@@ -2,9 +2,9 @@ package tfg.android.fcg.presentador;
 
 public interface IPresentadorRegistro {
 
-    public void tratarRegistro();
-    public void tratarAceptarRegistro(Object data);
-    public void tratarCancelar();
-    public void tratarOk();
+    public void tratarRegistro(Object informacion);
+    public void tratarOk(Object informacion);
+    public void tratarAceptarRegistro(Object informacion);
+    public void tratarCancelar(Object informacion);
 
 }
