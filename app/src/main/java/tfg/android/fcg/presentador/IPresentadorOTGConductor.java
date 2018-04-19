@@ -2,8 +2,8 @@ package tfg.android.fcg.presentador;
 
 public interface IPresentadorOTGConductor {
 
-    public void iniciar();
-    public void tratarAceptar();
-    public void tratarRechazar();
-    public void tratarParar();
+    public void iniciar(Object informacion);
+    public void tratarAceptar(Object informacion);
+    public void tratarRechazar(Object informacion);
+    public void tratarParar(Object informacion);
 }

@@ -2,9 +2,9 @@ package tfg.android.fcg.presentador;
 
 public interface IPresentadorOTGPasajero {
 
-    public void iniciar();
-    public void tratarBuscar();
-    public void tratarVehiculo();
-    public void tratarOk();
-    public void tratarCancelar();
+    public void iniciar(Object informacion);
+    public void tratarBuscar(Object informacion);
+    public void tratarVehiculo(Object informacion);
+    public void tratarOk(Object informacion);
+    public void tratarCancelar(Object informacion);
 }

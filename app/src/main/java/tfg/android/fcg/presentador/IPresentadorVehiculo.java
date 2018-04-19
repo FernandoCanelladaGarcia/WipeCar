@@ -2,10 +2,10 @@ package tfg.android.fcg.presentador;
 
 public interface IPresentadorVehiculo {
 
-    public void tratarGuardar();
-    public void tratarGuardarVehiculo(Object data);
-    public void tratarCancelar();
-    public void tratarEditar();
-    public void tratarPapelera();
-    public void tratarEliminarVehiculo();
+    public void tratarGuardar(Object informacion);
+    public void tratarGuardarVehiculo(Object informacion);
+    public void tratarCancelar(Object informacion);
+    public void tratarEditar(Object informacion);
+    public void tratarPapelera(Object informacion);
+    public void tratarEliminarVehiculo(Object informacion);
 }
