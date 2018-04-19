@@ -15,28 +15,16 @@ public class VistaOTGConductor extends AppCompatActivity implements IVistaOTGCon
         setContentView(R.layout.layout_vista_otgconductor);
     }
 
-    /**
-     * Indicacion sonora de peticion de compartir ruta de un pasajero
-     * @param informacion contendra:
-     */
     @Override
     public void indicarPeticionPasajero(Object informacion) {
 
     }
 
-    /**
-     * Indicacion de que el pasajero ha sido aceptado.
-     * @param informacion contendra:
-     */
     @Override
     public void indicarPasajeroAceptado(Object informacion) {
 
     }
 
-    /**
-     * Indicacion de que el pasajero ha sido rechazado.
-     * @param informacion contendra:
-     */
     @Override
     public void indicarPasajeroRechazado(Object informacion) {
 
