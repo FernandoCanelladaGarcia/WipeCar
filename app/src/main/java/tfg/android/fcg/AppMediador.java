@@ -10,9 +10,9 @@ import android.support.v4.content.LocalBroadcastManager;
 
 
 @SuppressWarnings("rawtypes")
-public class AppMediator extends Application {
+public class AppMediador extends Application {
 
-	private static AppMediator singleton;
+	private static AppMediador singleton;
 
 	// presenters and views members
 //	private IEMERAppPresenter emmerAppPresenter;
@@ -23,7 +23,7 @@ public class AppMediator extends Application {
 //	private IDetailView detailView;
 //	private IMapPresenter mapPresenter;
 
-	public static AppMediator getInstance(){
+	public static AppMediador getInstance(){
 		return singleton;
 	}
 
