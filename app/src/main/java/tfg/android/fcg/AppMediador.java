@@ -40,8 +40,6 @@ import tfg.android.fcg.vista.IVistaVehiculo;
 @SuppressWarnings("rawtypes")
 public class AppMediador extends Application {
 
-	private static AppMediador singleton;
-
 	//variables correspondientes a los presentadores, vistas y modelo.
 
 	private IVistaLogin vistaLogin;
@@ -71,46 +69,19 @@ public class AppMediador extends Application {
 	private IVistaHistorial vistaHistorial;
 	private IPresentadorHistorial presentadorHistorial;
 
-	// constants of commuinication, storage and petition
-	public static final String NOTIFICATION_OPERATIONS_RECOVERED = "android.cnog.NOTIFICATION_OPERATIONS_RECOVERED";
-    public static final String NOTIFICATION_RECORDING_ENDED = "android.cnog.NOTIFICATION_RECORDING_ENDED";
-	public static final String NOTIFICATION_PLAYING_ENDED = "android.cnog.NOTIFICATION_PLAYING_ENDED";
-    public static final String NOTIFICATION_INFO_RECOVERED = "android.cnog.NOTIFICATION_INFO_RECOVERED";
-	public static final String NOTIFICATION_INFO_ADDED = "android.cnog.NOTIFICATION_INFO_ADDED";
-	public static final String NOTIFICATION_INFO_REMOVED = "android.cnog.NOTIFICATION_INFO_REMOVED";
-	public static final String NOTIFICATION_INIT_APP = "android.cnog.NOTIFICATION_INIT_APP";
-	public static final String NOTIFICATION_GPS_LOCATION = "android.cnog.NOTIFICATION_GPS_LOCATION";
+	private static AppMediador singleton;
 
-	public static final String APP_STATUS = "APP_STATUS";
-    public static final String SET_OF_OPERATIONS = "SET_OF_OPERATIONS";
-	public static final String INFO_OPERATION = "INFO_OPERATION";
-    public static final String DATE = "DATE";
-    public static final String TIME = "TIME";
-	public static final String ADDRESS = "ADDRESS";
-	public static final String SEX = "SEX";
-	public static final String AGE = "AGE";
-	public static final String LATITUDE = "LATITUDE";
-	public static final String LONGITUDE = "LONGITUDE";
-	public static final String INSERT_STATUS = "INSERT_STATUS";
-	public static final String OK = "OK";
-	public static final String CANCEL = "CANCEL";
+	//Constantes de comunicacion
 
-    public static final int DATABASE_ERROR = 0;
-    public static final int STORAGE_ERROR = 1;
-	public static final int APP_RUNNING = 2;
-	public static final int INSERT_CODE = 0;
 
-    public static boolean permission_granted = true;
+	//Métodos accesor de los presentadores, vistas y modelo.
 
 	public static AppMediador getInstance(){
 		return singleton;
 	}
 
-	//Métodos accesor de los presentadores, vistas y modelo.
-
-
 	//PRESENTADOR
-	
+
 	public IPresentadorLogin getPresentadorLogin() {
 		if(presentadorLogin == null)
 			presentadorLogin = new PresentadorLogin();
