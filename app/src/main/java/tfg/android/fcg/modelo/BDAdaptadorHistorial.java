@@ -4,7 +4,7 @@ public class BDAdaptadorHistorial {
 
     /**
      * Añade a la tabla Historial, un historial relacionado
-     * con un pasajero y un conductor cuando finaliza su vinculo
+     * con un pasajero y un conductor cuando finaliza su vínculo.
      * @param informacion contendra:
      */
     public void agregarHistorial(Object informacion){
@@ -13,7 +13,7 @@ public class BDAdaptadorHistorial {
 
     /**
      * Elimina de la tabla Historial, un historial determiando de un usuario,
-     * especificado en el parametro idUser.
+     * especificado en el parámetro idUser.
      * @param idUser contendra:
      */
     public void eliminarHistorial(String idUser){
@@ -22,7 +22,7 @@ public class BDAdaptadorHistorial {
 
     /**
      * Busca en la tabla Historial, el historial referido al identificador
-     * que coincide con el parametro idUser
+     * que coincide con el parámetro idUser.
      * @param idUser contendra:
      */
     public void obtenerHistorial(String idUser){

@@ -21,7 +21,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil {
     }
 
     @Override
-    public void eliminarProgreso() {
+    public void cerrarProgreso() {
 
     }
 

@@ -21,7 +21,7 @@ public class VistaMapaOrigen extends AppCompatActivity implements IVistaMapaOrig
     }
 
     @Override
-    public void eliminarProgreso() {
+    public void cerrarProgreso() {
 
     }
 

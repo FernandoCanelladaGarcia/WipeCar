@@ -21,7 +21,7 @@ public class VistaVehiculo extends AppCompatActivity implements IVistaVehiculo{
     }
 
     @Override
-    public void eliminarProgreso() {
+    public void cerrarProgreso() {
 
     }
 

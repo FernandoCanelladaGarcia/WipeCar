@@ -3,15 +3,14 @@ package tfg.android.fcg.presentador;
 public interface IPresentadorLogin {
 
     /**
-     * Se comunica con el modelo para realizar la
-     * comprobación de la informacion introducida por el
-     * usuario
+     * Realiza los operaciones oportunas para comprobar
+     * la información introducida por el usuario.
      * @param informacion contendra:
      */
     public void tratarLogin(Object informacion);
 
     /**
-     * Trata la selección del boton OK.
+     * Trata la selección del botón Ok.
      * @param informacion contendra:
      */
     public void tratarOk(Object informacion);
@@ -32,7 +31,7 @@ public interface IPresentadorLogin {
 
     /**
      * Realiza las operaciones oportunas para registrar un nuevo
-     * usuario en la aplicacion
+     * usuario en la aplicación.
      * @param informacion contendra:
      */
     public void tratarNuevo(Object informacion);

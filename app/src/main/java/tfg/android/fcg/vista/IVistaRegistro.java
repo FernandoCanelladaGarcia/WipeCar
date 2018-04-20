@@ -11,7 +11,7 @@ public interface IVistaRegistro {
     /**
      * Elimina la barra de progreso. Acción en background finalizada.
      */
-    public void eliminarProgreso();
+    public void cerrarProgreso();
 
     /**
      * Muestra un diálogo al usuario para realizar una determinada acción.
@@ -20,7 +20,7 @@ public interface IVistaRegistro {
     public void mostrarDialogo(Object informacion);
 
     /**
-     * Cierra el dialogo mostrado al usuario tras su uso util.
+     * Cierra el diálogo mostrado al usuario tras su uso útil.
      */
     public void cerrarDialogo();
 

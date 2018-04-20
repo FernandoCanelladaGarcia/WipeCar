@@ -3,7 +3,7 @@ package tfg.android.fcg.modelo;
 public class BDAdaptadorVehiculo {
 
     /**
-     * Busca en la tabla Vehiculo aquel registro que coincide con el parametro.
+     * Busca en la tabla Vehículo aquel registro que coincide con el parámetro.
      * @param datoVehiculo contendra:
      */
     public void obtenerVehiculo(String datoVehiculo){
@@ -11,7 +11,7 @@ public class BDAdaptadorVehiculo {
     }
 
     /**
-     * Añade a la tabla Vehiculo un vehiculo determinado que se indica a traves del parametro
+     * Añade a la tabla Vehículo un vehículo determinado que se indica a través del parámetro.
      * @param informacion contendra:
      */
     public void agregarVehiculo(Object informacion){
@@ -19,7 +19,7 @@ public class BDAdaptadorVehiculo {
     }
 
     /**
-     * Modifica en la tabla Vehiculo, un determinado vehiculo que se indica a traves del parametro
+     * Modifica en la tabla Vehículo, un determinado vehículo que se indica a través del parámetro.
      * @param informacion contendra:
      */
     public void actualizarVehiculo(Object informacion){

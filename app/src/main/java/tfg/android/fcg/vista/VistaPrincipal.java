@@ -17,7 +17,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     }
 
     @Override
-    public void eliminarProgreso() {
+    public void cerrarProgreso() {
 
     }
 
@@ -42,7 +42,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     }
 
     @Override
-    public void desmarcarSeleccion(Object informacion) {
+    public void desmarcarUsuario(Object informacion) {
 
     }
 }

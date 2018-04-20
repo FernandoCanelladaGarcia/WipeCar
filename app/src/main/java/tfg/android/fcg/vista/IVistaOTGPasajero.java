@@ -10,7 +10,7 @@ public interface IVistaOTGPasajero {
     /**
      * Elimina la barra de progreso. Acción en background finalizada.
      */
-    public void eliminarProgreso();
+    public void cerrarProgreso();
 
     /**
      * Muestra un diálogo al usuario para realizar una determinada acción.
@@ -19,18 +19,18 @@ public interface IVistaOTGPasajero {
     public void mostrarDialogo(Object informacion);
 
     /**
-     * Cierra el dialogo mostrado al usuario tras su uso util.
+     * Cierra el diálogo mostrado al usuario tras su uso útil.
      */
     public void cerrarDialogo();
 
     /**
-     * Muestra el mapa en la pantalla centrado en la ubicacion del usuario.
+     * Muestra el mapa en la pantalla centrado en la ubicación del usuario.
      * @param informacion contendra:
      */
     public void mostrarMapaConPosicion(Object informacion);
 
     /**
-     * Muestra en el mapa los vehiculos encontrados
+     * Muestra en el mapa los vehículos encontrados.
      * @param informacion contendra:
      */
     public void mostrarVehiculos(Object informacion);

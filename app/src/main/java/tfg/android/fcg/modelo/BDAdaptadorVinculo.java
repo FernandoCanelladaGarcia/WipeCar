@@ -3,7 +3,7 @@ package tfg.android.fcg.modelo;
 public class BDAdaptadorVinculo {
 
     /**
-     * Añade a la tabla Vinculo, un vinculo determinado entre pasajero y conductor.
+     * Añade a la tabla Vínculo, un vínculo determinado entre pasajero y conductor.
      * @param informacion contendra:
      */
     public void agregarVinculo(Object informacion){
@@ -11,7 +11,7 @@ public class BDAdaptadorVinculo {
     }
 
     /**
-     * Actualiza en la tabla Vinculo, un vinculo determinado entre pasajero y conductor.
+     * Actualiza en la tabla Vínculo, un vínculo determinado entre pasajero y conductor.
      * @param idPasajero contiene:
      * @param idConductor contiene:
      */
@@ -20,7 +20,7 @@ public class BDAdaptadorVinculo {
     }
 
     /**
-     * Elimina de la tabla Vinculo, un vinculo determinado entre un pasajero y un conductor.
+     * Elimina de la tabla Vínculo, un vínculo determinado entre un pasajero y un conductor.
      * @param idPasajero contiene:
      * @param idConductor contiene:
      */
@@ -29,7 +29,7 @@ public class BDAdaptadorVinculo {
     }
 
     /**
-     * Busca en la tabla Vinculo, los pasajeros que coinciden en el atributo idConductor, el valor pasado por parametro.
+     * Busca en la tabla Vínculo, los pasajeros que coinciden en el atributo idConductor, el valor pasado por parámetro.
      * @param idUser contendra:
      */
     public void obtenerListaPasajeros(String idUser){

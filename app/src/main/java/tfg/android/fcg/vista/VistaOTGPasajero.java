@@ -17,7 +17,7 @@ public class VistaOTGPasajero extends AppCompatActivity implements IVistaOTGPasa
     }
 
     @Override
-    public void eliminarProgreso() {
+    public void cerrarProgreso() {
 
     }
 

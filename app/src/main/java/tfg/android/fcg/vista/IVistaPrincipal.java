@@ -10,7 +10,7 @@ public interface IVistaPrincipal {
     /**
      * Elimina la barra de progreso. Acción en background finalizada.
      */
-    public void eliminarProgreso();
+    public void cerrarProgreso();
 
     /**
      * Muestra un diálogo al usuario para realizar una determinada acción.
@@ -19,7 +19,7 @@ public interface IVistaPrincipal {
     public void mostrarDialogo(Object informacion);
 
     /**
-     * Cierra el dialogo mostrado al usuario tras su uso util.
+     * Cierra el diálogo mostrado al usuario tras su uso útil.
      */
     public void cerrarDialogo();
 
@@ -30,7 +30,7 @@ public interface IVistaPrincipal {
     public void mostrarUsuarios(Object informacion);
 
     /**
-     * Destaca un pasajero o conductor tras su seleccion.
+     * Destaca un pasajero o conductor tras su selección.
      * @param informacion contendra:
      */
     public void mostrarSeleccion(Object informacion);
@@ -39,6 +39,6 @@ public interface IVistaPrincipal {
      * Desmarca un pasajero o conductor y muestra el resultado.
      * @param informacion contendra:
      */
-    public void desmarcarSeleccion(Object informacion);
+    public void desmarcarUsuario(Object informacion);
 
 }

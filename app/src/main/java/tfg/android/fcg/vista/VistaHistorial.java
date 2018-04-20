@@ -22,7 +22,7 @@ public class VistaHistorial extends AppCompatActivity implements IVistaHistorial
     }
 
     @Override
-    public void eliminarProgreso() {
+    public void cerrarProgreso() {
 
     }
 

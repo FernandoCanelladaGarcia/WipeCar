@@ -21,7 +21,7 @@ public class VistaRegistro extends AppCompatActivity implements IVistaRegistro{
     }
 
     @Override
-    public void eliminarProgreso() {
+    public void cerrarProgreso() {
 
     }
 

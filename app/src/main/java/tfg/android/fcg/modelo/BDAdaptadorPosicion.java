@@ -3,8 +3,8 @@ package tfg.android.fcg.modelo;
 public class BDAdaptadorPosicion {
 
     /**
-     * Busca en la tabla Posicion la latitud y longitud del usuario que posee
-     * el identificador que coincide con el parametro
+     * Busca en la tabla Posición la latitud y longitud del usuario que posee
+     * el identificador que coincide con el parámetro.
      * @param idUser contendra:
      */
     public void obtenerPosicion(String idUser){
@@ -12,7 +12,7 @@ public class BDAdaptadorPosicion {
     }
 
     /**
-     * Añade a la tabla Posicion una latitud y longitud a un usuario determinado
+     * Añade a la tabla Posición una latitud y longitud a un usuario determinado.
      * @param informacion contendra:
      */
     public void agregarPosicion(Object informacion){
@@ -20,7 +20,7 @@ public class BDAdaptadorPosicion {
     }
 
     /**
-     * Modifica en la tabla Posicion una latitud y longitud de un usuario determinado
+     * Modifica en la tabla Posición una latitud y longitud de un usuario determinado.
      * @param informacion
      */
     public void actualizarPosicion(Object informacion){

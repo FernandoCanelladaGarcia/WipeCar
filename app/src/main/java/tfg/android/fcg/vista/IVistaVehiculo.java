@@ -10,7 +10,7 @@ public interface IVistaVehiculo {
     /**
      * Elimina la barra de progreso. Acción en background finalizada.
      */
-    public void eliminarProgreso();
+    public void cerrarProgreso();
 
     /**
      * Muestra un diálogo al usuario para realizar una determinada acción.
@@ -19,12 +19,12 @@ public interface IVistaVehiculo {
     public void mostrarDialogo(Object informacion);
 
     /**
-     * Cierra el dialogo mostrado al usuario tras su uso util.
+     * Cierra el diálogo mostrado al usuario tras su uso útil.
      */
     public void cerrarDialogo();
 
     /**
-     * Habilita la edicion de los datos del vehiculo
+     * Habilita la edición de los datos del vehículo.
      * @param informacion contendra:
      */
     public void prepararEdicion(Object informacion);

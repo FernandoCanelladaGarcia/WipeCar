@@ -19,7 +19,7 @@ public class VistaLogin extends AppCompatActivity implements IVistaLogin {
 
 
     @Override
-    public void eliminarProgreso() {
+    public void cerrarProgreso() {
 
     }
 
