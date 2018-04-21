@@ -21,7 +21,7 @@ public interface IPresentadorMapaOrigen {
     public void tratarSeleccionarOrigen(Object informacion);
 
     /**
-     * Presentar el diálogo a traves del cual se introducen el origen y el destino
+     * Presenta el diálogo a traves del cual se introducen el origen y el destino
      * cuando se sale de la pantalla de mapa.
      * @param informacion contendra:
      */

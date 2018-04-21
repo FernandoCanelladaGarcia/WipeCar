@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "213650545388",
+    "firebase_url": "https://wipecar-48a55.firebaseio.com",
+    "project_id": "wipecar-48a55",
+    "storage_bucket": "wipecar-48a55.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:213650545388:android:60d6dbc79b790949",
+        "android_client_info": {
+          "package_name": "tfg.android.fcg.vista"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "213650545388-vobo9mudufsb7r4qoh8av45v8vi2hln4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLIxlPEbmAwehaUa5J8cEe8CvbbOqJIMQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

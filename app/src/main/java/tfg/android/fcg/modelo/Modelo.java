@@ -2,6 +2,7 @@ package tfg.android.fcg.modelo;
 
 public class Modelo implements IModelo{
 
+    //TODO: Login
     @Override
     public void comprobarLogin(Object informacion) {
 
