@@ -54,14 +54,14 @@ public interface IPresentadorPerfil {
     public void tratarPapelera(Object informacion);
 
     /**
-     * Encargado de eliminar el perfil del usuario.
+     * Elimina el perfil del usuario.
      * @param informacion contendra:
      */
     public void tratarEliminarPerfil(Object informacion);
 
     /**
      * Presenta la vista de registro de vehículo,
-     * para que el usuario, introduzca la información de su vehículo.
+     * para que el usuario introduzca la información de su vehículo.
      * @param informacion contendra:
      */
     public void tratarConductor(Object informacion);

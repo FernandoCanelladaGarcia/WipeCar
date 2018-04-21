@@ -300,6 +300,15 @@ public class AppMediador extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		presentadorLogin = null;
+		presentadorRegistro = null;
+		presentadorMapaOrigen = null;
+		presentadorPrincipal = null;
+		presentadorOTGPasajero = null;
+		presentadorOTGConductor = null;
+		presentadorPerfil = null;
+		presentadorVehiculo = null;
+		presentadorHistorial = null;
 		singleton = this;
 	}
 }

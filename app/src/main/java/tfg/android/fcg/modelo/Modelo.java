@@ -17,7 +17,6 @@ public class Modelo implements IModelo{
 
     }
 
-
     @Override
     public void registrarUsuario(Object informacion) {
 

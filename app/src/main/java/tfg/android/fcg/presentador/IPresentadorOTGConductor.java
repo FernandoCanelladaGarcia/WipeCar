@@ -3,7 +3,7 @@ package tfg.android.fcg.presentador;
 public interface IPresentadorOTGConductor {
 
     /**
-     * Encargado de obtener la localización del conductor
+     * Obtiene la localización del conductor
      * y las peticiones de los pasajeros que quieren compartir ruta con él.
      * @param informacion contendra:
      */

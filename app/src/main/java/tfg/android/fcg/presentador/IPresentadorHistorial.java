@@ -18,7 +18,7 @@ public interface IPresentadorHistorial {
     public void tratarValorar(Object informacion);
 
     /**
-     * Realizar la valoración del usuario sobre los acompañantes.
+     * Realiza la valoración del usuario sobre los acompañantes.
      * @param informacion contendra:
      */
     public void tratarValoracion(Object informacion);

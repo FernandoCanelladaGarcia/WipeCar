@@ -10,7 +10,7 @@ public interface IPresentadorPrincipal {
     public void iniciar(Object informacion);
 
     /**
-     * Encargado de conocer la selección del usuario y la confirmación de la selección.
+     * Recupera la selección del usuario y la confirmación de la selección.
      * @param informacion contendra:
      */
     public void tratarSeleccion(Object informacion);
