@@ -73,6 +73,8 @@ public class AppMediador extends Application {
 
 	//Constantes de comunicacion
 
+	public static final String AVISO_USER_LOGGED_OK = "usuarioLogged";
+	public static final String AVISO_USER_LOGGED_FAIL = "usuarioNoLogged";
 
 	//Métodos accesor de los presentadores, vistas y modelo.
 

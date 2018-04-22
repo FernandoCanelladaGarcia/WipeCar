@@ -1,11 +1,45 @@
 package tfg.android.fcg.modelo;
 
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
+import tfg.android.fcg.AppMediador;
+
 public class Modelo implements IModelo{
 
-    //TODO: Login
-    @Override
-    public void comprobarLogin(Object informacion) {
+    private static Modelo singleton = null;
+    private FirebaseAuth auth;
 
+    private Modelo(){
+        auth = FirebaseAuth.getInstance();
+    }
+
+    public static Modelo getInstance(){
+        if(singleton == null)
+            singleton = new Modelo();
+        return singleton;
+    }
+    
+    @Override
+    public void comprobarLogin(Object[] informacion) {
+        auth.signInWithEmailAndPassword((String)informacion[0],(String)informacion[1]).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    //Usuario logged.
+                    AppMediador.getInstance().sendBroadcast(AppMediador.AVISO_USER_LOGGED_OK,null);
+                }
+                else{
+                    //Fallo en login
+                    AppMediador.getInstance().sendBroadcast(AppMediador.AVISO_USER_LOGGED_FAIL,null);
+                }
+            }
+        });
     }
 
     @Override
@@ -18,6 +52,7 @@ public class Modelo implements IModelo{
 
     }
 
+    //Usa la clase Usuario
     @Override
     public void registrarUsuario(Object informacion) {
 
@@ -117,4 +152,5 @@ public class Modelo implements IModelo{
     public void pararRuta(Object informacion) {
 
     }
+
 }

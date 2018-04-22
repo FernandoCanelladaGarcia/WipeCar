@@ -7,7 +7,7 @@ public interface IModelo {
      * al entrar en la aplicación.
      * @param informacion contendra:
      */
-    public void comprobarLogin(Object informacion);
+    public void comprobarLogin(Object[] informacion);
 
 
     /**
