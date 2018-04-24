@@ -16,11 +16,4 @@ public class ExampleUnitTest {
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
     }
-
-    @Test
-    public void login_correcto() throws Exception{
-        Modelo modelo = Modelo.getInstance();
-        String[] login = new String[] {"fernando.canellada101@alu.ulpgc.es","123456"};
-        modelo.comprobarLogin(login);
-    }
 }

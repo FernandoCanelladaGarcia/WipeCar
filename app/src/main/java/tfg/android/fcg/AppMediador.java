@@ -73,16 +73,19 @@ public class AppMediador extends Application {
 
 	//Constantes de comunicacion
 
-	public static final String AVISO_USER_LOGGED_OK = "usuarioLogged";
-	public static final String AVISO_USER_LOGGED_FAIL = "usuarioNoLogged";
-
+	public static final String AVISO_USER_LOGIN = "tfg.android.fcg.AVISO_USER_LOGIN";
+	public static final String AVISO_CAMBIO_PASSWORD = "tfg.android.fcg.AVISO_CAMBIO_PASSWORD";
+	public static final String AVISO_CORREO_PASSWORD = "tfg.android.fcg.AVISO_CORREO_PASSWORD";
+	public static String CLAVE_RESULTADO_LOGIN;
+	public static String CLAVE_RESULTADO_CAMBIO_PASSWORD;
+	public static String CLAVE_RESULTADO_RECUPERAR_PASSWORD;
 	//Métodos accesor de los presentadores, vistas y modelo.
 
 	public static AppMediador getInstance(){
 		return singleton;
 	}
 
-	//PRESENTADOR
+	//***************PRESENTADORES****************//
 
 	public IPresentadorLogin getPresentadorLogin() {
 		if(presentadorLogin == null)
@@ -174,7 +177,7 @@ public class AppMediador extends Application {
 		presentadorHistorial = null;
 	}
 
-	//VISTA
+	//****************VISTAS*****************//
 
 	public IVistaLogin getVistaLogin() {
 		return vistaLogin;

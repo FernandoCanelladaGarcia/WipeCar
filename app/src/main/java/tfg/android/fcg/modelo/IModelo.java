@@ -22,7 +22,7 @@ public interface IModelo {
      * con los datos pasados por parámetros.
      * @param informacion contendra:
      */
-    public void cambiarPassword(Object informacion);
+    public void cambiarPassword(Object[] informacion);
 
     /**
      * Añdade un nuevo usuario a la aplicación.
