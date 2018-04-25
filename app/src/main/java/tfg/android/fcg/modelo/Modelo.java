@@ -3,7 +3,6 @@ package tfg.android.fcg.modelo;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -13,9 +12,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import tfg.android.fcg.AppMediador;
 
@@ -34,7 +30,7 @@ public class Modelo implements IModelo{
     //Variables de uso comun
     private FirebaseAuth auth;
     private FirebaseUser usuarioActual;
-    private Login userActual;
+    private Login loginActual;
 
     private final String TAG = "depurador";
 
@@ -71,12 +67,12 @@ public class Modelo implements IModelo{
         this.usuarioActual = usuario;
     }
 
-    public Login getUserActual(){
-        return userActual;
+    public Login getLoginActual(){
+        return loginActual;
     }
 
-    public void setUserActual(Login usuario){
-        this.userActual = usuario;
+    public void setLoginActual(Login usuario){
+        this.loginActual = usuario;
     }
 
     @Override
@@ -113,8 +109,8 @@ public class Modelo implements IModelo{
                     String telefono = partes [1];
                     Boolean rol = Boolean.valueOf(partes[2]);
 
-                    userActual = new Login(idUser,nombre,emailUser,telefono,rol);
-                    Log.i(TAG, "Usuario actual: " + userActual.getNombre());
+                    loginActual = new Login(idUser,nombre,emailUser,telefono,rol);
+                    Log.i(TAG, "Usuario actual: " + loginActual.getNombre());
                     extras.putBoolean(AppMediador.CLAVE_RESULTADO_LOGIN, true);
                     appMediador.sendBroadcast(AppMediador.AVISO_USER_LOGIN, extras);
                 }
@@ -149,7 +145,7 @@ public class Modelo implements IModelo{
     @Override
     public void cambiarPassword(final Object[] informacion) {
 
-        String correo = userActual.getEmail();
+        String correo = loginActual.getEmail();
 
         AuthCredential credential = EmailAuthProvider.getCredential(correo, (String) informacion[0]);
         usuarioActual.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -184,7 +180,7 @@ public class Modelo implements IModelo{
     }
 
     @Override
-    public void registrarUsuario(Object informacion) {
+    public void registrarUsuario(Object[] informacion) {
        adaptadorUsuario.agregarUsuario(informacion);
     }
 

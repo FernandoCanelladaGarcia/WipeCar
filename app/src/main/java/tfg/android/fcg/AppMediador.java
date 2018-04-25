@@ -76,9 +76,13 @@ public class AppMediador extends Application {
 	public static final String AVISO_USER_LOGIN = "tfg.android.fcg.AVISO_USER_LOGIN";
 	public static final String AVISO_CAMBIO_PASSWORD = "tfg.android.fcg.AVISO_CAMBIO_PASSWORD";
 	public static final String AVISO_CORREO_PASSWORD = "tfg.android.fcg.AVISO_CORREO_PASSWORD";
-	public static String CLAVE_RESULTADO_LOGIN;
-	public static String CLAVE_RESULTADO_CAMBIO_PASSWORD;
-	public static String CLAVE_RESULTADO_RECUPERAR_PASSWORD;
+	public static final String AVISO_REGISTRO_USUARIO = "tfg.android.fcg.AVISO_REGISTRO_USUARIO";
+
+	public static final String CLAVE_RESULTADO_LOGIN = "tfg.android.fcg.CLAVE_RESULTADO_LOGIN";
+	public static final String CLAVE_RESULTADO_CAMBIO_PASSWORD = "tfg.android.fcg.CLAVE_RESULTADO_CAMBIO_PASSWORD";
+	public static final String CLAVE_RESULTADO_RECUPERAR_PASSWORD = "tfg.android.fcg.CLAVE_RESULTADO_RECUPERAR_PASSWORD";
+	public static final String CLAVE_RESULTADO_REGISTRO_USUARIO = "tfg.android.fcg.CLAVE_RESULTADO_REGISTRO_USUARIO";
+
 	//Métodos accesor de los presentadores, vistas y modelo.
 
 	public static AppMediador getInstance(){

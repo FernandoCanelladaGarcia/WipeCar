@@ -68,11 +68,23 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
 
     @Test
     public void testComprobarLoginEmailCorrectoPasswordIncorrecto() throws Exception{
+        Log.i(TAG, "metodo testComprobarLoginEmailCorrectoPasswordIncorrecto");
         String[] login = new String[] {"fernando.canellada101@alu.ulpgc.es","111111"}; //Email registrado contraseña no correcta.
         modelo = Modelo.getInstance();
         contador = new CountDownLatch(1);
         esperarRespuestaLoginEmailCorrectoPasswordIncorrecto();
         modelo.comprobarLogin(login);
+        contador.await(10000,TimeUnit.MILLISECONDS);
+    }
+
+    @Test
+    public void testComprobarRegistroUsuarioCorrecto() throws Exception{
+        Log.i(TAG, "metodo testComprobarRegistroUsuarioCorrecto");
+        String[] registro = new String[] {"fernando.canellada101@alu.ulpgc.es","123456","Fernando Canellada","673347971","Leon y Castillo nº39"};
+        modelo = Modelo.getInstance();
+        contador = new CountDownLatch(1);
+        esperarRespuestaRegistroUsuarioCorrecto();
+        modelo.registrarUsuario(registro);
         contador.await(10000,TimeUnit.MILLISECONDS);
     }
 
@@ -140,5 +152,25 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
 
         };
         appMediador.registerReceiver(receptor,AppMediador.AVISO_USER_LOGIN);
+    }
+
+    private void esperarRespuestaRegistroUsuarioCorrecto() throws Exception{
+        BroadcastReceiver receptor = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(AppMediador.AVISO_REGISTRO_USUARIO)){
+                boolean resultado = intent.getBooleanExtra(AppMediador.CLAVE_RESULTADO_REGISTRO_USUARIO,false);
+                if(resultado){
+                    //Se pudo registrar el usuario. TEST OK, sign-out.
+                    modelo.getAuth().signOut();
+                }else{
+                    Log.i(TAG,"No se pudo registrar el usuario. TEST FALLIDO");
+                }
+                contador.countDown();;
+            }
+            appMediador.unRegisterReceiver(this);
+            }
+        };
+        appMediador.registerReceiver(receptor,AppMediador.AVISO_REGISTRO_USUARIO);
     }
 }

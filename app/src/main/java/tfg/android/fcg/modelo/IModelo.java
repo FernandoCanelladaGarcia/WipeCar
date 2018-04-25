@@ -28,7 +28,7 @@ public interface IModelo {
      * Añdade un nuevo usuario a la aplicación.
      * @param informacion contendra:
      */
-    public void registrarUsuario(Object informacion);
+    public void registrarUsuario(Object[] informacion);
 
     /**
      * Obtiene un mapa centrado en la ubicación del usuario
