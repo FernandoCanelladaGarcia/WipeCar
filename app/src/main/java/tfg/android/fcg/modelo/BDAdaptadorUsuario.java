@@ -72,9 +72,10 @@ public class BDAdaptadorUsuario {
         String password = (String) informacion[1];
         final String nombre = (String) informacion [2];
         String telefono = (String) informacion [3];
+        final String origen = (String) informacion[4];
         boolean rol = false;
 
-        final String displayName = nombre+"#"+rol;
+        final String displayName = nombre+"#"+telefono+"#"+rol;
 
         auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -98,7 +99,7 @@ public class BDAdaptadorUsuario {
                                 String nombreEncriptado = nombre;
                                 String idUser = usuarioActual.getUid();
                                 //Guardamos en la tabla el usuario
-                                usuario = new Usuario(idUser,nombreEncriptado,"","","","","",null);
+                                usuario = new Usuario(idUser,nombreEncriptado,"",origen,"","","",null);
                                 DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(idUser);
                                 referenciaUsuario.setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override

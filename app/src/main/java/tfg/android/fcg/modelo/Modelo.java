@@ -33,7 +33,6 @@ public class Modelo implements IModelo{
     private Login loginActual;
 
     private final String TAG = "depurador";
-
     //Constructor
     private Modelo(){
         auth = FirebaseAuth.getInstance();
@@ -77,6 +76,7 @@ public class Modelo implements IModelo{
 
     @Override
     public void comprobarLogin(final Object[] informacion) {
+
         auth.signInWithEmailAndPassword((String)informacion[0],(String)informacion[1])
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -84,6 +84,7 @@ public class Modelo implements IModelo{
                 Bundle extras = new Bundle();
                 if(task.isSuccessful()){
                     //Usuario logged.
+                    setUsuarioActual(auth.getCurrentUser());
                     SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login",0);
                     String email = sharedPreferences.getString("email",null);
                     if(email != null){
@@ -98,16 +99,14 @@ public class Modelo implements IModelo{
                         editor.apply();
                     }
 
-                    usuarioActual = auth.getCurrentUser();
-
                     String idUser = usuarioActual.getUid();
                     String emailUser = usuarioActual.getEmail();
-
                     String displayName = usuarioActual.getDisplayName();
+                    Log.i(TAG,displayName);
                     String[] partes = displayName.split("#");
                     String nombre = partes[0];
                     String telefono = partes [1];
-                    Boolean rol = Boolean.valueOf(partes[2]);
+                    Boolean rol = Boolean.valueOf(partes[1]);
 
                     loginActual = new Login(idUser,nombre,emailUser,telefono,rol);
                     Log.i(TAG, "Usuario actual: " + loginActual.getNombre());

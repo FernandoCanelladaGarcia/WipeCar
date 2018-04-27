@@ -1,27 +1,35 @@
 {
   "project_info": {
-    "project_number": "213650545388",
-    "firebase_url": "https://wipecar-48a55.firebaseio.com",
-    "project_id": "wipecar-48a55",
-    "storage_bucket": "wipecar-48a55.appspot.com"
+    "project_number": "101825917216",
+    "firebase_url": "https://wipecar-89dad.firebaseio.com",
+    "project_id": "wipecar-89dad",
+    "storage_bucket": "wipecar-89dad.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:213650545388:android:60d6dbc79b790949",
+        "mobilesdk_app_id": "1:101825917216:android:60d6dbc79b790949",
         "android_client_info": {
           "package_name": "tfg.android.fcg.vista"
         }
       },
       "oauth_client": [
         {
-          "client_id": "213650545388-vobo9mudufsb7r4qoh8av45v8vi2hln4.apps.googleusercontent.com",
+          "client_id": "101825917216-05ve5o6dabrha7ggiru1dh9na9d3c750.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tfg.android.fcg.vista",
+            "certificate_hash": "3a1853f5d78695aa5201e8f8572fb21b2ce3a8fb"
+          }
+        },
+        {
+          "client_id": "101825917216-ba1sq33os4ofregm9ndb8u17reopv6hb.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCLIxlPEbmAwehaUa5J8cEe8CvbbOqJIMQ"
+          "current_key": "AIzaSyAN2lZ-AY0NiyieE8tjASuZYYYSEUU_pGc"
         }
       ],
       "services": {
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "101825917216-ba1sq33os4ofregm9ndb8u17reopv6hb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
