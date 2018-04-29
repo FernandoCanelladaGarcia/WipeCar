@@ -48,7 +48,7 @@ public interface IModelo {
      * un usuario determinado y el destino del mismo.
      * @param informacion contendra:
      */
-    public void guardarOrigenYDestino(Object informacion);
+    public void guardarOrigenYDestino(Object[] informacion);
 
     /**
      * Recupera la lista de pasajeros o conductores de la base de datos.
@@ -117,7 +117,7 @@ public interface IModelo {
      * Almacena en la base de datos una valoración a un usuario determinado.
      * @param informacion contendra:
      */
-    public void asignarValoracion(Object informacion);
+    public void asignarValoracion(Object[] informacion);
 
     /**
      * Almacena en la base de datos la localización de un usuario.

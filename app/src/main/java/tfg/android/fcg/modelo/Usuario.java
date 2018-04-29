@@ -26,6 +26,10 @@ public class Usuario {
         this.datoVehiculo = datoVehiculo;
     }
 
+    public Usuario(){
+
+    }
+
     //Getters & Setters
 
     public String getIdUser() {

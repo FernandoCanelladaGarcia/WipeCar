@@ -8,6 +8,7 @@ public class Login {
     private String nombre;
     private String email;
     private String telefono;
+    private String password;
     private boolean rol;
 
     //Constructor
@@ -18,6 +19,9 @@ public class Login {
         this.email = email;
         this.telefono = telefono;
         this.rol = rol;
+    }
+    public Login(){
+
     }
 
     //Getters & Setters
@@ -60,5 +64,13 @@ public class Login {
 
     public void setRol(boolean rol) {
         this.rol = rol;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

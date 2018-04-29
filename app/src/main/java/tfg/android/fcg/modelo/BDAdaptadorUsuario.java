@@ -73,6 +73,7 @@ public class BDAdaptadorUsuario {
      * @param informacion contendra:
      */
     public void agregarUsuario(final Object[] informacion){
+        //TODO ENCRIPTAR
         //INFORMACION LOGIN = 0 email, 1 contraseña, 2 nombre, 3 telefono, 4 direccion, modo por defecto pasajero = false
         //INFORMACION USUARIO = nombre, valoracion, origen, destino, fecha, hora, datovehiculo
         final String email = (String) informacion[0];
@@ -152,6 +153,7 @@ public class BDAdaptadorUsuario {
         String[] partes = currentDisplayName.split("#");
         String currentName = partes[0];
         String currentPhone = partes[1];
+        String password = "";
         boolean currentRol = Boolean.valueOf(partes[3]);
         boolean newRol = Boolean.valueOf((String)informacion[7]);
 
@@ -194,7 +196,13 @@ public class BDAdaptadorUsuario {
         }
 
         final String correoActual = auth.getCurrentUser().getEmail();
-        String password = (String) informacion[4];
+
+        if(!informacion[4].toString().isEmpty()){
+             password = (String) informacion[4];
+        }else{
+            password = login.getPassword();
+        }
+
         AuthCredential credential = EmailAuthProvider.getCredential(correoActual,password);
 
         usuarioActual.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
