@@ -86,7 +86,7 @@ public interface IModelo {
      * Almacena en la base de datos la información de un usuario.
      * @param informacion contendra:
      */
-    public void guardarPerfil(Object informacion);
+    public void guardarPerfil(Object[] informacion);
 
     /**
      * Elimina de la base de datos la información de un usuario.

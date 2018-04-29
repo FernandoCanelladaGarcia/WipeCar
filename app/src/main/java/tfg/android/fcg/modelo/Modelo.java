@@ -224,8 +224,8 @@ public class Modelo implements IModelo{
     }
 
     @Override
-    public void guardarPerfil(Object informacion) {
-
+    public void guardarPerfil(Object[] informacion) {
+        adaptadorUsuario.actualizarUsuario(informacion);
     }
 
     @Override
