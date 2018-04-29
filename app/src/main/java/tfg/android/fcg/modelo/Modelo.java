@@ -240,8 +240,8 @@ public class Modelo implements IModelo{
     }
 
     @Override
-    public void guardarVehiculo(Object informacion) {
-
+    public void guardarVehiculo(Object[] informacion) {
+        adaptadorVehiculo.agregarVehiculo(informacion);
     }
 
     @Override

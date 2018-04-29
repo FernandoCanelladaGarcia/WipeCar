@@ -98,7 +98,7 @@ public interface IModelo {
      * Almacena en la base de datos la información del vehículo de un usuario.
      * @param informacion contendra:
      */
-    public void guardarVehiculo(Object informacion);
+    public void guardarVehiculo(Object[] informacion);
 
     /**
      * Elimina de la base de datos la información del vehículo de un usuario.
