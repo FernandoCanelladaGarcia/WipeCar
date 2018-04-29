@@ -99,9 +99,9 @@ public class Modelo implements IModelo{
                         editor.apply();
                     }
 
-                    String idUser = usuarioActual.getUid();
-                    String emailUser = usuarioActual.getEmail();
-                    String displayName = usuarioActual.getDisplayName();
+                    String idUser = auth.getCurrentUser().getUid();
+                    String emailUser = auth.getCurrentUser().getEmail();
+                    String displayName = auth.getCurrentUser().getDisplayName();
                     Log.i(TAG,displayName);
                     String[] partes = displayName.split("#");
                     String nombre = partes[0];

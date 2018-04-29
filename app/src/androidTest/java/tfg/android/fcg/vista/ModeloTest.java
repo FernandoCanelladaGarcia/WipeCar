@@ -45,6 +45,17 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
     }
 
     @Test
+    public void testComprobarRegistroUsuarioCorrecto() throws Exception{
+        Log.i(TAG, "metodo testComprobarRegistroUsuarioCorrecto");
+        String[] registro = new String[] {"fernando.canellada101@alu.ulpgc.es","123456","Fernando Canellada","673347971","Leon y Castillo nº39"};
+        modelo = Modelo.getInstance();
+        contador = new CountDownLatch(1);
+        esperarRespuestaRegistroUsuarioCorrecto();
+        modelo.registrarUsuario(registro);
+        contador.await(10000,TimeUnit.MILLISECONDS);
+    }
+
+    @Test
     public void testComprobarLoginCorrecto() throws Exception{
         Log.i(TAG, "metodo testCOmprobarLoginCorrecto");
         String[] login = new String[] {"fernando.canellada101@alu.ulpgc.es", "123456"};
@@ -77,14 +88,17 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
         contador.await(10000,TimeUnit.MILLISECONDS);
     }
 
+
     @Test
-    public void testComprobarRegistroUsuarioCorrecto() throws Exception{
-        Log.i(TAG, "metodo testComprobarRegistroUsuarioCorrecto");
-        String[] registro = new String[] {"fernando.canellada101@alu.ulpgc.es","123456","Fernando Canellada","673347971","Leon y Castillo nº39"};
+    public void testActualizarUsuarioCorrecto() throws Exception{
+        //INFORMACION USUARIO = nombre, telefono, direccion, email, password, origen, destino, rol, datovehiculo, fecha, hora, valoracion
+        Log.i(TAG, "metodo testActualizarUsuarioCorrecto");
+        String[] actualizacion = new String[]
+                {"Fernando Canellada","673347971","Leon y Castillo 39","fernando.canellada101@alu.ulpgc.es","123456","Origen","Destino","false","vacio","","",""};
         modelo = Modelo.getInstance();
         contador = new CountDownLatch(1);
-        esperarRespuestaRegistroUsuarioCorrecto();
-        modelo.registrarUsuario(registro);
+        esperarRespuestaActualizacionCorrecto();
+        modelo.guardarPerfil(actualizacion);
         contador.await(10000,TimeUnit.MILLISECONDS);
     }
 
@@ -172,5 +186,28 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
             }
         };
         appMediador.registerReceiver(receptor,AppMediador.AVISO_REGISTRO_USUARIO);
+    }
+
+    private void esperarRespuestaActualizacionCorrecto() throws Exception{
+        BroadcastReceiver receptor = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(intent.getAction().equals(AppMediador.AVISO_ACTUALIZACION_USUARIO)){
+                    Object[] respuesta = (Object[])intent.getSerializableExtra(AppMediador.CLAVE_ACTUALIZACION_USUARIO);
+                    boolean resultado = (Boolean) respuesta[0];
+                    String error = (String)respuesta[1];
+                    if(resultado){
+                        //Se pudo actualizar el usuario. TEST OK, sign-out.
+                        modelo.getAuth().signOut();
+                    }else{
+                        Log.i(TAG,"No se pudo actualizar el usuario. TEST FALLIDO");
+                        Log.i(TAG, error);
+                    }
+                    contador.countDown();;
+                }
+                appMediador.unRegisterReceiver(this);
+            }
+        };
+        appMediador.registerReceiver(receptor,AppMediador.AVISO_ACTUALIZACION_USUARIO);
     }
 }
