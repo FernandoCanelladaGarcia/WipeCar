@@ -52,7 +52,7 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
         contador = new CountDownLatch(1);
         esperarRespuestaRegistroUsuarioCorrecto();
         modelo.registrarUsuario(registro);
-        contador.await(10000,TimeUnit.MILLISECONDS);
+        contador.await(15000,TimeUnit.MILLISECONDS);
     }
 
     @Test
@@ -179,6 +179,7 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
                     modelo.getAuth().signOut();
                 }else{
                     Log.i(TAG,"No se pudo registrar el usuario. TEST FALLIDO");
+                    fail();
                 }
                 contador.countDown();;
             }

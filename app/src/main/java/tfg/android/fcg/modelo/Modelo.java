@@ -78,7 +78,7 @@ public class Modelo implements IModelo{
 
     @Override
     public void comprobarLogin(final Object[] informacion) {
-
+    //TODO: ENCRIPTAR PASSWORD
         auth.signInWithEmailAndPassword((String)informacion[0],(String)informacion[1])
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -106,14 +106,13 @@ public class Modelo implements IModelo{
                     String idUser = auth.getCurrentUser().getUid();
                     String emailUser = auth.getCurrentUser().getEmail();
                     String displayName = auth.getCurrentUser().getDisplayName();
+                    String userPhone = auth.getCurrentUser().getPhoneNumber();
 
                     String[] partes = displayName.split("#");
                     String nombre = partes[0];
-                    String telefono = partes [1];
                     Boolean rol = Boolean.valueOf(partes[1]);
 
-                    loginActual = new Login(idUser,nombre,emailUser,telefono,rol);
-                    loginActual.setPassword((String)informacion[1]);
+                    loginActual = new Login(idUser,nombre,emailUser,userPhone,rol);
                     Log.i(TAG, "Usuario actual: " + loginActual.getNombre());
                     extras.putBoolean(AppMediador.CLAVE_RESULTADO_LOGIN, true);
                     appMediador.sendBroadcast(AppMediador.AVISO_USER_LOGIN, extras);
@@ -148,8 +147,8 @@ public class Modelo implements IModelo{
 
     @Override
     public void cambiarPassword(final Object[] informacion) {
-        //informacion 0 = vieja, informacion 1 = nueva
-        String correo = loginActual.getEmail();
+        //informacion 0 = vieja, informacion 1 = nueva, informacion 2 = correo
+        String correo = (String)informacion[2];
         AuthCredential credential = EmailAuthProvider.getCredential(correo, (String) informacion[0]);
         usuarioActual.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -162,7 +161,6 @@ public class Modelo implements IModelo{
                             Bundle extras = new Bundle();
                             if(task.isSuccessful()){
                                 Log.i(TAG,"Exito en actualizacion de contraseña");
-                                loginActual.setPassword((String)informacion[1]);
                                 extras.putBoolean(AppMediador.CLAVE_RESULTADO_CAMBIO_PASSWORD, true);
                                 appMediador.sendBroadcast(AppMediador.AVISO_CAMBIO_PASSWORD,extras);
                             }else{
@@ -175,7 +173,6 @@ public class Modelo implements IModelo{
                 }else{
                     Log.i(TAG,"No hubo exito en reautenticacion");
                     extras.putBoolean(AppMediador.CLAVE_RESULTADO_CAMBIO_PASSWORD,false);
-
                     appMediador.sendBroadcast(AppMediador.AVISO_CAMBIO_PASSWORD,extras);
                 }
             }
@@ -199,8 +196,6 @@ public class Modelo implements IModelo{
 
     @Override
     public void guardarOrigenYDestino(Object[] informacion) {
-        informacion[3] = loginActual.getEmail() ;
-        informacion[4] = loginActual.getPassword();
         adaptadorUsuario.actualizarUsuario(informacion);
     }
 
@@ -256,8 +251,6 @@ public class Modelo implements IModelo{
 
     @Override
     public void asignarValoracion(Object[] informacion) {
-        informacion[3] = loginActual.getEmail() ;
-        informacion[4] = loginActual.getPassword();
         adaptadorUsuario.actualizarUsuario(informacion);
     }
 
