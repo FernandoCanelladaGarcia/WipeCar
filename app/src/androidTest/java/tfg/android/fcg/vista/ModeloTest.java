@@ -88,18 +88,85 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
         contador.await(10000,TimeUnit.MILLISECONDS);
     }
 
-
+    //TODO SEPARAR EN VARIOS TEST
     @Test
-    public void testActualizarUsuarioCorrecto() throws Exception{
-        //INFORMACION USUARIO = nombre, telefono, direccion, email, password, origen, destino, rol, datovehiculo, fecha, hora, valoracion
+    public void testActualizarLoginCorrecto() throws Exception{
+        //INFORMACION USUARIO = nombre, telefono, email, password, origen, destino, rol, datovehiculo, fecha, hora, valoracion
         Log.i(TAG, "metodo testActualizarUsuarioCorrecto");
+        String[] login = new String[] {"fernando.canellada101@alu.ulpgc.es","123456"};
         String[] actualizacion = new String[]
-                {"Fernando Canellada","673347971","Leon y Castillo 39","fernando.canellada101@alu.ulpgc.es","123456","Origen","Destino","false","vacio","","",""};
+                {"2","Fernando Canellada","673347971","fernando.canellada101@ulpgc.es","111111","","","true","","","",""};
         modelo = Modelo.getInstance();
         contador = new CountDownLatch(1);
         esperarRespuestaActualizacionCorrecto();
+        modelo.comprobarLogin(login);
         modelo.guardarPerfil(actualizacion);
-        contador.await(10000,TimeUnit.MILLISECONDS);
+        contador.await(15000,TimeUnit.MILLISECONDS);
+    }
+
+    @Test
+    public void testActualizarOrigenYDestinoCorrecto() throws Exception{
+        Log.i(TAG, "metodo testActualizarOrigenYDestinoCorrecto");
+        String[] origenYDestino = new String []{"1","","","","","Plaza de San Telmo","Facultad de Ingenieria","","","","",""};
+        String[] login = new String[] {"fernando.canellada101@alu.ulpgc.es","123456"};
+        modelo = Modelo.getInstance();
+        contador = new CountDownLatch(1);
+        esperarRespuestaActualizacionCorrecto();
+        modelo.comprobarLogin(login);
+        modelo.guardarPerfil(origenYDestino);
+        contador.await(15000,TimeUnit.MILLISECONDS);
+    }
+
+    @Test
+    public void testActualizarValoracionCorrecto() throws Exception{
+        Log.i(TAG, "metodo testActualizarValoracionCorrecto");
+        String[] valoracion = new String []{"3","","","","","","","","","","","5"};
+        String[] login = new String[] {"fernando.canellada101@alu.ulpgc.es","123456"};
+        modelo = Modelo.getInstance();
+        contador = new CountDownLatch(1);
+        esperarRespuestaActualizacionCorrecto();
+        modelo.comprobarLogin(login);
+        modelo.guardarPerfil(valoracion);
+        contador.await(15000,TimeUnit.MILLISECONDS);
+    }
+
+    @Test
+    public void testActualizarFechaYHoraCorrecto() throws Exception{
+        Log.i(TAG, "metodo testActualizarFechaYHoraCorrecto");
+        String[] fechaYHora = new String []{"4","","","","","","","","","20/12/14","22:50",""};
+        String[] login = new String[] {"fernando.canellada101@alu.ulpgc.es","123456"};
+        modelo = Modelo.getInstance();
+        contador = new CountDownLatch(1);
+        esperarRespuestaActualizacionCorrecto();
+        modelo.comprobarLogin(login);
+        modelo.guardarPerfil(fechaYHora);
+        contador.await(15000,TimeUnit.MILLISECONDS);
+    }
+
+    @Test
+    public void testActualizarDatosVehiculoUsuario() throws Exception{
+        Log.i(TAG, "metodo testActualizarDatosVehiculo");
+        String[] datoVehiculo = new String []{"5","","","","","","","","eray7261gebe82e7012e2y8","","",""};
+        String[] login = new String[] {"fernando.canellada101@alu.ulpgc.es","123456"};
+        modelo = Modelo.getInstance();
+        contador = new CountDownLatch(1);
+        esperarRespuestaActualizacionCorrecto();
+        modelo.comprobarLogin(login);
+        modelo.guardarPerfil(datoVehiculo);
+        contador.await(15000,TimeUnit.MILLISECONDS);
+    }
+
+    @Test
+    public void testAgregarVehiculoCorrecto() throws Exception{
+        Log.i(TAG, "metodo testAgregarVehiculoCorrecto");
+        String[] datosVehiculo = new String[] {"Marca","Modelo","0000ABC"};
+        //String[] login = new String[] {"fernando.canellada101@alu.ulpgc.es","123456"};
+        modelo = Modelo.getInstance();
+        contador = new CountDownLatch(1);
+        esperarRespuestaAgregarVehiculo();
+        //modelo.comprobarLogin(login);
+        modelo.guardarVehiculo(datosVehiculo);
+        contador.await(15000,TimeUnit.MILLISECONDS);
     }
 
     private void esperarRespuestaLoginCorrecto() throws Exception{
@@ -132,11 +199,11 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
                     boolean resultado = intent.getBooleanExtra(AppMediador.CLAVE_RESULTADO_LOGIN,false);
                     if(resultado){
                         //No se debia hacer login, TEST OK, se hace logout.
-                        Log.i(TAG,"Login realizado con exito, TEST OK");
+                        Log.i(TAG,"Login realizado con exito, TEST FALLIDO");
                         modelo.getAuth().signOut();
                         fail();
                     }else{
-                        Log.i(TAG, "No se pudo realizar el login. TEST FALLIDO");
+                        Log.i(TAG, "No se pudo realizar el login. TEST OK");
                     }
                     contador.countDown();
                 }
@@ -203,6 +270,7 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
                     }else{
                         Log.i(TAG,"No se pudo actualizar el usuario. TEST FALLIDO");
                         Log.i(TAG, error);
+                        fail();
                     }
                     contador.countDown();;
                 }
@@ -210,5 +278,28 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
             }
         };
         appMediador.registerReceiver(receptor,AppMediador.AVISO_ACTUALIZACION_USUARIO);
+
     }
+
+    private void esperarRespuestaAgregarVehiculo() throws Exception{
+        BroadcastReceiver receptor = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(intent.getAction().equals(AppMediador.AVISO_REGISTRO_VEHICULO)){
+                    boolean resultado = intent.getBooleanExtra(AppMediador.CLAVE_RESULTADO_NUEVO_VEHICULO,false);
+                    if(resultado){
+                        //Se pudo Agregar vehiculo. TEST OK, sign-out.
+                        modelo.getAuth().signOut();
+                    }else{
+                        Log.i(TAG,"No se pudo Agregar vehiculo. TEST FALLIDO");
+                        fail();
+                    }
+                    contador.countDown();;
+                }
+                appMediador.unRegisterReceiver(this);
+            }
+        };
+        appMediador.registerReceiver(receptor,AppMediador.AVISO_REGISTRO_VEHICULO);
+    }
+
 }

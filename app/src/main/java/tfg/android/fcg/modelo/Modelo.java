@@ -86,6 +86,7 @@ public class Modelo implements IModelo{
                 Bundle extras = new Bundle();
                 if(task.isSuccessful()){
                     //Usuario logged.
+                    Log.i(TAG,"Login comprobado");
                     setUsuarioActual(auth.getCurrentUser());
                     SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login",0);
                     String email = sharedPreferences.getString("email",null);
@@ -97,6 +98,7 @@ public class Modelo implements IModelo{
                             editor.apply();
                         }
                     }else{
+                        Log.i(TAG,"Login comprobado");
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("email", (String)informacion[0]);
                         editor.putString("password",(String)informacion[1]);

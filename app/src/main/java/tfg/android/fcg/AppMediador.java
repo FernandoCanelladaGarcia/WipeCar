@@ -8,6 +8,8 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
+import tfg.android.fcg.modelo.IModelo;
+import tfg.android.fcg.modelo.Modelo;
 import tfg.android.fcg.presentador.IPresentadorHistorial;
 import tfg.android.fcg.presentador.IPresentadorLogin;
 import tfg.android.fcg.presentador.IPresentadorMapaOrigen;
@@ -71,6 +73,8 @@ public class AppMediador extends Application {
 
 	private static AppMediador singleton;
 
+    private IModelo modelo;
+
 	//Constantes de comunicacion
 
 	public static final String AVISO_USER_LOGIN = "tfg.android.fcg.AVISO_USER_LOGIN";
@@ -78,20 +82,24 @@ public class AppMediador extends Application {
 	public static final String AVISO_CORREO_PASSWORD = "tfg.android.fcg.AVISO_CORREO_PASSWORD";
 	public static final String AVISO_REGISTRO_USUARIO = "tfg.android.fcg.AVISO_REGISTRO_USUARIO";
 	public static final String AVISO_ACTUALIZACION_USUARIO = "tfg.android.fcg.AVISO_ACTUALIZACION_USUARIO";
+	public static final String AVISO_REGISTRO_VEHICULO = "tfg.android.fcg.AVISO_REGISTRO_VEHICULO";
 
 	public static final String CLAVE_RESULTADO_LOGIN = "tfg.android.fcg.CLAVE_RESULTADO_LOGIN";
 	public static final String CLAVE_RESULTADO_CAMBIO_PASSWORD = "tfg.android.fcg.CLAVE_RESULTADO_CAMBIO_PASSWORD";
 	public static final String CLAVE_RESULTADO_RECUPERAR_PASSWORD = "tfg.android.fcg.CLAVE_RESULTADO_RECUPERAR_PASSWORD";
 	public static final String CLAVE_RESULTADO_REGISTRO_USUARIO = "tfg.android.fcg.CLAVE_RESULTADO_REGISTRO_USUARIO";
 	public static final String CLAVE_ACTUALIZACION_USUARIO = "tfg.android.fcg.CLAVE_ACTUALIZACION_USUARIO";
+	public static final String CLAVE_RESULTADO_NUEVO_VEHICULO = "tfg.android.fcg.CLAVE_RESULTADO_NUEVO_VEHICULO";
 
 	public static final String ERROR_ACTUALIZACION_USUARIO_CORREO = "tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_CORREO";
 	public static final String ERROR_ACTUALIZACION_USUARIO_PASSWORD ="tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_PASSWORD";
 	public static final String ERROR_ACTUALIZACION_USUARIO_PARAMETROS = "tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_PARAMETROS";
 	public static final String ERROR_ACTUALIZACION_USUARIO_INFO = "tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_INFO";
 	public static final String ERROR_ACTUALIZACION_USUARIO_REAUTENTICACION = "tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_REAUTENTICACION";
-
-
+	public static final String ERROR_ACTUALIZACION_USUARIO_ORIGENYDESTINO = "tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_ORIGENYDESTINO";
+	public static final String ERROR_ACTUALIZACION_USUARIO_FECHAYHORA = "tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_FECHAYHORA";
+	public static final String ERROR_ACTUALIZACION_USUARIO_DATOVEHICULO = "tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_DATOVEHICULO";
+	public static final String ERROR_ACTUALIZACION_USUARIO_VALORACION = "tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_VALORACION";
 	//Métodos accesor de los presentadores, vistas y modelo.
 
 	public static AppMediador getInstance(){
@@ -189,6 +197,16 @@ public class AppMediador extends Application {
 	public void removePresentadorHistorial(){
 		presentadorHistorial = null;
 	}
+
+	//***************MODELO******************//
+    public IModelo getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(IModelo modelo) {
+        this.modelo = modelo;
+    }
+
 
 	//****************VISTAS*****************//
 
