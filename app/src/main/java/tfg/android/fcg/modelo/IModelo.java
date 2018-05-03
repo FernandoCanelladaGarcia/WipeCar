@@ -123,7 +123,7 @@ public interface IModelo {
      * Almacena en la base de datos la localización de un usuario.
      * @param informacion contendra:
      */
-    public void guardarLocalizacion(Object informacion);
+    public void guardarLocalizacion(Object[] informacion);
 
     /**
      * Recupera de la base de datos la información sobre los pasajeros

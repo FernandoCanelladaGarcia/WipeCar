@@ -257,8 +257,8 @@ public class Modelo implements IModelo{
     }
 
     @Override
-    public void guardarLocalizacion(Object informacion) {
-
+    public void guardarLocalizacion(Object[] informacion) {
+        adaptadorPosicion.actualizarPosicion(informacion);
     }
 
     @Override

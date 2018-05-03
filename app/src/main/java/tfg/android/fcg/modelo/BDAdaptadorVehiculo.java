@@ -9,6 +9,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import tfg.android.fcg.AppMediador;
 
 public class BDAdaptadorVehiculo {
@@ -71,7 +74,42 @@ public class BDAdaptadorVehiculo {
      * Modifica en la tabla Vehículo, un determinado vehículo que se indica a través del parámetro.
      * @param informacion contendra:
      */
-    public void actualizarVehiculo(Object informacion){
+    //TODO BUSCAR VEHICULO A TRAVES DE ID USER!!
+    public void actualizarVehiculo(Object[] informacion){
+        //INFORMACION 0=datovehiculo, 1=marca 2=modelo, 3=matricula.
+        String datoVehiculo = (String)informacion[0];
+        String marca = (String)informacion[1];
+        String modelo = (String)informacion[2];
+        String matricula = (String)informacion[3];
 
+        Map<String, Object> vehiculoTask = new HashMap<>();
+        vehiculoTask.put("marca", informacion[1]);
+        vehiculo.setMarca(marca);
+
+        vehiculoTask.put("modelo", informacion[2]);
+        vehiculo.setModelo(modelo);
+
+        vehiculoTask.put("matricula", informacion[3]);
+        vehiculo.setMatricula(matricula);
+
+        database.child(datoVehiculo).updateChildren(vehiculoTask).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    //Actualizacion vehiculo correctamente
+                    Log.i(TAG,"Actualizada posicion correctamente");
+
+                    Bundle extras = new Bundle();
+                    extras.putBoolean(AppMediador.CLAVE_RESULTADO_ACTUALIZACION_VEHICULO,true);
+                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_VEHICULO,extras);
+                }else{
+                    Log.i(TAG,"Error a la hora de actualizar vehiculo");
+
+                    Bundle extras = new Bundle();
+                    extras.putBoolean(AppMediador.CLAVE_RESULTADO_ACTUALIZACION_VEHICULO,false);
+                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_VEHICULO,extras);
+                }
+            }
+        });
     }
 }
