@@ -86,6 +86,7 @@ public class AppMediador extends Application {
 	public static final String AVISO_ACTUALIZACION_VEHICULO = "tfg.android.fcg.AVISO_ACTUALIZACION_VEHICULO";
 	public static final String AVISO_REGISTRO_POSICION = "tfg.android.fcg.AVISO_REGISTRO_POSICION";
 	public static final String AVISO_ACTUALIZACION_POSICION = "tfg.android.fcg.AVISO_ACTUALIZACION_POSICION";
+	public static final String AVISO_ELIMINAR_USUARIO = "tfg.android.fcg.AVISO_ELIMINAR_USUARIO";
 
 	public static final String CLAVE_RESULTADO_LOGIN = "tfg.android.fcg.CLAVE_RESULTADO_LOGIN";
 	public static final String CLAVE_RESULTADO_CAMBIO_PASSWORD = "tfg.android.fcg.CLAVE_RESULTADO_CAMBIO_PASSWORD";
@@ -96,10 +97,11 @@ public class AppMediador extends Application {
 	public static final String CLAVE_RESULTADO_ACTUALIZACION_VEHICULO = "tfg.android.fcg.CLAVE_RESULTADO_ACTUALIZACION_VEHICULO";
 	public static final String CLAVE_RESULTADO_REGISTRO_POSICION = "tfg.android.fcg.CLAVE_RESULTADO_REGISTRO_POSICION";
 	public static final String CLAVE_RESULTADO_ACTUALIZACION_POSICION = "tfg.android.fcg.CLAVE_RESULTADO_ACTUALIZACION_POSICION";
+    public static final String CLAVE_RESULTADO_ELIMINAR_USUARIO = "tfg.android.fcg.CLAVE_RESULTADO_ELIMINAR_USUARIO";
 
 	public static final String ERROR_ACTUALIZACION_USUARIO_CORREO = "tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_CORREO";
 	public static final String ERROR_ACTUALIZACION_USUARIO_PASSWORD ="tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_PASSWORD";
-	public static final String ERROR_ACTUALIZACION_USUARIO_PARAMETROS = "tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_PARAMETROS";
+	public static final String ERROR_ACTUALIZACION_USUARIO_NOMBRE = "tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_NOMBRE";
 	public static final String ERROR_ACTUALIZACION_USUARIO_INFO = "tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_INFO";
 	public static final String ERROR_ACTUALIZACION_USUARIO_REAUTENTICACION = "tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_REAUTENTICACION";
 	public static final String ERROR_ACTUALIZACION_USUARIO_ORIGENYDESTINO = "tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_ORIGENYDESTINO";

@@ -61,14 +61,14 @@ public interface IModelo {
      * seleccionado en la opción PickUp.
      * @param informacion contendra:
      */
-    public void guardarUsuarioPickup(Object informacion);
+    public void guardarUsuarioPickup(Object[] informacion);
 
     /**
      * Elimina de la base de datos la información de un usuario
      * seleccionado en la opción PickUp.
      * @param informacion contendra:
      */
-    public void eliminarUsuarioPickup(Object informacion);
+    public void eliminarUsuarioPickup(Object[] informacion);
 
     /**
      * Recupera la lista de vehículos en la opción On The Go.

@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Switch;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -12,11 +11,8 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthActionCodeException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -180,14 +176,14 @@ public class BDAdaptadorUsuario {
         String[] fechaYHora = new String[]{(String) informacion[9], (String) informacion[10]};
         String datoVehiculo = (String) informacion[8];
 
-        int tarea = Integer.parseInt((String)informacion[0]);
+        int tarea = Integer.parseInt((String) informacion[0]);
 
         switch (tarea) {
             case 1:
                 actualizarOrigenYDestino(origenDestino);
                 break;
             case 2:
-                Log.i(TAG,"actualizar Login");
+                Log.i(TAG, "actualizar Login");
                 actualizarLogin(loginUsuario);
                 break;
             case 3:
@@ -369,7 +365,7 @@ public class BDAdaptadorUsuario {
 //                                            }
 //                                        } else {
 //                                            //Error a la hora de actualizar los parametros del usuario en la base de datos
-//                                            String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_PARAMETROS;
+//                                            String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_NOMBRE;
 //                                            datos[0] = false;
 //                                            datos[1] = error;
 //                                            Bundle extras = new Bundle();
@@ -408,29 +404,86 @@ public class BDAdaptadorUsuario {
      * @param idUser contendra:
      */
     public void eliminarUsuario(String idUser) {
+    final DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios")
+            .child(idUser);
+    SharedPreferences sharedPreferences = appMediador.getSharedPreferences("login",0);
+    AuthCredential credential = EmailAuthProvider.getCredential(usuarioActual.getEmail(),sharedPreferences.getString("password",null));
 
+    usuarioActual.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+        @Override
+        public void onComplete(@NonNull Task<Void> task) {
+            if(task.isSuccessful()){
+                //Reautenticado
+                usuarioActual.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()){
+                            //Eliminado correctamente, falta eliminar el registro de la base de datos.
+                            referenciaUsuario.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        //Eliminado registro de la base de datos, notifica resultado
+
+                                        Bundle extras = new Bundle();
+                                        extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_USUARIO,true);
+
+                                        appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_USUARIO,extras);
+
+                                    }else{
+                                        //Fallo al eliminar el registro de la base de datos
+                                        Bundle extras = new Bundle();
+                                        extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_USUARIO,false);
+
+                                        appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_USUARIO,extras);
+                                    }
+                                }
+                            });
+                        }else{
+                            //Fallo al eliminar el registro de la base de datos
+                            Bundle extras = new Bundle();
+                            extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_USUARIO,false);
+
+                            appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_USUARIO,extras);
+                        }
+                    }
+                });
+            }else{
+                //Fallo en la reautenticacion
+                Bundle extras = new Bundle();
+                extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_USUARIO,false);
+
+                appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_USUARIO,extras);
+            }
+        }
+    });
     }
 
     //**********METODOS PRIVADOS**************//
 
     private void actualizarLogin(final String[] informacion) {
-        final String currentPassword = sharedPreferences.getString("password", null);
-        final String currentEmail = sharedPreferences.getString("email", null);
+
         final Object datos[] = new Object[2];
 
+        final String currentPassword = sharedPreferences.getString("password", null);
+        final String currentEmail = sharedPreferences.getString("email", null);
+        final Map<String, Object> taskMap = new HashMap<>();
+
         AuthCredential credential = EmailAuthProvider.getCredential(currentEmail, currentPassword);
+
         usuarioActual.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Log.i(TAG,"Reautenticacion correcta");
+                    Log.i(TAG, "Reautenticacion correcta");
+
                     String currentDisplayName = auth.getCurrentUser().getDisplayName();
                     String[] partes = currentDisplayName.split("#");
                     String currentName = partes[0];
                     String currentPhone = partes[1];
                     boolean currentRol = Boolean.valueOf(partes[2]);
 
-                    String newName = informacion[0];
+                    final String newName = informacion[0];
                     final String newPhone = informacion[1];
                     final String newEmail = informacion[2];
                     final String newPassword = informacion[3];
@@ -438,10 +491,13 @@ public class BDAdaptadorUsuario {
 
                     if (currentName.equals(newName) && currentRol == newRol) {
                         newDisplayName = currentDisplayName;
+                        taskMap.put("nombre", currentName);
                     }
                     if (!currentName.equals(newName) && currentRol == newRol) {
                         newDisplayName = newName + "#" + currentRol;
                         login.setNombre(newName);
+                        taskMap.put("nombre", newName);
+                        usuario.setNombre(newName);
                     }
                     if (currentName.equals(newName) && currentRol != newRol) {
                         newDisplayName = currentName + "#" + newRol;
@@ -450,98 +506,117 @@ public class BDAdaptadorUsuario {
                         newDisplayName = newName + "#" + newRol;
                         login.setNombre(newName);
                         login.setRol(newRol);
+                        taskMap.put("nombre", newName);
+                        usuario.setNombre(newName);
                     }
-                    //Reautenticacion correcta
+
                     UserProfileChangeRequest actualizacion = new UserProfileChangeRequest.Builder().setDisplayName(newDisplayName).build();
                     usuarioActual.updateProfile(actualizacion).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 //Actualizacion de DisplayName
-                                Log.i(TAG,"Actualizacion display");
-                                if (!currentPassword.equals(newPassword)) {
-                                    SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                                    editor.putString("password", newPassword);
-                                    editor.apply();
-                                    //TODO ENCRIPTAR
-                                    usuarioActual.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
+                                Log.i(TAG, "Actualizacion display");
+                                DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(usuarioActual.getUid());
 
-                                            if (task.isSuccessful()) {
-                                                //Actualizacion de password
-                                                Log.i(TAG,"Actualizacion password");
-                                                datos[0] = true;
-                                                datos[1] = "password";
-                                                Bundle extras = new Bundle();
-                                                extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
-                                                appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
-                                            } else {
-                                                //Error password
-                                                Log.i(TAG,"Error password");
-                                                Bundle extras = new Bundle();
-                                                String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_PASSWORD;
-                                                datos[0] = false;
-                                                datos[1] = error;
-                                                extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
-                                                appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
-                                            }
-                                        }
-
-                                    });
-                                    //TODO CREDENCIAL TELEFONO
-//                                } else if (!currentPhone.equals(newPhone)) {
-//                                    login.setTelefono(newPhone);
-//                                    AuthCredential credential = PhoneAuthCredential.CREATOR.
-//                                    usuarioActual.updatePhoneNumber(newPhone).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                        @Override
-//                                        public void onComplete(@NonNull Task<Void> task) {
+                                referenciaUsuario.updateChildren(taskMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            //Actualizacion name en tabla usuarios
+                                            Log.i(TAG, "Actualizacion nombre");
+                                            if (!currentPassword.equals(newPassword)) {
+                                                SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
+                                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                editor.putString("password", newPassword);
+                                                editor.apply();
+                                                //TODO ENCRIPTAR
+                                                usuarioActual.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            //Actualizacion de password
+                                                            Log.i(TAG, "Actualizacion password");
+                                                            datos[0] = true;
+                                                            datos[1] = "password";
+                                                            Bundle extras = new Bundle();
+                                                            extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
+                                                            appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
+                                                        } else {
+                                                            //Error password
+                                                            Log.i(TAG, "Error password");
+                                                            Bundle extras = new Bundle();
+                                                            String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_PASSWORD;
+                                                            datos[0] = false;
+                                                            datos[1] = error;
+                                                            extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
+                                                            appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
+                                                        }
+                                                    }
+                                                });
+                                                //TODO CREDENCIAL TELEFONO
+//                                           } else if (!currentPhone.equals(newPhone)) {
+//                                               login.setTelefono(newPhone);
+//                                               AuthCredential credential = PhoneAuthCredential.CREATOR.
+//                                               usuarioActual.updatePhoneNumber(newPhone).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                                  @Override
+//                                                  public void onComplete(@NonNull Task<Void> task) {
 //
-//                                        }
-//                                    })
-                                } else if (!currentEmail.equals(newEmail)) {
-                                    login.setEmail(newEmail);
-                                    SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                                    editor.putString("email", newEmail);
-                                    editor.apply();
-                                    usuarioActual.updateEmail(newEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                //Actualizacion de email
-                                                Log.i(TAG,"Actualizacion email");
+//                                                  }
+//                                           })
+                                            } else if (!currentEmail.equals(newEmail)) {
+                                                login.setEmail(newEmail);
+                                                SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
+                                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                editor.putString("email", newEmail);
+                                                editor.apply();
+                                                usuarioActual.updateEmail(newEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            //Actualizacion de email
+                                                            Log.i(TAG, "Actualizacion email");
+                                                            Bundle extras = new Bundle();
+                                                            datos[0] = true;
+                                                            datos[1] = "email";
+                                                            extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
+                                                            appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
+                                                        } else {
+                                                            //Error password
+                                                            Log.i(TAG, "Error email");
+                                                            Bundle extras = new Bundle();
+                                                            String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_CORREO;
+                                                            datos[0] = false;
+                                                            datos[1] = error;
+                                                            extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
+                                                            appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
+                                                        }
+                                                    }
+                                                });
+                                            } else {
+                                                //Solo actualizacion displayName
+                                                Log.i(TAG, "Actualizacion solo display");
                                                 Bundle extras = new Bundle();
                                                 datos[0] = true;
-                                                datos[1] = "email";
-                                                extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
-                                                appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
-                                            } else {
-                                                //Error password
-                                                Log.i(TAG,"Error email");
-                                                Bundle extras = new Bundle();
-                                                String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_CORREO;
-                                                datos[0] = false;
-                                                datos[1] = error;
+                                                datos[1] = "displayname";
                                                 extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
                                                 appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
                                             }
-
+                                        } else {
+                                            //Error a la hora de actualizar el nombre en la base de usuarios.
+                                            Log.i(TAG, "Error nombre");
+                                            Bundle extras = new Bundle();
+                                            String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_NOMBRE;
+                                            datos[0] = false;
+                                            datos[1] = error;
+                                            extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
+                                            appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
                                         }
-                                    });
-                                } else {
-                                    //Solo actualizacion displayName
-                                    Log.i(TAG,"Actualizacion solo display");
-                                    Bundle extras = new Bundle();
-                                    datos[0] = true;
-                                    datos[1] = "displayname";
-                                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
-                                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
-                                }
+                                    }
+                                });
                             } else {
                                 //Error actualizacion displayName
-                                Log.i(TAG,"Error display");
+                                Log.i(TAG, "Error display");
                                 Bundle extras = new Bundle();
                                 String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_INFO;
                                 datos[0] = false;
@@ -550,10 +625,9 @@ public class BDAdaptadorUsuario {
                                 appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
                             }
                         }
-
                     });
                 } else {
-                    Log.i(TAG,"Error reautenticacion");
+                    Log.i(TAG, "Error reautenticacion");
                     //Error en reautenticacion
                     Bundle extras = new Bundle();
                     String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_REAUTENTICACION;
@@ -581,17 +655,17 @@ public class BDAdaptadorUsuario {
                     //Actualizacion valoracion
                     Bundle extras = new Bundle();
                     datos[0] = true;
-                    datos[1] ="datovehiculo";
-                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO,datos);
-                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO,extras);
+                    datos[1] = "datovehiculo";
+                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
+                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
                 } else {
                     //Error de actualizacion valoracion
                     Bundle extras = new Bundle();
                     String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_VALORACION;
                     datos[0] = true;
                     datos[1] = error;
-                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO,datos);
-                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO,extras);
+                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
+                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
                 }
             }
         });
@@ -613,17 +687,17 @@ public class BDAdaptadorUsuario {
                     //Actualizacion dato vehiculo
                     Bundle extras = new Bundle();
                     datos[0] = true;
-                    datos[1] ="datovehiculo";
-                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO,datos);
-                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO,extras);
+                    datos[1] = "datovehiculo";
+                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
+                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
                 } else {
                     //Error de actualizacion dato vehiculo
                     Bundle extras = new Bundle();
                     String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_DATOVEHICULO;
                     datos[0] = true;
                     datos[1] = error;
-                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO,datos);
-                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO,extras);
+                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
+                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
                 }
             }
         });
@@ -648,17 +722,17 @@ public class BDAdaptadorUsuario {
                     //Actualizacion fecha y hora
                     Bundle extras = new Bundle();
                     datos[0] = true;
-                    datos[1] ="fechayhora";
-                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO,datos);
-                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO,extras);
+                    datos[1] = "fechayhora";
+                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
+                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
                 } else {
                     //Error de actualizacion Origen y Destino
                     Bundle extras = new Bundle();
                     String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_FECHAYHORA;
                     datos[0] = true;
                     datos[1] = error;
-                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO,datos);
-                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO,extras);
+                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
+                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
                 }
             }
         });
@@ -684,17 +758,17 @@ public class BDAdaptadorUsuario {
                     //Actualizacion Origen y Destino
                     Bundle extras = new Bundle();
                     datos[0] = true;
-                    datos[1] ="origenydestino";
-                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO,datos);
-                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO,extras);
+                    datos[1] = "origenydestino";
+                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
+                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
                 } else {
                     //Error de actualizacion Origen y Destino
                     Bundle extras = new Bundle();
                     String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_ORIGENYDESTINO;
                     datos[0] = true;
                     datos[1] = error;
-                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO,datos);
-                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO,extras);
+                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
+                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
                 }
             }
         });

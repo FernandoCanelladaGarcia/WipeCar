@@ -207,13 +207,13 @@ public class Modelo implements IModelo{
     }
 
     @Override
-    public void guardarUsuarioPickup(Object informacion) {
-
+    public void guardarUsuarioPickup(Object[] informacion) {
+        adaptadorVinculo.agregarVinculo(informacion);
     }
 
     @Override
-    public void eliminarUsuarioPickup(Object informacion) {
-
+    public void eliminarUsuarioPickup(Object[] informacion) {
+        adaptadorVinculo.eliminarVinculo((String)informacion[0],(String)informacion[1]);
     }
 
     @Override
@@ -233,7 +233,7 @@ public class Modelo implements IModelo{
 
     @Override
     public void eliminarPerfil(Object informacion) {
-
+        adaptadorUsuario.eliminarUsuario((String)informacion);
     }
 
     @Override

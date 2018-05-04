@@ -87,6 +87,18 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
         modelo.comprobarLogin(login);
         contador.await(10000,TimeUnit.MILLISECONDS);
     }
+    //TODO COMPLETAR
+    @Test
+    public void testComprobarELiminarUsuario() throws Exception{
+        Log.i(TAG, "metodo testComprobarELiminarUsuario");
+        String[] login = new String[] {"fernando.canellada101@alu.ulpgc.es", "123456"};
+        String perfil = "";
+        modelo = Modelo.getInstance();
+        contador = new CountDownLatch(1);
+        esperarRespuestaEliminarUsuarioCorrecto();
+        modelo.comprobarLogin(login);
+        modelo.eliminarPerfil(perfil);
+    }
 
     //TODO SEPARAR EN VARIOS TEST
     @Test
@@ -300,6 +312,27 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
             }
         };
         appMediador.registerReceiver(receptor,AppMediador.AVISO_REGISTRO_VEHICULO);
+    }
+
+    private void esperarRespuestaEliminarUsuarioCorrecto() throws Exception{
+        BroadcastReceiver receptor = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(intent.getAction().equals(AppMediador.AVISO_ELIMINAR_USUARIO)){
+                    boolean resultado = intent.getBooleanExtra(AppMediador.CLAVE_RESULTADO_ELIMINAR_USUARIO,false);
+                    if(resultado){
+                        //Se pudo Eliminar perfil. TEST OK, sign-out.
+
+                    }else{
+                        Log.i(TAG,"No se pudo eliminar usuario. TEST FALLIDO");
+                        fail();
+                    }
+                    contador.countDown();;
+                }
+                appMediador.unRegisterReceiver(this);
+            }
+        };
+        appMediador.registerReceiver(receptor,AppMediador.AVISO_ELIMINAR_USUARIO);
     }
 
 }
