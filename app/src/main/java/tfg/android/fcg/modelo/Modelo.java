@@ -219,6 +219,7 @@ public class Modelo implements IModelo{
     @Override
     public void buscarVehiculos(Object informacion) {
 
+        
     }
 
     @Override
