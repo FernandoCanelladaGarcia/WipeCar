@@ -83,12 +83,16 @@ public class AppMediador extends Application {
 	public static final String AVISO_REGISTRO_USUARIO = "tfg.android.fcg.AVISO_REGISTRO_USUARIO";
 	public static final String AVISO_ACTUALIZACION_USUARIO = "tfg.android.fcg.AVISO_ACTUALIZACION_USUARIO";
 	public static final String AVISO_REGISTRO_VEHICULO = "tfg.android.fcg.AVISO_REGISTRO_VEHICULO";
-	public static final String AVISO_ACTUALIZACION_VEHICULO = "tfg.android.fcg.AVISO_ACTUALIZACION_VEHICULO";
 	public static final String AVISO_REGISTRO_POSICION = "tfg.android.fcg.AVISO_REGISTRO_POSICION";
 	public static final String AVISO_ACTUALIZACION_POSICION = "tfg.android.fcg.AVISO_ACTUALIZACION_POSICION";
 	public static final String AVISO_ELIMINAR_USUARIO = "tfg.android.fcg.AVISO_ELIMINAR_USUARIO";
 	public static final String AVISO_CREACION_VINCULO = "tfg.android.fcg.AVISO_CREACION_VINCULO";
 	public static final String AVISO_CREACION_HISTORIAL = "tfg.android.fcg.AVISO_CREACION_HISTORIAL";
+	public static final String AVISO_OBTENER_VEHICULO = "tfg.android.fcg.AVISO_OBTENER_VEHICULO";
+	public static final String AVISO_ACTUALIZACION_VEHICULO = "tfg.android.fcg.AVISO_ACTUALIZACION_VEHICULO";
+	public static final String AVISO_ELIMINACION_VEHICULO = "tfg.android.fcg.AVISO_ELIMINACION_VEHICULO";
+	public static final String AVISO_OBTENER_CONDUCTOR = "tfg.android.fcg.AVISO_OBTENER_CONDUCTOR";
+	public static final String AVISO_OBTENER_PASAJERO = "tfg.android.fcg.AVISO_OBTENER_PASAJERO";
 
 	public static final String CLAVE_RESULTADO_LOGIN = "tfg.android.fcg.CLAVE_RESULTADO_LOGIN";
 	public static final String CLAVE_RESULTADO_CAMBIO_PASSWORD = "tfg.android.fcg.CLAVE_RESULTADO_CAMBIO_PASSWORD";
@@ -96,12 +100,16 @@ public class AppMediador extends Application {
 	public static final String CLAVE_RESULTADO_REGISTRO_USUARIO = "tfg.android.fcg.CLAVE_RESULTADO_REGISTRO_USUARIO";
 	public static final String CLAVE_ACTUALIZACION_USUARIO = "tfg.android.fcg.CLAVE_ACTUALIZACION_USUARIO";
 	public static final String CLAVE_RESULTADO_NUEVO_VEHICULO = "tfg.android.fcg.CLAVE_RESULTADO_NUEVO_VEHICULO";
-	public static final String CLAVE_RESULTADO_ACTUALIZACION_VEHICULO = "tfg.android.fcg.CLAVE_RESULTADO_ACTUALIZACION_VEHICULO";
 	public static final String CLAVE_RESULTADO_REGISTRO_POSICION = "tfg.android.fcg.CLAVE_RESULTADO_REGISTRO_POSICION";
 	public static final String CLAVE_RESULTADO_ACTUALIZACION_POSICION = "tfg.android.fcg.CLAVE_RESULTADO_ACTUALIZACION_POSICION";
     public static final String CLAVE_RESULTADO_ELIMINAR_USUARIO = "tfg.android.fcg.CLAVE_RESULTADO_ELIMINAR_USUARIO";
     public static final String CLAVE_CREACION_VINCULO = "tfg.android.fcg.CLAVE_CREACION_VINCULO";
     public static final String CLAVE_CREACION_HISTORIAL = "tfg.android.fcg.CLAVE_CREACION_HISTORIAL";
+    public static final String CLAVE_OBTENER_VEHICULO = "tfg.android.fcg.CLAVE_OBTENER_VEHICULO";
+	public static final String CLAVE_RESULTADO_ACTUALIZACION_VEHICULO = "tfg.android.fcg.CLAVE_RESULTADO_ACTUALIZACION_VEHICULO";
+	public static final String CLAVE_RESULTADO_ELIMINACION_VEHICULO = "tfg.android.fcg.CLAVE_RESULTADO_ELIMINACION_VEHICULO";
+	public static final String CLAVE_OBTENER_CONDUCTOR = "tfg.android.fcg.CLAVE_OBTENER_CONDUCTOR";
+	public static final String CLAVE_OBTENER_PASAJERO = "tfg.android.fcg.CLAVE_OBTENER_PASAJERO";
 
 	public static final String ERROR_ACTUALIZACION_USUARIO_CORREO = "tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_CORREO";
 	public static final String ERROR_ACTUALIZACION_USUARIO_PASSWORD ="tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_PASSWORD";

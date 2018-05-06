@@ -1,6 +1,8 @@
 package tfg.android.fcg.modelo;
 
-public class Vehiculo {
+import java.io.Serializable;
+
+public class Vehiculo implements Serializable {
 
     //Variables globales
 

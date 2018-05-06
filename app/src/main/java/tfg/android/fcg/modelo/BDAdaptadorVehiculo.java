@@ -6,8 +6,11 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,8 +34,32 @@ public class BDAdaptadorVehiculo {
      * Busca en la tabla Vehículo aquel registro que coincide con el parámetro.
      * @param datoVehiculo contendra:
      */
-    public void obtenerVehiculo(String datoVehiculo){
+    public void obtenerVehiculo(final String datoVehiculo){
+        database.child(datoVehiculo).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Se ha obtenido vehiculo
+                vehiculo = dataSnapshot.getValue(Vehiculo.class);
 
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_OBTENER_VEHICULO,vehiculo);
+                appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_VEHICULO,extras);
+
+                database.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //Error a la hora de obtener vehiculo
+                vehiculo = null;
+
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_OBTENER_VEHICULO,vehiculo);
+                appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_VEHICULO,extras);
+
+                database.removeEventListener(this);
+            }
+        });
     }
 
     /**
@@ -83,13 +110,13 @@ public class BDAdaptadorVehiculo {
         String matricula = (String)informacion[3];
 
         Map<String, Object> vehiculoTask = new HashMap<>();
-        vehiculoTask.put("marca", informacion[1]);
+        vehiculoTask.put("marca", marca);
         vehiculo.setMarca(marca);
 
-        vehiculoTask.put("modelo", informacion[2]);
+        vehiculoTask.put("modelo", modelo);
         vehiculo.setModelo(modelo);
 
-        vehiculoTask.put("matricula", informacion[3]);
+        vehiculoTask.put("matricula",matricula);
         vehiculo.setMatricula(matricula);
 
         database.child(datoVehiculo).updateChildren(vehiculoTask).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -111,5 +138,76 @@ public class BDAdaptadorVehiculo {
                 }
             }
         });
+    }
+
+    public void eliminarVehiculo(Object informacion){
+    //Informacion Query del datovehiculo, eliminar vehiculo de tabla vehiculos
+        String idUser = (String)informacion;
+
+        final DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference()
+                .child("usuarios").child(idUser);
+        referenciaUsuario.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Obtenido usuario
+                Usuario user = dataSnapshot.getValue(Usuario.class);
+
+                String datoVehiculo = (String) user.getDatoVehiculo();
+
+                database.child(datoVehiculo).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            //Vehiculo eliminado, quitar referencia vehiculo de tabla usuarios.
+                            Map<String, Object> vehiculoTask = new HashMap<>();
+                            vehiculoTask.put("datoVehiculo","");
+
+                            referenciaUsuario.updateChildren(vehiculoTask).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        //Quitada la referencia del datoVehiculo del usuario
+                                        Bundle extras = new Bundle();
+
+                                        extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINACION_VEHICULO,true);
+                                        appMediador.sendBroadcast(AppMediador.AVISO_ELIMINACION_VEHICULO,extras);
+
+                                    }else{
+                                        //Error al quitar la referencia
+                                        Bundle extras = new Bundle();
+
+                                        extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINACION_VEHICULO,false);
+                                        appMediador.sendBroadcast(AppMediador.AVISO_ELIMINACION_VEHICULO,extras);
+                                    }
+
+                                }
+                            });
+
+                        }else{
+                            //No se ha eliminado vehiculo de la tabla vehiculos
+                            Bundle extras = new Bundle();
+
+                            extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINACION_VEHICULO,false);
+                            appMediador.sendBroadcast(AppMediador.AVISO_ELIMINACION_VEHICULO,extras);
+                        }
+                    }
+                });
+                referenciaUsuario.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //No hay coincidencia del referencia del usuario
+                Usuario user = null;
+
+                Bundle extras = new Bundle();
+
+                extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINACION_VEHICULO,false);
+                appMediador.sendBroadcast(AppMediador.AVISO_ELIMINACION_VEHICULO,extras);
+
+                referenciaUsuario.removeEventListener(this);
+            }
+        });
+
     }
 }

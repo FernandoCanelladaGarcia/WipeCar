@@ -9,6 +9,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import tfg.android.fcg.AppMediador;
 
 public class BDAdaptadorVinculo {
@@ -69,6 +72,7 @@ public class BDAdaptadorVinculo {
      */
     public void concretarVinculo(String idPasajero, String idConductor){
     //TODO query vinculo, update taskmap vinculo = true
+
     }
 
     /**
@@ -78,6 +82,9 @@ public class BDAdaptadorVinculo {
      */
     public void eliminarVinculo(String idPasajero, String idConductor){
     //TODO query, delete
+        Map<String, Object> task = new HashMap<>();
+        task.put("idPasajero",idPasajero);
+        task.put("idConductor",idConductor);
     }
 
     /**

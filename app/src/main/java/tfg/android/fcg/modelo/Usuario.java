@@ -1,6 +1,8 @@
 package tfg.android.fcg.modelo;
 
-public class Usuario {
+import java.io.Serializable;
+
+public class Usuario implements Serializable {
 
     //Variables globales
 

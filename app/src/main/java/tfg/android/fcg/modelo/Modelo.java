@@ -202,7 +202,22 @@ public class Modelo implements IModelo{
     }
 
     @Override
-    public void obtenerUsuariosPickUp(Object informacion) {
+    public void obtenerUsuariosPickUp(Object[] informacion) {
+        //Pasajeros o Conductores;
+        int tarea = (int) informacion[0];
+
+        switch (tarea){
+            case 0:
+                //buscarPasajeros
+                adaptadorUsuario.obtenerListaPasajeros((String)informacion[1]);
+                break;
+            case 1:
+                //buscarConductores
+                adaptadorUsuario.obtenerListaConductores((String)informacion[1]);
+            default:
+                Log.i(TAG, "ERROR INTRODUCIENDO TAREA");
+                return;
+        }
 
     }
 
@@ -219,7 +234,6 @@ public class Modelo implements IModelo{
     @Override
     public void buscarVehiculos(Object informacion) {
 
-        
     }
 
     @Override
@@ -244,7 +258,7 @@ public class Modelo implements IModelo{
 
     @Override
     public void eliminarVehiculo(Object informacion) {
-
+        adaptadorVehiculo.eliminarVehiculo(informacion);
     }
 
     @Override

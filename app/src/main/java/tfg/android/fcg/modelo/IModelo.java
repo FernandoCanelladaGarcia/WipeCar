@@ -54,7 +54,7 @@ public interface IModelo {
      * Recupera la lista de pasajeros o conductores de la base de datos.
      * @param informacion contendra:
      */
-    public void obtenerUsuariosPickUp(Object informacion);
+    public void obtenerUsuariosPickUp(Object[] informacion);
 
     /**
      * Almacena la información de un usuario

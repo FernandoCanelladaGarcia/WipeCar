@@ -13,8 +13,11 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,11 +35,13 @@ public class BDAdaptadorUsuario {
     private SharedPreferences sharedPreferences;
     private String newDisplayName = "";
     private final String TAG = "depurador";
+    private DatabaseReference database;
 
     public BDAdaptadorUsuario() {
         appMediador = AppMediador.getInstance();
         auth = FirebaseAuth.getInstance();
         sharedPreferences = appMediador.getSharedPreferences("Login", 0);
+        database = FirebaseDatabase.getInstance().getReference().child("usuarios");
     }
 
     /**
@@ -45,7 +50,7 @@ public class BDAdaptadorUsuario {
      * @param destino contendra:
      */
     public void obtenerListaConductores(String destino) {
-
+        //TODO comprobar rol
     }
 
     /**
@@ -54,6 +59,7 @@ public class BDAdaptadorUsuario {
      * @param destino contendra:
      */
     public void obtenerListaPasajeros(String destino) {
+        //TODO comprobar rol
 
     }
 
@@ -63,7 +69,32 @@ public class BDAdaptadorUsuario {
      * @param idUser contendra:
      */
     public void obtenerConductor(String idUser) {
+        database.child(idUser).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Obtenido conductor
+                usuario = dataSnapshot.getValue(Usuario.class);
 
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_OBTENER_CONDUCTOR,usuario);
+                appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_CONDUCTOR,extras);
+
+                database.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //Error a la hora de obtener conductor
+
+                usuario = null;
+
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_OBTENER_CONDUCTOR,usuario);
+                appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_CONDUCTOR,extras);
+
+                database.removeEventListener(this);
+            }
+        });
     }
 
     /**
@@ -72,7 +103,32 @@ public class BDAdaptadorUsuario {
      * @param idUser contendra:
      */
     public void obtenerPasajero(String idUser) {
+        database.child(idUser).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Obtenido Pasajero
+                usuario = dataSnapshot.getValue(Usuario.class);
 
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_OBTENER_PASAJERO,usuario);
+                appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_PASAJERO,extras);
+
+                database.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //Error a la hora de obtener pasajero
+
+                usuario = null;
+
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_OBTENER_PASAJERO,usuario);
+                appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_PASAJERO,extras);
+
+                database.removeEventListener(this);
+            }
+        });
     }
 
     /**
