@@ -92,12 +92,13 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
     public void testComprobarELiminarUsuario() throws Exception{
         Log.i(TAG, "metodo testComprobarELiminarUsuario");
         String[] login = new String[] {"fernando.canellada101@alu.ulpgc.es", "123456"};
-        String perfil = "";
+//        String perfil = "";
         modelo = Modelo.getInstance();
+        modelo.comprobarLogin(login);
         contador = new CountDownLatch(1);
         esperarRespuestaEliminarUsuarioCorrecto();
-        modelo.comprobarLogin(login);
-        modelo.eliminarPerfil(perfil);
+        modelo.eliminarPerfil("vhyuQd4tPgRObCZ28TKvXPU8gPr1");
+        contador.await(15000,TimeUnit.MILLISECONDS);
     }
 
     //TODO SEPARAR EN VARIOS TEST
@@ -178,6 +179,45 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
         esperarRespuestaAgregarVehiculo();
         //modelo.comprobarLogin(login);
         modelo.guardarVehiculo(datosVehiculo);
+        contador.await(15000,TimeUnit.MILLISECONDS);
+    }
+
+    @Test
+    public void testAgregarPosicion() throws Exception{
+        Log.i(TAG, "metodo testAgregarPosicion");
+        String[] posicion = new String[] {"idUser","latitud","longitud"};
+        //String[] login = new String[] {"fernando.canellada101@alu.ulpgc.es","123456"};
+        modelo = Modelo.getInstance();
+        contador = new CountDownLatch(1);
+        esperarRespuestaAgregarPosicion();
+        //modelo.comprobarLogin(login);
+        modelo.guardarLocalizacion(posicion);
+        contador.await(15000,TimeUnit.MILLISECONDS);
+    }
+
+    @Test
+    public void testAgregarVinculo() throws Exception{
+        Log.i(TAG, "metodo testAgregarVinculo");
+        Object[] vinculo = new Object[] {"idUserPasajero","idUserConductor",false,"fecha","hora","origen","destino"};
+        //String[] login = new String[] {"fernando.canellada101@alu.ulpgc.es","123456"};
+        modelo = Modelo.getInstance();
+        contador = new CountDownLatch(1);
+        esperarRespuestaAgregarVinculo();
+        //modelo.comprobarLogin(login);
+        modelo.guardarUsuarioPickup(vinculo);
+        contador.await(15000,TimeUnit.MILLISECONDS);
+    }
+
+    @Test
+    public void testAgregarHistorial() throws Exception{
+        Log.i(TAG, "metodo testAgregarHistorial");
+        Object[] vinculo = new Object[] {"idUserPasajero","idUserConductor","fecha","hora","origen","destino","valoracionPasajero","valoracionConductor"};
+        //String[] login = new String[] {"fernando.canellada101@alu.ulpgc.es","123456"};
+        modelo = Modelo.getInstance();
+        contador = new CountDownLatch(1);
+        esperarRespuestaAgregarHistorial();
+        //modelo.comprobarLogin(login);
+
         contador.await(15000,TimeUnit.MILLISECONDS);
     }
 
@@ -333,6 +373,69 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
             }
         };
         appMediador.registerReceiver(receptor,AppMediador.AVISO_ELIMINAR_USUARIO);
+    }
+
+    private void esperarRespuestaAgregarPosicion() throws Exception{
+        BroadcastReceiver receptor = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(intent.getAction().equals(AppMediador.AVISO_REGISTRO_POSICION)){
+                    boolean resultado = intent.getBooleanExtra(AppMediador.CLAVE_RESULTADO_REGISTRO_POSICION,false);
+                    if(resultado){
+                        //Se pudo agregar posicion. TEST OK, sign-out.
+
+                    }else{
+                        Log.i(TAG,"No se pudo agregar posicion. TEST FALLIDO");
+                        fail();
+                    }
+                    contador.countDown();;
+                }
+                appMediador.unRegisterReceiver(this);
+            }
+        };
+        appMediador.registerReceiver(receptor,AppMediador.AVISO_REGISTRO_POSICION);
+    }
+
+    private void esperarRespuestaAgregarVinculo() throws Exception{
+        BroadcastReceiver receptor = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(intent.getAction().equals(AppMediador.AVISO_CREACION_VINCULO)){
+                    boolean resultado = intent.getBooleanExtra(AppMediador.CLAVE_CREACION_VINCULO,false);
+                    if(resultado){
+                        //Se pudo agregar vinculo. TEST OK, sign-out.
+
+                    }else{
+                        Log.i(TAG,"No se pudo agregar vinculo. TEST FALLIDO");
+                        fail();
+                    }
+                    contador.countDown();;
+                }
+                appMediador.unRegisterReceiver(this);
+            }
+        };
+        appMediador.registerReceiver(receptor,AppMediador.AVISO_CREACION_VINCULO);
+    }
+
+    private void esperarRespuestaAgregarHistorial() throws Exception{
+        BroadcastReceiver receptor = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(intent.getAction().equals(AppMediador.AVISO_CREACION_HISTORIAL)){
+                    boolean resultado = intent.getBooleanExtra(AppMediador.CLAVE_CREACION_HISTORIAL,false);
+                    if(resultado){
+                        //Se pudo agregar historial. TEST OK, sign-out.
+
+                    }else{
+                        Log.i(TAG,"No se pudo agregar historial. TEST FALLIDO");
+                        fail();
+                    }
+                    contador.countDown();;
+                }
+                appMediador.unRegisterReceiver(this);
+            }
+        };
+        appMediador.registerReceiver(receptor,AppMediador.AVISO_CREACION_HISTORIAL);
     }
 
 }

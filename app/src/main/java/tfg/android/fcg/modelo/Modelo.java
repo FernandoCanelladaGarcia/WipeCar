@@ -193,7 +193,7 @@ public class Modelo implements IModelo{
 
     @Override
     public void obtenerPosicionUsuario(Object informacion) {
-
+        adaptadorPosicion.obtenerPosicion((String)informacion);
     }
 
     @Override

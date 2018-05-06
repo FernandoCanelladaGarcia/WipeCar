@@ -28,12 +28,12 @@ public class BDAdaptadorPosicion {
     }
 
     /**
-     * Busca en la tabla Posición la latitud y longitud del usuario que posee
+     * Busca la posicion del usuario y la almacena en la tabla usuario que posee
      * el identificador que coincide con el parámetro.
      * @param idUser contendra:
      */
     public void obtenerPosicion(String idUser){
-
+        //TODO Llamada al GPS para obtener ubicacion
     }
 
     /**
