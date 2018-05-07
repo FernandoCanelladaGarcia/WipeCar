@@ -7,17 +7,17 @@ public class Login {
     private String idUser;
     private String nombre;
     private String email;
-    private String telefono;
-    private boolean rol;
+//    private String telefono;
+//    private boolean rol;
 
     //Constructor
 
-    public Login(String idUser, String nombre, String email, String telefono, boolean rol){
+    public Login(String idUser, String nombre, String email){
         this.idUser = idUser;
         this.nombre = nombre;
         this.email = email;
-        this.telefono = telefono;
-        this.rol = rol;
+//        this.telefono = telefono;
+//        this.rol = rol;
     }
     public Login(){
 
@@ -49,20 +49,20 @@ public class Login {
         this.email = email;
     }
 
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public boolean isRol() {
-        return rol;
-    }
-
-    public void setRol(boolean rol) {
-        this.rol = rol;
-    }
+//    public String getTelefono() {
+//        return telefono;
+//    }
+//
+//    public void setTelefono(String telefono) {
+//        this.telefono = telefono;
+//    }
+//
+//    public boolean isRol() {
+//        return rol;
+//    }
+//
+//    public void setRol(boolean rol) {
+//        this.rol = rol;
+//    }
 
 }

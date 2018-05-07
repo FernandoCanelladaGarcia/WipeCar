@@ -107,14 +107,9 @@ public class Modelo implements IModelo{
 
                     String idUser = auth.getCurrentUser().getUid();
                     String emailUser = auth.getCurrentUser().getEmail();
-                    String displayName = auth.getCurrentUser().getDisplayName();
-                    String userPhone = auth.getCurrentUser().getPhoneNumber();
+                    String nombre = auth.getCurrentUser().getDisplayName();
 
-                    String[] partes = displayName.split("#");
-                    String nombre = partes[0];
-                    Boolean rol = Boolean.valueOf(partes[1]);
-
-                    loginActual = new Login(idUser,nombre,emailUser,userPhone,rol);
+                    loginActual = new Login(idUser,nombre,emailUser);
                     Log.i(TAG, "Usuario actual: " + loginActual.getNombre());
                     extras.putBoolean(AppMediador.CLAVE_RESULTADO_LOGIN, true);
                     appMediador.sendBroadcast(AppMediador.AVISO_USER_LOGIN, extras);

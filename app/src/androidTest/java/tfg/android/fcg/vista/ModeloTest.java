@@ -101,7 +101,6 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
         contador.await(15000,TimeUnit.MILLISECONDS);
     }
 
-    //TODO SEPARAR EN VARIOS TEST
     @Test
     public void testActualizarLoginCorrecto() throws Exception{
         //INFORMACION USUARIO = nombre, telefono, email, password, origen, destino, rol, datovehiculo, fecha, hora, valoracion

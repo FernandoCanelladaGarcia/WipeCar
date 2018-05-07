@@ -8,18 +8,22 @@ public class Usuario implements Serializable {
 
     private String idUser;
     private String nombre;
+    private String telefono;
+    private boolean rol;
     private String valoracion;
     private String origen;
     private String destino;
     private String fecha;
     private String hora;
-    private Object datoVehiculo;
+    private String datoVehiculo;
 
     //Constructor
 
-    public Usuario (String idUser, String nombre, String valoracion, String origen, String destino, String fecha, String hora, Object datoVehiculo){
+    public Usuario (String idUser, String nombre, String telefono, boolean rol, String valoracion, String origen, String destino, String fecha, String hora, String datoVehiculo){
         this.idUser = idUser;
         this.nombre = nombre;
+        this.telefono = telefono;
+        this.rol = rol;
         this.valoracion = valoracion;
         this.origen = origen;
         this.destino = destino;
@@ -47,6 +51,22 @@ public class Usuario implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public boolean isRol() {
+        return rol;
+    }
+
+    public void setRol(boolean rol) {
+        this.rol = rol;
     }
 
     public String getValoracion() {
@@ -93,7 +113,7 @@ public class Usuario implements Serializable {
         return datoVehiculo;
     }
 
-    public void setDatoVehiculo(Object datoVehiculo) {
+    public void setDatoVehiculo(String datoVehiculo) {
         this.datoVehiculo = datoVehiculo;
     }
 }

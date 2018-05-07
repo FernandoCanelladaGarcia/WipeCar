@@ -76,8 +76,8 @@ public class BDAdaptadorUsuario {
                 usuario = dataSnapshot.getValue(Usuario.class);
 
                 Bundle extras = new Bundle();
-                extras.putSerializable(AppMediador.CLAVE_OBTENER_CONDUCTOR,usuario);
-                appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_CONDUCTOR,extras);
+                extras.putSerializable(AppMediador.CLAVE_OBTENER_CONDUCTOR, usuario);
+                appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_CONDUCTOR, extras);
 
                 database.removeEventListener(this);
             }
@@ -89,8 +89,8 @@ public class BDAdaptadorUsuario {
                 usuario = null;
 
                 Bundle extras = new Bundle();
-                extras.putSerializable(AppMediador.CLAVE_OBTENER_CONDUCTOR,usuario);
-                appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_CONDUCTOR,extras);
+                extras.putSerializable(AppMediador.CLAVE_OBTENER_CONDUCTOR, usuario);
+                appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_CONDUCTOR, extras);
 
                 database.removeEventListener(this);
             }
@@ -110,8 +110,8 @@ public class BDAdaptadorUsuario {
                 usuario = dataSnapshot.getValue(Usuario.class);
 
                 Bundle extras = new Bundle();
-                extras.putSerializable(AppMediador.CLAVE_OBTENER_PASAJERO,usuario);
-                appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_PASAJERO,extras);
+                extras.putSerializable(AppMediador.CLAVE_OBTENER_PASAJERO, usuario);
+                appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_PASAJERO, extras);
 
                 database.removeEventListener(this);
             }
@@ -123,8 +123,8 @@ public class BDAdaptadorUsuario {
                 usuario = null;
 
                 Bundle extras = new Bundle();
-                extras.putSerializable(AppMediador.CLAVE_OBTENER_PASAJERO,usuario);
-                appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_PASAJERO,extras);
+                extras.putSerializable(AppMediador.CLAVE_OBTENER_PASAJERO, usuario);
+                appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_PASAJERO, extras);
 
                 database.removeEventListener(this);
             }
@@ -138,15 +138,15 @@ public class BDAdaptadorUsuario {
      */
     public void agregarUsuario(final Object[] informacion) {
         //TODO ENCRIPTAR
-        //INFORMACION LOGIN = 0 email, 1 contraseña, 2 nombre, 3 telefono, 4 direccion, modo por defecto pasajero = false
-        //INFORMACION USUARIO = nombre, valoracion, origen, destino, fecha, hora, datovehiculo
+        //INFORMACION LOGIN = 0 email, 1 contraseña, 2 nombre
+        //INFORMACION USUARIO = nombre, telefono, rol valoracion, origen, destino, fecha, hora, datovehiculo
         final String email = (String) informacion[0];
-        String password = (String) informacion[1];
+        final String password = (String) informacion[1];
         final String nombre = (String) informacion[2];
         final String telefono = (String) informacion[3];
         final String origen = (String) informacion[4];
-        boolean rol = false;
-        final String displayName = nombre + "#" + rol;
+        final boolean rol = false;
+        final String displayName = nombre;
 
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -165,14 +165,15 @@ public class BDAdaptadorUsuario {
                                 SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString("email", email);
+                                editor.putString("password", password);
                                 editor.apply();
                                 //TODO ENCRIPTAR
                                 String nombreEncriptado = nombre;
                                 String idUser = usuarioActual.getUid();
                                 //Creamos el Login del usuario
-                                login = new Login(idUser, nombreEncriptado, email, telefono, false);
+                                login = new Login(idUser, nombreEncriptado, email);
                                 //Guardamos en la tabla el usuario
-                                usuario = new Usuario(idUser, nombreEncriptado, "", origen, "", "", "", null);
+                                usuario = new Usuario(idUser, nombreEncriptado, telefono, rol, "", origen, "", "", "", null);
                                 DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(idUser);
                                 referenciaUsuario.setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     //                                    referenciaUsuario.setValue(usuario, new DatabaseReference.CompletionListener() {
@@ -460,59 +461,59 @@ public class BDAdaptadorUsuario {
      * @param idUser contendra:
      */
     public void eliminarUsuario(String idUser) {
-    final DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios")
-            .child(idUser);
-    SharedPreferences sharedPreferences = appMediador.getSharedPreferences("login",0);
-    AuthCredential credential = EmailAuthProvider.getCredential(usuarioActual.getEmail(),sharedPreferences.getString("password",null));
+        final DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios")
+                .child(idUser);
+        SharedPreferences sharedPreferences = appMediador.getSharedPreferences("login", 0);
+        AuthCredential credential = EmailAuthProvider.getCredential(usuarioActual.getEmail(), sharedPreferences.getString("password", null));
 
-    usuarioActual.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
-        @Override
-        public void onComplete(@NonNull Task<Void> task) {
-            if(task.isSuccessful()){
-                //Reautenticado
-                usuarioActual.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()){
-                            //Eliminado correctamente, falta eliminar el registro de la base de datos.
-                            referenciaUsuario.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        //Eliminado registro de la base de datos, notifica resultado
+        usuarioActual.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    //Reautenticado
+                    usuarioActual.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                //Eliminado correctamente, falta eliminar el registro de la base de datos.
+                                referenciaUsuario.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            //Eliminado registro de la base de datos, notifica resultado
 
-                                        Bundle extras = new Bundle();
-                                        extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_USUARIO,true);
+                                            Bundle extras = new Bundle();
+                                            extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_USUARIO, true);
 
-                                        appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_USUARIO,extras);
+                                            appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_USUARIO, extras);
 
-                                    }else{
-                                        //Fallo al eliminar el registro de la base de datos
-                                        Bundle extras = new Bundle();
-                                        extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_USUARIO,false);
+                                        } else {
+                                            //Fallo al eliminar el registro de la base de datos
+                                            Bundle extras = new Bundle();
+                                            extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_USUARIO, false);
 
-                                        appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_USUARIO,extras);
+                                            appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_USUARIO, extras);
+                                        }
                                     }
-                                }
-                            });
-                        }else{
-                            //Fallo al eliminar el registro de la base de datos
-                            Bundle extras = new Bundle();
-                            extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_USUARIO,false);
+                                });
+                            } else {
+                                //Fallo al eliminar el registro de la base de datos
+                                Bundle extras = new Bundle();
+                                extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_USUARIO, false);
 
-                            appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_USUARIO,extras);
+                                appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_USUARIO, extras);
+                            }
                         }
-                    }
-                });
-            }else{
-                //Fallo en la reautenticacion
-                Bundle extras = new Bundle();
-                extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_USUARIO,false);
+                    });
+                } else {
+                    //Fallo en la reautenticacion
+                    Bundle extras = new Bundle();
+                    extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_USUARIO, false);
 
-                appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_USUARIO,extras);
+                    appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_USUARIO, extras);
+                }
             }
-        }
-    });
+        });
     }
 
     //**********METODOS PRIVADOS**************//
@@ -533,37 +534,39 @@ public class BDAdaptadorUsuario {
                 if (task.isSuccessful()) {
                     Log.i(TAG, "Reautenticacion correcta");
 
-                    String currentDisplayName = auth.getCurrentUser().getDisplayName();
-                    String[] partes = currentDisplayName.split("#");
-                    String currentName = partes[0];
-                    String currentPhone = partes[1];
-                    boolean currentRol = Boolean.valueOf(partes[2]);
+                    String currentName = auth.getCurrentUser().getDisplayName();
+                    final String currentPhone = usuario.getTelefono();
+                    final boolean currentRol = usuario.isRol();
 
                     final String newName = informacion[0];
                     final String newPhone = informacion[1];
                     final String newEmail = informacion[2];
                     final String newPassword = informacion[3];
-                    boolean newRol = Boolean.valueOf(informacion[4]);
+                    final boolean newRol = Boolean.valueOf(informacion[4]);
 
-                    if (currentName.equals(newName) && currentRol == newRol) {
-                        newDisplayName = currentDisplayName;
+                    if (currentName.equals(newName) && currentPhone.equals(newPhone)) {
+                        newDisplayName = currentName;
                         taskMap.put("nombre", currentName);
+                        taskMap.put("telefono", currentPhone);
                     }
-                    if (!currentName.equals(newName) && currentRol == newRol) {
-                        newDisplayName = newName + "#" + currentRol;
+                    if (!currentName.equals(newName) && currentPhone.equals(newPhone)) {
+                        newDisplayName = newName;
                         login.setNombre(newName);
-                        taskMap.put("nombre", newName);
                         usuario.setNombre(newName);
+                        taskMap.put("nombre", newName);
+                        taskMap.put("telefono", currentPhone);
                     }
-                    if (currentName.equals(newName) && currentRol != newRol) {
-                        newDisplayName = currentName + "#" + newRol;
-                        login.setRol(newRol);
+                    if (currentName.equals(newName) && !currentPhone.equals(newPhone)) {
+                        usuario.setTelefono(newPhone);
+                        taskMap.put("nombre", currentName);
+                        taskMap.put("telefono", newPhone);
                     } else {
-                        newDisplayName = newName + "#" + newRol;
+                        newDisplayName = newName;
                         login.setNombre(newName);
-                        login.setRol(newRol);
                         taskMap.put("nombre", newName);
                         usuario.setNombre(newName);
+                        usuario.setTelefono(newPhone);
+                        taskMap.put("telefono", newPhone);
                     }
 
                     UserProfileChangeRequest actualizacion = new UserProfileChangeRequest.Builder().setDisplayName(newDisplayName).build();
@@ -573,8 +576,11 @@ public class BDAdaptadorUsuario {
                             if (task.isSuccessful()) {
                                 //Actualizacion de DisplayName
                                 Log.i(TAG, "Actualizacion display");
+                                //Comprobamos el rol, sino no varia.
+                                if (currentRol != newRol) {
+                                    taskMap.put("rol", newRol);
+                                }
                                 DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(usuarioActual.getUid());
-
                                 referenciaUsuario.updateChildren(taskMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
@@ -610,16 +616,6 @@ public class BDAdaptadorUsuario {
                                                         }
                                                     }
                                                 });
-                                                //TODO CREDENCIAL TELEFONO
-//                                           } else if (!currentPhone.equals(newPhone)) {
-//                                               login.setTelefono(newPhone);
-//                                               AuthCredential credential = PhoneAuthCredential.CREATOR.
-//                                               usuarioActual.updatePhoneNumber(newPhone).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                                  @Override
-//                                                  public void onComplete(@NonNull Task<Void> task) {
-//
-//                                                  }
-//                                           })
                                             } else if (!currentEmail.equals(newEmail)) {
                                                 login.setEmail(newEmail);
                                                 SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
@@ -650,7 +646,7 @@ public class BDAdaptadorUsuario {
                                                     }
                                                 });
                                             } else {
-                                                //Solo actualizacion displayName
+                                                //Solo actualizacion displayName y la tabla usuarios
                                                 Log.i(TAG, "Actualizacion solo display");
                                                 Bundle extras = new Bundle();
                                                 datos[0] = true;
