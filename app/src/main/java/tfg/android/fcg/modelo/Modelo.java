@@ -223,17 +223,17 @@ public class Modelo implements IModelo{
 
     @Override
     public void eliminarUsuarioPickup(Object[] informacion) {
-        adaptadorVinculo.eliminarVinculo((String)informacion[0],(String)informacion[1]);
+        adaptadorVinculo.eliminarVinculo(informacion);
     }
 
     @Override
     public void buscarVehiculos(Object informacion) {
-
+        adaptadorUsuario.obtenerListaConductores((String)informacion);
     }
 
     @Override
     public void seleccionarVehiculoOnTheGo(Object informacion) {
-
+        adaptadorVinculo.agregarVinculo((Object[])informacion);
     }
 
     @Override
@@ -279,12 +279,12 @@ public class Modelo implements IModelo{
 
     @Override
     public void aceptarPasajero(Object informacion) {
-
+        adaptadorVinculo.concretarVinculo((Object[])informacion);
     }
 
     @Override
     public void rechazarPasajero(Object informacion) {
-
+        adaptadorVinculo.eliminarVinculo((Object[])informacion);
     }
 
     @Override

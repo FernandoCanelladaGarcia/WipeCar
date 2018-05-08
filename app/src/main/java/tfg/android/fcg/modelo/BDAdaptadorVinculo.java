@@ -6,9 +6,13 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,31 +71,161 @@ public class BDAdaptadorVinculo {
 
     /**
      * Actualiza en la tabla Vínculo, un vínculo determinado entre pasajero y conductor.
-     * @param idPasajero contiene:
-     * @param idConductor contiene:
+     * @param informacion contiene:
      */
-    public void concretarVinculo(String idPasajero, String idConductor){
-    //TODO query vinculo, update taskmap vinculo = true
+    public void concretarVinculo(final Object[] informacion){
+        final String idPasajero  = (String)informacion[0];
+        final String idConductor = (String)informacion[1];
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    vinculo = snapshot.getValue(Vinculo.class);
+
+                    if (vinculo.getIdPasajero().equals(idPasajero) && vinculo.getIdConductor().equals(idConductor)) {
+                        Map<String, Object> task = new HashMap<>();
+                        task.put("vinculo", true);
+                        dataSnapshot.getRef().updateChildren(task).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    //Creado vinculo
+                                    Bundle extras = new Bundle();
+
+                                    extras.putBoolean(AppMediador.CLAVE_CONCRETAR_VINCULO, true);
+                                    appMediador.sendBroadcast(AppMediador.AVISO_CONCRETAR_VINCULO, extras);
+                                } else {
+                                    //No se ha concretado vinculo
+                                    Bundle extras = new Bundle();
+
+                                    extras.putBoolean(AppMediador.CLAVE_CONCRETAR_VINCULO, false);
+                                    appMediador.sendBroadcast(AppMediador.AVISO_CONCRETAR_VINCULO, extras);
+
+                                }
+                            }
+                        });
+                    }
+                }
+                reference.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //No se ha encontrado referencia
+                Bundle extras = new Bundle();
+
+                extras.putBoolean(AppMediador.CLAVE_CONCRETAR_VINCULO, false);
+                appMediador.sendBroadcast(AppMediador.AVISO_CONCRETAR_VINCULO, extras);
+
+                reference.removeEventListener(this);
+            }
+        });
 
     }
 
     /**
      * Elimina de la tabla Vínculo, un vínculo determinado entre un pasajero y un conductor.
-     * @param idPasajero contiene:
-     * @param idConductor contiene:
+     * @param informacion contiene:
      */
-    public void eliminarVinculo(String idPasajero, String idConductor){
-    //TODO query, delete
-        Map<String, Object> task = new HashMap<>();
-        task.put("idPasajero",idPasajero);
-        task.put("idConductor",idConductor);
+    public void eliminarVinculo(final Object[] informacion){
+        final String idPasajero  = (String)informacion[0];
+        final String idConductor = (String)informacion[1];
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    vinculo = snapshot.getValue(Vinculo.class);
+
+                    if(vinculo.getIdPasajero().equals(idPasajero) && vinculo.getIdConductor().equals(idConductor)){
+                        snapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    //Se ha completado la eliminacion
+                                    Bundle extras = new Bundle();
+
+                                    extras.putBoolean(AppMediador.CLAVE_ELIMINAR_VINCULO,true);
+                                    appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_VINCULO,extras);
+                                }else{
+                                 //No ha eliminado el vinculo
+                                    Bundle extras = new Bundle();
+
+                                    extras.putBoolean(AppMediador.CLAVE_ELIMINAR_VINCULO,false);
+                                    appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_VINCULO,extras);
+                                }
+                            }
+                        });
+                    }
+                }
+                reference.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //No ha encontrado vinculo
+                Bundle extras = new Bundle();
+
+                extras.putBoolean(AppMediador.CLAVE_ELIMINAR_VINCULO,false);
+                appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_VINCULO,extras);
+
+                reference.removeEventListener(this);
+            }
+        });
     }
 
     /**
      * Busca en la tabla Vínculo, los pasajeros que coinciden en el atributo idConductor, el valor pasado por parámetro.
-     * @param idUser contendra:
+     * @param idConductor contendra:
      */
-    public void obtenerListaPasajeros(String idUser){
+    public void obtenerListaPasajeros(final String idConductor){
+        final ArrayList<Usuario> pasajeros = new ArrayList<>();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    Vinculo vinculo = snapshot.getValue(Vinculo.class);
+                    if(vinculo.getIdConductor().equals(idConductor)){
+                        final DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios");
+                        referenciaUsuario.child(vinculo.getIdPasajero()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Usuario pasajero = dataSnapshot.getValue(Usuario.class);
+                                pasajeros.add(pasajero);
 
+                                referenciaUsuario.removeEventListener(this);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                //Error recibiendo referencias de la tabla usuario
+                                Bundle extras = new Bundle();
+                                extras.putSerializable(AppMediador.CLAVE_LISTA_PASAJEROS_VINCULO, null);
+                                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_PASAJEROS_VINCULO,extras);
+
+                                referenciaUsuario.removeEventListener(this);
+                            }
+                        });
+                    }
+                }
+                //Se han agregado a la lista todos los usuarios pasajeros del conductor referencia.
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_LISTA_PASAJEROS_VINCULO, pasajeros);
+                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_PASAJEROS_VINCULO,extras);
+
+                reference.removeEventListener(this);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //Error recibiendo la referencia de la tabla vinculo
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_LISTA_PASAJEROS_VINCULO, null);
+                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_PASAJEROS_VINCULO,extras);
+
+                reference.removeEventListener(this);
+            }
+        });
     }
 }

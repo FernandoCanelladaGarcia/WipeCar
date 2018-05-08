@@ -86,7 +86,12 @@ public class AppMediador extends Application {
 	public static final String AVISO_REGISTRO_POSICION = "tfg.android.fcg.AVISO_REGISTRO_POSICION";
 	public static final String AVISO_ACTUALIZACION_POSICION = "tfg.android.fcg.AVISO_ACTUALIZACION_POSICION";
 	public static final String AVISO_ELIMINAR_USUARIO = "tfg.android.fcg.AVISO_ELIMINAR_USUARIO";
+	public static final String AVISO_LISTA_CONDUCTORES = "tfg.android.fcg.AVISO_LISTA_CONDUCTORES";
+	public static final String AVISO_LISTA_PASAJEROS = "tfg.android.fcg.AVISO_LISTA_PASAJEROS";
 	public static final String AVISO_CREACION_VINCULO = "tfg.android.fcg.AVISO_CREACION_VINCULO";
+	public static final String AVISO_CONCRETAR_VINCULO = "tfg.android.fcg.AVISO_CONCRETAR_VINCULO";
+	public static final String AVISO_ELIMINAR_VINCULO = "tfg.android.fcg.AVISO_ELIMINAR_VINCULO";
+	public static final String AVISO_LISTA_PASAJEROS_VINCULO = "tfg.android.fcg.AVISO_LISTA_PASAJEROS_VINCULO";
 	public static final String AVISO_CREACION_HISTORIAL = "tfg.android.fcg.AVISO_CREACION_HISTORIAL";
 	public static final String AVISO_OBTENER_VEHICULO = "tfg.android.fcg.AVISO_OBTENER_VEHICULO";
 	public static final String AVISO_ACTUALIZACION_VEHICULO = "tfg.android.fcg.AVISO_ACTUALIZACION_VEHICULO";
@@ -106,7 +111,12 @@ public class AppMediador extends Application {
 	public static final String CLAVE_RESULTADO_REGISTRO_POSICION = "tfg.android.fcg.CLAVE_RESULTADO_REGISTRO_POSICION";
 	public static final String CLAVE_RESULTADO_ACTUALIZACION_POSICION = "tfg.android.fcg.CLAVE_RESULTADO_ACTUALIZACION_POSICION";
     public static final String CLAVE_RESULTADO_ELIMINAR_USUARIO = "tfg.android.fcg.CLAVE_RESULTADO_ELIMINAR_USUARIO";
+    public static final String CLAVE_LISTA_CONDUCTORES = "tfg.android.fcg.CLAVE_LISTA_CONDUCTORES";
+    public static final String CLAVE_LISTA_PASAJEROS = "tfg.android.fcg.CLAVE_LISTA_PASAJEROS";
     public static final String CLAVE_CREACION_VINCULO = "tfg.android.fcg.CLAVE_CREACION_VINCULO";
+    public static final String CLAVE_CONCRETAR_VINCULO = "tfg.android.fcg.CLAVE_CONCRETAR_VINCULO";
+    public static final String CLAVE_ELIMINAR_VINCULO = "tfg.android.fcg.CLAVE_ELIMINAR_VINCULO";
+    public static final String CLAVE_LISTA_PASAJEROS_VINCULO = "tfg.android.fcg.CLAVE_LISTA_PASAJEROS_VINCULO";
     public static final String CLAVE_CREACION_HISTORIAL = "tfg.android.fcg.CLAVE_CREACION_HISTORIAL";
     public static final String CLAVE_OBTENER_VEHICULO = "tfg.android.fcg.CLAVE_OBTENER_VEHICULO";
 	public static final String CLAVE_RESULTADO_ACTUALIZACION_VEHICULO = "tfg.android.fcg.CLAVE_RESULTADO_ACTUALIZACION_VEHICULO";

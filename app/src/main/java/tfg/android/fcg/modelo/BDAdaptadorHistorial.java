@@ -87,7 +87,7 @@ public class BDAdaptadorHistorial {
                     Historial historial = snapshot.getValue(Historial.class);
 
                     if (historial.getIdPasajero().equals(idPasajero) && historial.getIdConductor().equals(idConductor)){
-                        dataSnapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        snapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){

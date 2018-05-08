@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,8 +50,34 @@ public class BDAdaptadorUsuario {
      *
      * @param destino contendra:
      */
-    public void obtenerListaConductores(String destino) {
+    public void obtenerListaConductores(final String destino) {
         //TODO comprobar rol
+        final ArrayList<Usuario> conductores = new ArrayList<>();
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    Usuario usuario = snapshot.getValue(Usuario.class);
+                    if(usuario.getDestino().equals(destino) && usuario.isRol()){
+                        conductores.add(usuario);
+                    }
+                }
+                //Se ha creado la lista de conductores que van al destino
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_LISTA_CONDUCTORES,conductores);
+                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_CONDUCTORES,extras);
+                database.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //Error en la referencia de la base de datos
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_LISTA_CONDUCTORES,null);
+                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_CONDUCTORES,extras);
+                database.removeEventListener(this);
+            }
+        });
     }
 
     /**
@@ -58,9 +85,34 @@ public class BDAdaptadorUsuario {
      *
      * @param destino contendra:
      */
-    public void obtenerListaPasajeros(String destino) {
+    public void obtenerListaPasajeros(final String destino) {
         //TODO comprobar rol
+        final ArrayList<Usuario> pasajeros = new ArrayList<>();
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    Usuario usuario = snapshot.getValue(Usuario.class);
+                    if(usuario.getDestino().equals(destino) && !usuario.isRol()){
+                        pasajeros.add(usuario);
+                    }
+                }
+                //Se ha creado la lista de pasajeros que van al destino
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_LISTA_PASAJEROS,pasajeros);
+                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_PASAJEROS,extras);
+                database.removeEventListener(this);
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //Error en la referencia de la base de datos
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_LISTA_PASAJEROS,null);
+                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_PASAJEROS,extras);
+                database.removeEventListener(this);
+            }
+        });
     }
 
     /**
@@ -74,24 +126,19 @@ public class BDAdaptadorUsuario {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Obtenido conductor
                 usuario = dataSnapshot.getValue(Usuario.class);
-
                 Bundle extras = new Bundle();
                 extras.putSerializable(AppMediador.CLAVE_OBTENER_CONDUCTOR, usuario);
                 appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_CONDUCTOR, extras);
-
                 database.removeEventListener(this);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 //Error a la hora de obtener conductor
-
                 usuario = null;
-
                 Bundle extras = new Bundle();
                 extras.putSerializable(AppMediador.CLAVE_OBTENER_CONDUCTOR, usuario);
                 appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_CONDUCTOR, extras);
-
                 database.removeEventListener(this);
             }
         });
