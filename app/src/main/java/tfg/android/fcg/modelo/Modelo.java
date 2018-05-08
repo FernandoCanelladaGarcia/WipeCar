@@ -258,12 +258,13 @@ public class Modelo implements IModelo{
 
     @Override
     public void obtenerHistorial(Object informacion) {
-
+        adaptadorHistorial.obtenerHistorial((String)informacion);
     }
 
     @Override
     public void asignarValoracion(Object[] informacion) {
         adaptadorUsuario.actualizarUsuario(informacion);
+        adaptadorHistorial.agregarValoracion((String[]) informacion);
     }
 
     @Override

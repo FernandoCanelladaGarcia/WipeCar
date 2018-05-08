@@ -87,7 +87,7 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
         modelo.comprobarLogin(login);
         contador.await(10000,TimeUnit.MILLISECONDS);
     }
-    //TODO COMPLETAR
+
     @Test
     public void testComprobarELiminarUsuario() throws Exception{
         Log.i(TAG, "metodo testComprobarELiminarUsuario");

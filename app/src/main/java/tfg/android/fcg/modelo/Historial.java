@@ -27,6 +27,10 @@ public class Historial {
         this.valoracionConductor = valoracionConductor;
     }
 
+    public Historial(){
+
+    }
+
 
     //Getters & Setters
 

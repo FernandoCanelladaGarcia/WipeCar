@@ -225,7 +225,6 @@ public class BDAdaptadorUsuario {
      */
     public void actualizarUsuario(final Object[] informacion) {
         //INFORMACION USUARIO = nombre, telefono, email, password, origen, destino, rol, datovehiculo, fecha, hora, valoracion
-        final Object[] datos = new Object[2];
 
         String[] loginUsuario = new String[]{(String) informacion[1], (String) informacion[2], (String) informacion[3], (String) informacion[4], (String) informacion[7]};
         String[] origenDestino = new String[]{(String) informacion[5], (String) informacion[6]};
