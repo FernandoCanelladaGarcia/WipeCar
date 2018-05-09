@@ -3,6 +3,8 @@
     package="tfg.android.fcg.vista">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:name="tfg.android.fcg.AppMediador"
         android:allowBackup="true"
@@ -34,6 +36,9 @@
         </activity>
         <activity android:name=".VistaHistorial">
         </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAevyXs40FngINeV3dul4jfqPj588BGTTw"/>
     </application>
 
 </manifest>

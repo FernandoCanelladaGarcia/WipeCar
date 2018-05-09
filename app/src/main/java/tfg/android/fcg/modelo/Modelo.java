@@ -19,7 +19,6 @@ public class Modelo implements IModelo{
 
     //Singleton
     private static Modelo singleton = null;
-
     private AppMediador appMediador;
     private BDAdaptadorHistorial adaptadorHistorial;
     private BDAdaptadorPosicion adaptadorPosicion;
@@ -75,6 +74,7 @@ public class Modelo implements IModelo{
     }
 
     //*************** METODOS ****************//
+
 
     @Override
     public void comprobarLogin(final Object[] informacion) {

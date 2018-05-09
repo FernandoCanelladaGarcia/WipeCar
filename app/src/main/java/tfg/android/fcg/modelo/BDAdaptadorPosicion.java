@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import tfg.android.fcg.AppMediador;
+import tfg.android.fcg.modelo.bajonivel.ServicioLocalizacion;
 
 public class BDAdaptadorPosicion {
 
@@ -27,6 +28,9 @@ public class BDAdaptadorPosicion {
         database = FirebaseDatabase.getInstance().getReference().child("posicion");
     }
 
+    public void iniciarGps(){
+        appMediador.launchService(ServicioLocalizacion.class,null);
+    }
     /**
      * Busca la posicion del usuario y la almacena en la tabla usuario que posee
      * el identificador que coincide con el parámetro.
