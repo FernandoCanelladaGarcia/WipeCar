@@ -269,12 +269,14 @@ public class Modelo implements IModelo{
 
     @Override
     public void guardarLocalizacion(Object[] informacion) {
-        adaptadorPosicion.actualizarPosicion(informacion);
+        String idUser = getUsuarioActual().getUid();
+        informacion[0] = idUser;
+        adaptadorPosicion.agregarPosicion(informacion);
     }
 
     @Override
     public void obtenerPeticionesDePasajeros(Object informacion) {
-
+        adaptadorVinculo.obtenerListaPasajeros((String)informacion);
     }
 
     @Override

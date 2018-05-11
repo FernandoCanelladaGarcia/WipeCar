@@ -56,10 +56,16 @@ public class ServicioLocalizacion extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        Bundle extras = new Bundle();
-        extras.putDouble(AppMediador.CLAVE_LATITUD,location.getLatitude());
-        extras.putDouble(AppMediador.CLAVE_LONGITUD,location.getLongitude());
-        appMediador.sendBroadcast(AppMediador.AVISO_LOCALIZACION_GPS,extras);
+        if(location != null) {
+            Bundle extras = new Bundle();
+            extras.putDouble(AppMediador.CLAVE_LATITUD, location.getLatitude());
+            extras.putDouble(AppMediador.CLAVE_LONGITUD, location.getLongitude());
+            appMediador.sendBroadcast(AppMediador.AVISO_LOCALIZACION_GPS, extras);
+        }
+        if(location == null){
+            Bundle extras = null;
+            appMediador.sendBroadcast(AppMediador.AVISO_LOCALIZACION_GPS, extras);
+        }
     }
 
     @Override

@@ -38,6 +38,7 @@ public class BDAdaptadorPosicion {
      */
     public void obtenerPosicion(String idUser){
         //TODO Llamada al GPS para obtener ubicacion
+        iniciarGps();
     }
 
     /**
@@ -52,7 +53,7 @@ public class BDAdaptadorPosicion {
 
         posicion = new Posicion(idUser,latitud,longitud);
 
-        database.child(idUser).setValue(posicion).addOnCompleteListener(new OnCompleteListener<Void>() {
+        database.setValue(posicion).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
@@ -60,14 +61,14 @@ public class BDAdaptadorPosicion {
                     Log.i(TAG,"Agregada posicion correctamente");
 
                     Bundle extras = new Bundle();
-                    extras.putBoolean(AppMediador.CLAVE_RESULTADO_REGISTRO_POSICION,true);
-                    appMediador.sendBroadcast(AppMediador.AVISO_REGISTRO_POSICION,extras);
+                    extras.putBoolean(AppMediador.CLAVE_RESULTADO_LOCALIZACION_GUARDADA,true);
+                    appMediador.sendBroadcast(AppMediador.AVISO_LOCALIZACION_GUARDADA,extras);
                 }else{
                     Log.i(TAG,"Error a la hora de agregar posicion");
 
                     Bundle extras = new Bundle();
-                    extras.putBoolean(AppMediador.CLAVE_RESULTADO_REGISTRO_POSICION,false);
-                    appMediador.sendBroadcast(AppMediador.AVISO_REGISTRO_POSICION,extras);
+                    extras.putBoolean(AppMediador.CLAVE_RESULTADO_LOCALIZACION_GUARDADA,false);
+                    appMediador.sendBroadcast(AppMediador.AVISO_LOCALIZACION_GUARDADA,extras);
                 }
             }
         });

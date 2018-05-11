@@ -102,6 +102,10 @@ public class AppMediador extends Application {
 	public static final String AVISO_ELIMINAR_HISTORIAL = "tfg.android.fcg.AVISO_ELIMINAR_HISTORIAL";
 	public static final String AVISO_VALORACION = "tfg.android.fcg.AVISO_VALORACION";
 	public static final String AVISO_LOCALIZACION_GPS = "tfg.android.fcg.AVISO_LOCALIZACION_GPS";
+	public static final String AVISO_PETICION_OTGCONDUCTOR = "tfg.android.fcg.AVISO_PETICION_OTGCONDUCTOR";
+	public static final String AVISO_ACEPTAR_PETICION_OTGCONDUCTOR = "tfg.android.fcg.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR";
+	public static final String AVISO_RECHAZAR_PETICION_OTGCONDUCTOR = "tfg.android.fcg.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR";
+	public static final String AVISO_LOCALIZACION_GUARDADA = "tfg.android.fcg.AVISO_LOCALIZACION_GUARDADA";
 
 	public static final String CLAVE_RESULTADO_LOGIN = "tfg.android.fcg.CLAVE_RESULTADO_LOGIN";
 	public static final String CLAVE_RESULTADO_CAMBIO_PASSWORD = "tfg.android.fcg.CLAVE_RESULTADO_CAMBIO_PASSWORD";
@@ -124,6 +128,7 @@ public class AppMediador extends Application {
 	public static final String CLAVE_RESULTADO_ELIMINACION_VEHICULO = "tfg.android.fcg.CLAVE_RESULTADO_ELIMINACION_VEHICULO";
 	public static final String CLAVE_OBTENER_CONDUCTOR = "tfg.android.fcg.CLAVE_OBTENER_CONDUCTOR";
 	public static final String CLAVE_OBTENER_PASAJERO = "tfg.android.fcg.CLAVE_OBTENER_PASAJERO";
+	public static final String CLAVE_RESULTADO_LOCALIZACION_GUARDADA = "tfg.android.fcg.CLAVE_RESULTADO_LOCALIZACION_GUARDADA";
 	public static final String CLAVE_HISTORIAL = "tfg.android.fcg.CLAVE_HISTORIAL";
 	public static final String CLAVE_VALORACION = "tfg.android.fcg.CLAVE_VALORACION";
 	public static final String CLAVE_RESULTADO_ELIMINAR_HISTORIAL = "tfg.android.fcg.CLAVE_RESULTADO_ELIMINAR_HISTORIAL";

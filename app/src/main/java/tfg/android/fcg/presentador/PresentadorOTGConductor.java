@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.TimerTask;
 
 import tfg.android.fcg.AppMediador;
@@ -29,24 +31,24 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor{
     private BroadcastReceiver receptorLocalizacion = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-//            if(intent.getAction().equals(AppMediador.AVISO_LOCALIZACION_GUARDADA)){
-//
-//            }
+            if(intent.getAction().equals(AppMediador.AVISO_LOCALIZACION_GUARDADA)){
+
+            }
         }
     };
 //TODO
     private BroadcastReceiver receptorPeticiones = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-//            if(intent.getAction().equals(AppMediador.AVISO_PETICION)){
-//
-//            }
-//            if(intent.getAction().equals(AppMediador.AVISO_ACEPTAR)){
-//
-//            }
-//            if(intent.getAction().equals(AppMediador.AVISO_RECHAZAR)){
-//
-//            }
+            if(intent.getAction().equals(AppMediador.AVISO_PETICION_OTGCONDUCTOR)){
+
+            }
+            if(intent.getAction().equals(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR)){
+
+            }
+            if(intent.getAction().equals(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR)){
+
+            }
         }
     };
 
@@ -54,35 +56,48 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor{
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(AppMediador.AVISO_LOCALIZACION_GPS)){
-
+                if(intent.hasExtra(AppMediador.CLAVE_LONGITUD)
+                        ||intent.hasExtra(AppMediador.CLAVE_LATITUD)){
+                Object[] posicion= new Object[3];
+                posicion[1] = intent.getSerializableExtra(AppMediador.CLAVE_LATITUD);
+                posicion[2] = intent.getSerializableExtra(AppMediador.CLAVE_LONGITUD);
+                guardarPosicion(posicion);
+                }else{
+                //TODO: PARAR APLICACION
+                }
             }
         }
     };
 
     @Override
-    public void iniciar(Object informacion) {
-        //1er hilo, busca posicion usuario
-//        Thread thread1 = new Thread(){
-//            @Override
-//            public void run(){
-//                buscarPosicion();
-//            }
-//        }.start();
-//        //2o hilo, busca peticiones
-//        Thread thread2 = new Thread(){
-//            @Override
-//            public void run(){
-//                buscarPeticiones();
-//            }
-//        }.start();
+    public void iniciar(final Object informacion) {
 
+        //1er hilo, busca posicion usuario
+
+        Thread thread1 = new Thread(new Runnable() {
+            @Override
+            public void run(){
+                buscarPosicion(informacion);
+            }
+        });
+
+        //2o hilo, busca peticiones
+
+        Thread thread2 = new Thread(new Runnable() {
+            @Override
+            public void run(){
+                buscarPeticiones(informacion);
+            }
+        });
+        thread1.start();
+        thread2.start();
     }
 
     @Override
     public void tratarAceptar(Object informacion) {
         if(atendiendoPeticion){
 //            pararTimer();
-//            aceptarPeticion();
+            aceptarPeticion(informacion);
             atendiendoPeticion = false;
         }
     }
@@ -91,7 +106,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor{
     public void tratarRechazar(Object informacion) {
         if(atendiendoPeticion){
 //            pararTimer();
-//            rechazarPeticion();
+            rechazarPeticion(informacion);
             atendiendoPeticion = false;
         }
     }
@@ -101,27 +116,27 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor{
 
     }
 
-//    private void guardarPosicion(){
-//        AppMediador.getInstance().registerReceiver(receptorLocalizacion,AppMediador.AVISO_LOCALIZACION_GUARDADA);
-//        modelo.guardarLocalizacion(nuevaLocalizacion);
-//    }
+    private void guardarPosicion(Object[] nuevaLocalizacion){
+        AppMediador.getInstance().registerReceiver(receptorLocalizacion,AppMediador.AVISO_LOCALIZACION_GUARDADA);
+        modelo.guardarLocalizacion(nuevaLocalizacion);
+    }
+
+    private void buscarPeticiones(Object informacion){
+        AppMediador.getInstance().registerReceiver(receptorPeticiones,AppMediador.AVISO_PETICION_OTGCONDUCTOR);
+        modelo.obtenerPeticionesDePasajeros(informacion);
+    }
 //
-//    private void buscarPeticiones(){
-//        AppMediador.getInstance().registerReceiver(receptorPeticiones,AppMediador.AVISO_PETICION);
-//        modelo.obtenerPeticionesDePasajeros();
-//    }
-//
-//    private void buscarPosicion(){
-//        AppMediador.getInstance().registerReceiver(receptorGPS,AppMediador.AVISO_LOCALIZACION_GPS);
-//        modelo.obtenerPosicionUsuario();
-//    }
-//
-//    private void aceptarPeticion(){
-//        AppMediador.getInstance().registerReceiver(receptorPeticiones,AppMediador.AVISO_ACEPTAR);
-//        modelo.aceptarPasajero();
-//    }
-//    private void rechazarPeticion(){
-//        AppMediador.getInstance().registerReceiver(receptorPeticiones,AppMediador.AVISO_RECHAZAR);
-//        modelo.rechazarPasajero();
-//    }
+    private void buscarPosicion(Object informacion){
+        AppMediador.getInstance().registerReceiver(receptorGPS,AppMediador.AVISO_LOCALIZACION_GPS);
+        modelo.obtenerPosicionUsuario(informacion);
+    }
+
+    private void aceptarPeticion(Object informacion){
+        AppMediador.getInstance().registerReceiver(receptorPeticiones,AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR);
+        modelo.aceptarPasajero(informacion);
+    }
+    private void rechazarPeticion(Object informacion){
+        AppMediador.getInstance().registerReceiver(receptorPeticiones,AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR);
+        modelo.rechazarPasajero(informacion);
+    }
 }
