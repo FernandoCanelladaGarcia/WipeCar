@@ -291,7 +291,9 @@ public class Modelo implements IModelo{
 
     @Override
     public void pararRuta(Object informacion) {
-
+        adaptadorPosicion.finalizarGps();
+        adaptadorVinculo.eliminarVinculo((Object[])informacion);
+        adaptadorHistorial.agregarHistorial((Object[])informacion);
     }
 
 }

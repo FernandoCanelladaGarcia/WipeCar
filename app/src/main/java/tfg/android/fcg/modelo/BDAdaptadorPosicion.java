@@ -113,4 +113,8 @@ public class BDAdaptadorPosicion {
             }
         });
     }
+
+    public void finalizarGps(){
+        appMediador.stopService(ServicioLocalizacion.class);
+    }
 }
