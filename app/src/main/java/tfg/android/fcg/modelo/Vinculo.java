@@ -1,6 +1,8 @@
 package tfg.android.fcg.modelo;
 
-public class Vinculo {
+import java.io.Serializable;
+
+public class Vinculo implements Serializable {
 
     //Variables Globales
     private String idPasajero;

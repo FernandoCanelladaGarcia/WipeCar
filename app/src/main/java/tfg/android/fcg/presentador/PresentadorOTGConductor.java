@@ -11,6 +11,7 @@ import java.util.TimerTask;
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.modelo.IModelo;
 import tfg.android.fcg.modelo.Modelo;
+import tfg.android.fcg.modelo.Vinculo;
 import tfg.android.fcg.vista.VistaOTGConductor;
 
 public class PresentadorOTGConductor implements IPresentadorOTGConductor{
@@ -27,27 +28,58 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor{
         vistaOTGConductor = (VistaOTGConductor) appMediador.getVistaOTGConductor();
         modelo = Modelo.getInstance();
     }
-//TODO
     private BroadcastReceiver receptorLocalizacion = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(AppMediador.AVISO_LOCALIZACION_GUARDADA)){
+                if(intent.getExtras().getBoolean(
+                        AppMediador.CLAVE_RESULTADO_LOCALIZACION_GUARDADA)){
 
+
+                }else{
+                    //TODO: PARAR APLICACION
+                    //informe sonoro problemas
+                }
             }
         }
     };
-//TODO
+    //TODO Nota: Timer seteara 30seg donde el usuario debe aceptar/rechazar la peticion
     private BroadcastReceiver receptorPeticiones = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(AppMediador.AVISO_PETICION_OTGCONDUCTOR)){
-
+                if(intent.getExtras().getSerializable(
+                        AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR) != null){
+                    atendiendoPeticion = true;
+                    Vinculo vinculo = (Vinculo)intent.getSerializableExtra(
+                            AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR);
+                    //informe sonoro datos del pasajero
+                    //poner timer
+                }else{
+                    //TODO: NO HAY NADIE
+                }
             }
             if(intent.getAction().equals(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR)){
-
+                if(intent.getExtras().getSerializable(
+                        AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR) != null){
+                        //informe sonoro recoger pasajero
+                    Vinculo vinculo = (Vinculo) intent.getSerializableExtra(
+                            AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR);
+                    buscarPeticiones(vinculo.getIdConductor());
+                }else{
+                    //TODO: PARAR APLICACION
+                }
             }
             if(intent.getAction().equals(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR)){
-
+                if(intent.getExtras().getString(
+                        AppMediador.CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR) != null){
+                    //informe sonoro no recoger pasajero
+                    String idConductor = intent.getStringExtra(
+                            AppMediador.CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR);
+                    buscarPeticiones(idConductor);
+                }else{
+                    //TODO: PARAR APLICACION
+                }
             }
         }
     };
@@ -56,8 +88,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor{
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(AppMediador.AVISO_LOCALIZACION_GPS)){
-                if(intent.hasExtra(AppMediador.CLAVE_LONGITUD)
-                        ||intent.hasExtra(AppMediador.CLAVE_LATITUD)){
+                if(intent.getExtras() != null){
                 Object[] posicion= new Object[3];
                 posicion[1] = intent.getSerializableExtra(AppMediador.CLAVE_LATITUD);
                 posicion[2] = intent.getSerializableExtra(AppMediador.CLAVE_LONGITUD);
@@ -96,7 +127,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor{
     @Override
     public void tratarAceptar(Object informacion) {
         if(atendiendoPeticion){
-//            pararTimer();
+//           Parar timer
             aceptarPeticion(informacion);
             atendiendoPeticion = false;
         }
@@ -105,7 +136,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor{
     @Override
     public void tratarRechazar(Object informacion) {
         if(atendiendoPeticion){
-//            pararTimer();
+//            Parar timer
             rechazarPeticion(informacion);
             atendiendoPeticion = false;
         }
@@ -125,7 +156,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor{
         AppMediador.getInstance().registerReceiver(receptorPeticiones,AppMediador.AVISO_PETICION_OTGCONDUCTOR);
         modelo.obtenerPeticionesDePasajeros(informacion);
     }
-//
+
     private void buscarPosicion(Object informacion){
         AppMediador.getInstance().registerReceiver(receptorGPS,AppMediador.AVISO_LOCALIZACION_GPS);
         modelo.obtenerPosicionUsuario(informacion);
@@ -135,6 +166,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor{
         AppMediador.getInstance().registerReceiver(receptorPeticiones,AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR);
         modelo.aceptarPasajero(informacion);
     }
+    
     private void rechazarPeticion(Object informacion){
         AppMediador.getInstance().registerReceiver(receptorPeticiones,AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR);
         modelo.rechazarPasajero(informacion);
