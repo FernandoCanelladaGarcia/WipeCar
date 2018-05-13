@@ -32,7 +32,6 @@ public interface IPresentadorLogin {
     /**
      * Realiza las operaciones oportunas para registrar un nuevo
      * usuario en la aplicación.
-     * @param informacion contendra:
      */
-    public void tratarNuevo(Object informacion);
+    public void tratarNuevo();
 }
