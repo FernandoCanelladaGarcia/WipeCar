@@ -3,10 +3,9 @@ package tfg.android.fcg.presentador;
 public interface IPresentadorOTGPasajero {
 
     /**
-     * Obtiene un mapa centrado en la localización del pasajero.
-     * @param informacion contendra:
+     * Obtiene un mapa centrado en la localización del pasajero
      */
-    public void iniciar(Object informacion);
+    public void iniciar();
 
     /**
      * Busca los vehículos que van al mismo destino que el pasajero.

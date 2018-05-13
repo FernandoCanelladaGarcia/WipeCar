@@ -39,9 +39,9 @@ public interface IModelo {
 
     /**
      * Obtiene la posición del usuario a través del GPS.
-     * @param informacion contendra:
+
      */
-    public void obtenerPosicionUsuario(Object informacion);
+    public void obtenerPosicionUsuario();
 
     /**
      * Almacena la localización origen que ha seleccionado

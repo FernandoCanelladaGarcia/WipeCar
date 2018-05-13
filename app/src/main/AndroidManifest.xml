@@ -39,6 +39,11 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAevyXs40FngINeV3dul4jfqPj588BGTTw"/>
+        <service
+            android:name="tfg.android.fcg.modelo.bajonivel.ServicioLocalizacion"
+            android:enabled="true"
+            android:exported="true">
+        </service>
     </application>
 
 </manifest>

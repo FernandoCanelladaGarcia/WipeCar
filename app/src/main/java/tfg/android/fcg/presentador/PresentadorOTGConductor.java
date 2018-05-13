@@ -109,7 +109,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor{
         Thread thread1 = new Thread(new Runnable() {
             @Override
             public void run(){
-                buscarPosicion(informacion);
+                buscarPosicion();
             }
         });
 
@@ -161,9 +161,9 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor{
         modelo.obtenerPeticionesDePasajeros(informacion);
     }
 
-    private void buscarPosicion(Object informacion){
+    private void buscarPosicion(){
         AppMediador.getInstance().registerReceiver(receptorGPS,AppMediador.AVISO_LOCALIZACION_GPS);
-        modelo.obtenerPosicionUsuario(informacion);
+        modelo.obtenerPosicionUsuario();
     }
 
     private void aceptarPeticion(Object informacion){
