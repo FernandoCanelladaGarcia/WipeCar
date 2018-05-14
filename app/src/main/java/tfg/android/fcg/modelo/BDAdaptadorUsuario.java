@@ -207,6 +207,7 @@ public class BDAdaptadorUsuario {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
+                                Log.i(TAG, "Exito en Actualizacion de Display Name de Usuario");
                                 //Actualizacion de Display Name de Usuario.
                                 //Guardamos la sesion del usuario
                                 SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
@@ -233,13 +234,14 @@ public class BDAdaptadorUsuario {
 //                                    });
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        Log.i(TAG, "Completado" + task.getException().toString());
+                                        Log.i(TAG, "Completado registro y almacenamiento en base de datos");
                                         if (task.isSuccessful()) {
                                             //Usuario correctamente registrado
                                             Bundle extras = new Bundle();
                                             extras.putBoolean(AppMediador.CLAVE_RESULTADO_REGISTRO_USUARIO, true);
                                             appMediador.sendBroadcast(AppMediador.AVISO_REGISTRO_USUARIO, extras);
                                         } else {
+                                            Log.i(TAG, task.getException().toString());
                                             //Fallo en registro
                                             Bundle extras = new Bundle();
                                             extras.putBoolean(AppMediador.CLAVE_RESULTADO_REGISTRO_USUARIO, false);
@@ -248,6 +250,7 @@ public class BDAdaptadorUsuario {
                                     }
                                 });
                             } else {
+                                Log.i(TAG, task.getException().toString());
                                 //Fallo en actualizacion de DisplayName
                                 Bundle extras = new Bundle();
                                 extras.putBoolean(AppMediador.CLAVE_RESULTADO_REGISTRO_USUARIO, false);
@@ -256,6 +259,7 @@ public class BDAdaptadorUsuario {
                         }
                     });
                 } else {
+                    Log.i(TAG, task.getException().toString());
                     //Fallo en la creacion del usuario
                     Bundle extras = new Bundle();
                     extras.putBoolean(AppMediador.CLAVE_RESULTADO_REGISTRO_USUARIO, false);

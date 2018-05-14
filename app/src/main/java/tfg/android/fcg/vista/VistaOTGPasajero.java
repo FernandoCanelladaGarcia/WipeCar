@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 
 import tfg.android.fcg.AppMediador;
+import tfg.android.fcg.R;
 import tfg.android.fcg.presentador.IPresentadorOTGPasajero;
 
 public class VistaOTGPasajero extends AppCompatActivity implements IVistaOTGPasajero, OnMapReadyCallback {

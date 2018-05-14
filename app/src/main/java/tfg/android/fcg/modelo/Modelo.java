@@ -79,6 +79,9 @@ public class Modelo implements IModelo{
     @Override
     public void comprobarLogin(final Object[] informacion) {
     //TODO: ENCRIPTAR PASSWORD
+        String email = (String)informacion[0];
+        String password = (String)informacion[1];
+        Log.i(TAG, email + " " + password);
         auth.signInWithEmailAndPassword((String)informacion[0],(String)informacion[1])
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override

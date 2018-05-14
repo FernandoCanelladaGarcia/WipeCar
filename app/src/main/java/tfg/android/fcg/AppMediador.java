@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
 import tfg.android.fcg.modelo.IModelo;
-import tfg.android.fcg.modelo.Modelo;
+
 import tfg.android.fcg.presentador.IPresentadorHistorial;
 import tfg.android.fcg.presentador.IPresentadorLogin;
 import tfg.android.fcg.presentador.IPresentadorMapaOrigen;
@@ -395,6 +395,7 @@ public class AppMediador extends Application {
 		presentadorPerfil = null;
 		presentadorVehiculo = null;
 		presentadorHistorial = null;
+
 		singleton = this;
 	}
 }

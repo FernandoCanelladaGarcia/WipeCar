@@ -3,6 +3,8 @@ package tfg.android.fcg.vista;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import tfg.android.fcg.R;
+
 /**
  * Created by ferca on 21/03/2018.
  */

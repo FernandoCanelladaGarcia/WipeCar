@@ -25,8 +25,7 @@ public interface IPresentadorRegistro {
 
     /**
      * Trata la selección del botón Cancelar.
-     * @param informacion contendra:
      */
-    public void tratarCancelar(Object informacion);
+    public void tratarCancelar();
 
 }
