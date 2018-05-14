@@ -8,15 +8,18 @@ import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.modelo.IModelo;
 import tfg.android.fcg.modelo.Modelo;
 import tfg.android.fcg.vista.VistaMapaOrigen;
+import tfg.android.fcg.vista.VistaRegistro;
 
 public class PresentadorRegistro implements IPresentadorRegistro {
 
     private IModelo modelo;
     private AppMediador appMediador;
+    private VistaRegistro vistaRegistro;
 
     public PresentadorRegistro(){
         appMediador = AppMediador.getInstance();
         modelo = Modelo.getInstance();
+        vistaRegistro = (VistaRegistro) appMediador.getVistaRegistro();
     }
 
     private BroadcastReceiver receptor = new BroadcastReceiver() {
@@ -26,12 +29,12 @@ public class PresentadorRegistro implements IPresentadorRegistro {
                 appMediador.unRegisterReceiver(this);
                 boolean resultado = intent.getBooleanExtra(AppMediador.CLAVE_RESULTADO_REGISTRO_USUARIO,false);
                 if(resultado){
-                    appMediador.getVistaRegistro().cerrarProgreso();
-                    appMediador.getVistaRegistro().mostrarDialogo(2);
+                    vistaRegistro.cerrarProgreso();
+                    vistaRegistro.mostrarDialogo(2);
                     appMediador.launchActivity(VistaMapaOrigen.class,this,null);
                 }else{
-                    appMediador.getVistaRegistro().cerrarProgreso();
-                    appMediador.getVistaRegistro().mostrarDialogo(0);
+                    vistaRegistro.cerrarProgreso();
+                    vistaRegistro.mostrarDialogo(0);
                 }
             }
         }
@@ -39,13 +42,13 @@ public class PresentadorRegistro implements IPresentadorRegistro {
 
     @Override
     public void tratarRegistro(Object informacion) {
-        appMediador.getVistaRegistro().mostrarDialogo(informacion);
+        vistaRegistro.mostrarDialogo(informacion);
     }
 
     @Override
     public void tratarOk(Object informacion) {
-        appMediador.getVistaRegistro().cerrarDialogo();
-        appMediador.getVistaRegistro().mostrarProgreso();
+        vistaRegistro.cerrarDialogo();
+        vistaRegistro.mostrarProgreso();
         tratarAceptarRegistro(informacion);
     }
 
@@ -57,6 +60,6 @@ public class PresentadorRegistro implements IPresentadorRegistro {
 
     @Override
     public void tratarCancelar() {
-        appMediador.getVistaRegistro().cerrarDialogo();
+        vistaRegistro.cerrarDialogo();
     }
 }

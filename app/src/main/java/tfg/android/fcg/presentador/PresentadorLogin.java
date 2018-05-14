@@ -7,6 +7,7 @@ import android.content.Intent;
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.modelo.IModelo;
 import tfg.android.fcg.modelo.Modelo;
+import tfg.android.fcg.vista.VistaLogin;
 import tfg.android.fcg.vista.VistaMapaOrigen;
 import tfg.android.fcg.vista.VistaRegistro;
 
@@ -14,10 +15,12 @@ public class PresentadorLogin implements IPresentadorLogin {
 
     private IModelo modelo;
     private AppMediador appMediador;
+    private VistaLogin vistaLogin;
 
     public PresentadorLogin(){
         appMediador = AppMediador.getInstance();
         modelo = Modelo.getInstance();
+        vistaLogin = (VistaLogin) appMediador.getVistaLogin();
     }
 
     private BroadcastReceiver receptor = new BroadcastReceiver() {
@@ -28,11 +31,11 @@ public class PresentadorLogin implements IPresentadorLogin {
 
                 boolean resultado = intent.getBooleanExtra(AppMediador.CLAVE_RESULTADO_LOGIN,false);
                 if(resultado){
-                    appMediador.getVistaLogin().cerrarProgreso();
+                    vistaLogin.cerrarProgreso();
                     appMediador.launchActivity(VistaMapaOrigen.class,this,null);
                 }else{
-                    appMediador.getVistaLogin().cerrarProgreso();
-                    appMediador.getVistaLogin().mostrarDialogo(0);
+                    vistaLogin.cerrarProgreso();
+                    vistaLogin.mostrarDialogo(0);
                 }
             }
             if(intent.getAction().equals(AppMediador.AVISO_CORREO_PASSWORD)){
@@ -40,17 +43,17 @@ public class PresentadorLogin implements IPresentadorLogin {
 
                 boolean resultado = intent.getBooleanExtra(AppMediador.CLAVE_RESULTADO_RECUPERAR_PASSWORD,false);
                 if(resultado){
-                    appMediador.getVistaLogin().cerrarProgreso();
-                    appMediador.getVistaLogin().mostrarDialogo(2);
+                    vistaLogin.cerrarProgreso();
+                    vistaLogin.mostrarDialogo(2);
                 }
             }
         }
     };
     @Override
     public void tratarLogin(Object informacion) {
-    appMediador.getVistaLogin().mostrarProgreso();
-    appMediador.registerReceiver(receptor,AppMediador.AVISO_USER_LOGIN);
-    modelo.comprobarLogin((Object[])informacion);
+        vistaLogin.mostrarProgreso();
+        appMediador.registerReceiver(receptor,AppMediador.AVISO_USER_LOGIN);
+        modelo.comprobarLogin((Object[])informacion);
     }
 
     @Override
@@ -60,7 +63,7 @@ public class PresentadorLogin implements IPresentadorLogin {
 
     @Override
     public void tratarRecuperarPassword(Object informacion) {
-        appMediador.getVistaLogin().mostrarProgreso();
+        vistaLogin.mostrarProgreso();
         appMediador.registerReceiver(receptor,AppMediador.AVISO_CORREO_PASSWORD);
         modelo.recuperarPassword(informacion);
     }

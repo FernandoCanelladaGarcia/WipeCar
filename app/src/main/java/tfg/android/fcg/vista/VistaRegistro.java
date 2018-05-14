@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
+import tfg.android.fcg.presentador.IPresentadorRegistro;
+import tfg.android.fcg.presentador.PresentadorRegistro;
 
 /**
  * Created by ferca on 21/03/2018.
@@ -26,6 +28,7 @@ public class VistaRegistro extends AppCompatActivity implements IVistaRegistro, 
     private ProgressDialog dialogoProgreso;
     private AlertDialog dialogo;
     private AppMediador appMediador;
+    private IPresentadorRegistro presentadorRegistro;
 
     private final static String TAG = "depurador";
     private String[] registro = new String[5];
@@ -35,7 +38,7 @@ public class VistaRegistro extends AppCompatActivity implements IVistaRegistro, 
         setContentView(R.layout.layout_vista_registro);
         appMediador = (AppMediador)this.getApplication();
         appMediador.setVistaRegistro(this);
-
+        presentadorRegistro = appMediador.getPresentadorRegistro();
         botonRegistro = (Button) findViewById(R.id.registro);
         botonRegistro.setOnClickListener(this);
 
@@ -59,7 +62,7 @@ public class VistaRegistro extends AppCompatActivity implements IVistaRegistro, 
                 registro[2] = nombre.getText().toString().trim();
                 registro[3] = telefono.getText().toString().trim();
                 registro[4] = origen.getText().toString().trim();
-                appMediador.getPresentadorRegistro().tratarRegistro(1);
+                presentadorRegistro.tratarRegistro(1);
             }
         }
     }
@@ -107,13 +110,13 @@ public class VistaRegistro extends AppCompatActivity implements IVistaRegistro, 
                 dialogBuild.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        appMediador.getPresentadorRegistro().tratarOk(registro);
+                        presentadorRegistro.tratarOk(registro);
                     }
                 });
                 dialogBuild.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        appMediador.getPresentadorRegistro().tratarCancelar();
+                        presentadorRegistro.tratarCancelar();
                     }
                 });
                 dialogo = dialogBuild.create();

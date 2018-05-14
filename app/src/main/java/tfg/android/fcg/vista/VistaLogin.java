@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
+import tfg.android.fcg.presentador.IPresentadorLogin;
 
 public class VistaLogin extends AppCompatActivity implements IVistaLogin, View.OnClickListener {
 
@@ -23,6 +24,7 @@ public class VistaLogin extends AppCompatActivity implements IVistaLogin, View.O
     private ProgressDialog dialogoProgreso;
     private AlertDialog dialogo;
     private AppMediador appMediador;
+    private IPresentadorLogin presentadorLogin;
 
     private final static String TAG = "depurador";
 
@@ -32,7 +34,7 @@ public class VistaLogin extends AppCompatActivity implements IVistaLogin, View.O
         setContentView(R.layout.layout_vista_login);
         appMediador = (AppMediador) this.getApplication();
         appMediador.setVistaLogin(this);
-
+        presentadorLogin = appMediador.getPresentadorLogin();
         botonLogin = (Button) findViewById(R.id.botonlogin);
         botonLogin.setOnClickListener(this);
 
@@ -64,13 +66,13 @@ public class VistaLogin extends AppCompatActivity implements IVistaLogin, View.O
                     login[0] = email.getText().toString().trim();
                     login[1] = password.getText().toString().trim();
                     Log.i(TAG, email.getText().toString() + " " + password.getText().toString());
-                    appMediador.getPresentadorLogin().tratarLogin(login);
+                    presentadorLogin.tratarLogin(login);
                     break;
                 }
                 break;
             case R.id.botonRegistro:
                 Log.i(TAG,"registro");
-                appMediador.getPresentadorLogin().tratarNuevo();
+                presentadorLogin.tratarNuevo();
                 break;
             case R.id.botonRecordar:
                 Log.i(TAG,"recordar");
@@ -138,8 +140,7 @@ public class VistaLogin extends AppCompatActivity implements IVistaLogin, View.O
                             Toast.makeText(getApplicationContext(),
                                     "El correo no pertenece a la ULPGC", Toast.LENGTH_SHORT).show();
                         }else{
-                            appMediador.getPresentadorLogin()
-                                    .tratarRecuperarPassword(email.getText().toString().trim());
+                            presentadorLogin.tratarRecuperarPassword(email.getText().toString().trim());
                             cerrarDialogo();
                         }
                     }

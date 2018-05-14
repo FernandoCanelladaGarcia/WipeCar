@@ -4,9 +4,8 @@ public interface IPresentadorMapaOrigen {
 
     /**
      * Arregla la interfaz de usuario para introducir el origen y el destino.
-     * @param informacion contendra:
      */
-    public void iniciar(Object informacion);
+    public void iniciar();
 
     /**
      * Obtiene un mapa centrado en la localización del pasajero.

@@ -34,6 +34,7 @@ public class VistaOTGPasajero extends AppCompatActivity implements IVistaOTGPasa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.layout_vista_otgpasajero);
         appMediador = (AppMediador)this.getApplication();
         appMediador.setVistaOTGPasajero(this);
         presentadorOTGPasajero = appMediador.getPresentadorOTGPasajero();
@@ -46,8 +47,6 @@ public class VistaOTGPasajero extends AppCompatActivity implements IVistaOTGPasa
         //TODO
         //SupportMapFragment mapFragment = getSupportFragmentManager().findFragmentById(R.id.map);
         //mapFragment.getMapAsync(this);
-
-        setContentView(R.layout.layout_vista_otgpasajero);
     }
 
     @Override
@@ -63,7 +62,6 @@ public class VistaOTGPasajero extends AppCompatActivity implements IVistaOTGPasa
             });
         }
         presentadorOTGPasajero.iniciar();
-
     }
 
     @Override
