@@ -2,9 +2,13 @@ package tfg.android.fcg.vista;
 
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -20,7 +24,7 @@ import tfg.android.fcg.presentador.IPresentadorMapaOrigen;
  * Created by ferca on 21/03/2018.
  */
 
-public class VistaMapaOrigen extends AppCompatActivity implements IVistaMapaOrigen, OnMapReadyCallback {
+public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallback ,IVistaMapaOrigen, GoogleMap.OnMapClickListener {
 
     private GoogleMap mMap;
     private Marker miUbicacion;
@@ -34,8 +38,8 @@ public class VistaMapaOrigen extends AppCompatActivity implements IVistaMapaOrig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_vista_mapaorigen);
         appMediador = (AppMediador) this.getApplication();
-        presentadorMapaOrigen = appMediador.getPresentadorMapaOrigen();
         appMediador.setVistaMapaOrigen(this);
+        presentadorMapaOrigen = appMediador.getPresentadorMapaOrigen();
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -43,7 +47,7 @@ public class VistaMapaOrigen extends AppCompatActivity implements IVistaMapaOrig
         altoPantalla = size.y;
 
         SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager()
-                .findFragmentById(R.id.mapOrigen);
+                .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
         Log.i(TAG,"Mapa Origen");
@@ -92,5 +96,16 @@ public class VistaMapaOrigen extends AppCompatActivity implements IVistaMapaOrig
     @Override
     public void mostrarOrigen(Object informacion) {
 
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        appMediador.removePresentadorMapaOrigen();
     }
 }
