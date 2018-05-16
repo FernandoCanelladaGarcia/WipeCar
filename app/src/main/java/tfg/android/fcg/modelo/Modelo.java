@@ -5,6 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -12,6 +17,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.EmailAuthProvider;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import tfg.android.fcg.AppMediador;
 
@@ -298,5 +306,28 @@ public class Modelo implements IModelo{
         adaptadorVinculo.eliminarVinculo((Object[])informacion);
         adaptadorHistorial.agregarHistorial((Object[])informacion);
     }
+
+//    public void traducirLatlng(LatLng miLatlng){
+//        String lat = String.valueOf(miLatlng.latitude);
+//        String lng = String.valueOf(miLatlng.longitude);
+//        RequestQueue requestQueue = Volley.newRequestQueue(AppMediador.getInstance().getApplicationContext());
+//        JsonObjectRequest request = new JsonObjectRequest(
+//                AppMediador.GEOCODE_URL + lat + "," + lng + "&key=" + AppMediador.GEOCODE_APIKEY, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                try {
+//                    String miOrigen = response.getJSONArray("results").getJSONObject(0).getString("formatted_address");
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//
+//            }
+//        });
+//        requestQueue.add(request);
+//    }
 
 }

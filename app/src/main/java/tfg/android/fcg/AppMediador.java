@@ -77,6 +77,8 @@ public class AppMediador extends Application {
 
 	//Constantes de comunicacion
 	public static final int ZOOM = 12;
+	public static final String GEOCODE_APIKEY = "AIzaSyCd5F6PDHPtEu_nTWWxyeoKfp3VfoWdePY";
+	public static final String GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
 
 	public static final String AVISO_USER_LOGIN = "tfg.android.fcg.AVISO_USER_LOGIN";
 	public static final String AVISO_CAMBIO_PASSWORD = "tfg.android.fcg.AVISO_CAMBIO_PASSWORD";

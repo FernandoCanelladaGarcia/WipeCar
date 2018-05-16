@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="350dp">
+
+    <TextView
+        android:id="@+id/origenDestino"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Origen y Destino"
+        android:textAlignment="center"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/buttonOrigenD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/back"
+        android:onClick="onClick"
+        android:text="Origen"
+        android:textSize="17dp" />
+
+    <Spinner
+        android:id="@+id/spinnerDestino"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:textSize="20dp"
+        android:entries="@array/destinos"
+        android:prompt="@string/destinos_promt"
+        android:background="@drawable/back"/>
+
+    <Button
+        android:id="@+id/botonGuardarOyD"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="110dp"
+        android:text="Guardar"
+        android:background="@drawable/back"
+        android:layout_width="140dp"
+        android:layout_height="50dp"
+        android:textSize="17dp" />
+</LinearLayout>

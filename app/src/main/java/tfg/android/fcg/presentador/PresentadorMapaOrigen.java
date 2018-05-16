@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 import tfg.android.fcg.AppMediador;
@@ -21,7 +22,29 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen{
     private BroadcastReceiver receptorDeAvisos = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(AppMediador.AVISO_LOCALIZACION_GUARDADA)){
+                boolean resultado = intent.getBooleanExtra(AppMediador.CLAVE_RESULTADO_LOCALIZACION_GUARDADA,false);
+                if(resultado){
+                    vistaMapaOrigen.cerrarProgreso();
+                    vistaMapaOrigen.mostrarDialogo(0);
+                }
+            }
+        }
+    };
 
+    private BroadcastReceiver receptorGPS = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(AppMediador.AVISO_LOCALIZACION_GPS)){
+                if(intent.getExtras() != null){
+                    Object[] posicion = new Object[3];
+                    posicion[0] = intent.getSerializableExtra(AppMediador.CLAVE_LATITUD);
+                    posicion[1] = intent.getSerializableExtra(AppMediador.CLAVE_LONGITUD);
+                    posicion[2] = "Mi Ubicación";
+                    vistaMapaOrigen.cerrarProgreso();
+                    vistaMapaOrigen.mostrarMapaConPosicion(posicion);
+                }
+            }
         }
     };
 
@@ -32,17 +55,23 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen{
     }
     @Override
     public void iniciar() {
-
+        AppMediador.getInstance().registerReceiver(receptorGPS,AppMediador.AVISO_LOCALIZACION_GPS);
+        vistaMapaOrigen.cerrarDialogo();
+        vistaMapaOrigen.mostrarProgreso();
+        modelo.obtenerPosicionUsuario();
     }
 
     @Override
     public void tratarOrigen(Object informacion) {
-
+        AppMediador.getInstance().registerReceiver(receptorDeAvisos,AppMediador.AVISO_LOCALIZACION_GUARDADA);
+        vistaMapaOrigen.cerrarDialogo();
+        vistaMapaOrigen.mostrarProgreso();
+        modelo.guardarLocalizacion((Object[])informacion);
     }
 
     @Override
     public void tratarSeleccionarOrigen(Object informacion) {
-
+        vistaMapaOrigen.mostrarDialogo(1);
     }
 
     @Override

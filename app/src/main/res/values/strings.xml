@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">WipeCar</string>
+
+    <string name="destinos_promt">Destino</string>
+    <string-array name="destinos">
+        <item>Facultad de Ingeniería</item>
+        <item>Facultad de Ciencias Sociales</item>
+        <item>Facultad de Humanidades</item>
+        <item>Facultad de Ciencias de la Salud</item>
+        <item>Facultad de Veterinaria</item>
+    </string-array>
 </resources>
