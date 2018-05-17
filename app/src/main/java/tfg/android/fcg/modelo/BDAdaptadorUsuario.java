@@ -287,6 +287,7 @@ public class BDAdaptadorUsuario {
 
         switch (tarea) {
             case 1:
+                Log.i(TAG, "actualizar origen y destino");
                 actualizarOrigenYDestino(origenDestino);
                 break;
             case 2:
@@ -294,12 +295,15 @@ public class BDAdaptadorUsuario {
                 actualizarLogin(loginUsuario);
                 break;
             case 3:
+                Log.i(TAG, "actualizar valoracion");
                 actualizarValoracion(valoracion);
                 break;
             case 4:
+                Log.i(TAG, "actualizar hora y fecha");
                 actualizarHoraYFecha(fechaYHora);
                 break;
             case 5:
+                Log.i(TAG, "actualizar datos vehiculo");
                 actualizarDatosVehiculo(datoVehiculo);
             default:
                 Log.i(TAG, "NO HAY TAREA == informacion[0] ¿? ");

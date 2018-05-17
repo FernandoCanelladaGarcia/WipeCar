@@ -110,11 +110,11 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
     public void mostrarDialogo(Object informacion) {
         int tarea = (int) informacion;
         AlertDialog.Builder dialogBuild = new AlertDialog.Builder(this);
+        final View dialogoOrigen = getLayoutInflater().inflate(R.layout.layout_origen_destino, null);
         switch (tarea) {
             //Inicio
             case 0:
                 Log.i(TAG, "DIALOGO INICIO");
-                final View dialogoOrigen = getLayoutInflater().inflate(R.layout.layout_origen_destino, null);
                 dialogBuild.setView(dialogoOrigen);
                 dialogo = dialogBuild.create();
                 dialogo.show();
@@ -141,6 +141,14 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
                 dialogo = dialogBuild.create();
                 dialogo.show();
                 break;
+            case 2:
+                Log.i(TAG,"DIALOGO FINAL");
+                dialogBuild.setView(dialogoOrigen);
+                dialogo = dialogBuild.create();
+                dialogo.show();
+                Button buttonOrigen = (Button)findViewById(R.id.buttonOrigenD);
+                buttonOrigen.setEnabled(false);
+                break;
         }
     }
 
@@ -161,7 +169,6 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
                     Spinner destino = findViewById(R.id.spinnerDestino);
                     String d = destino.getSelectedItem().toString();
                     Object[] origenDestino = new Object[2];
-                    origenDestino[0] = miLatLng;
                     origenDestino[1] = d;
                     presentadorMapaOrigen.tratarOrigenYDestino(origenDestino);
                 }

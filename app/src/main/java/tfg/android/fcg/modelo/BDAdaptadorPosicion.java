@@ -1,15 +1,21 @@
 package tfg.android.fcg.modelo;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import tfg.android.fcg.AppMediador;
@@ -111,6 +117,33 @@ public class BDAdaptadorPosicion {
                 }
             }
         });
+    }
+
+    public void traducirLatlng(LatLng miLatlng){
+        Bundle extras = new Bundle();
+        List<Address> addresses;
+        Geocoder geocoder = new Geocoder(AppMediador.getInstance().getApplicationContext());
+        try {
+            addresses = geocoder.getFromLocation(miLatlng.latitude,miLatlng.longitude,1);
+
+            if(addresses == null){
+                extras.putBoolean(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION,false);
+                appMediador.sendBroadcast(AppMediador.AVISO_RESULTADO_TRADUCIR_LOCALIZACION,extras);
+                return;
+            }
+            if(addresses.size() == 0){
+                extras.getInt(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION,addresses.size());
+                appMediador.sendBroadcast(AppMediador.AVISO_RESULTADO_TRADUCIR_LOCALIZACION,extras);
+                return;
+            }
+            String address = addresses.get(0).getAddressLine(0);
+            extras.putString(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION,address);
+            appMediador.sendBroadcast(AppMediador.AVISO_RESULTADO_TRADUCIR_LOCALIZACION,extras);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(AppMediador.getInstance().getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     public void finalizarGps(){

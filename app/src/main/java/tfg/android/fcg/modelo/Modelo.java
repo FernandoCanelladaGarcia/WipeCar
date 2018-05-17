@@ -1,9 +1,12 @@
 package tfg.android.fcg.modelo;
 
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -20,6 +23,9 @@ import com.google.firebase.auth.EmailAuthProvider;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.List;
 
 import tfg.android.fcg.AppMediador;
 
@@ -204,7 +210,11 @@ public class Modelo implements IModelo{
 
     @Override
     public void guardarOrigenYDestino(Object[] informacion) {
-        adaptadorUsuario.actualizarUsuario(informacion);
+        Object[] datos = new Object[12];
+        datos[0] = 1;
+        datos[5] = informacion[0];
+        datos[6] = informacion[1];
+        adaptadorUsuario.actualizarUsuario(datos);
     }
 
     @Override
@@ -281,8 +291,10 @@ public class Modelo implements IModelo{
     @Override
     public void guardarLocalizacion(Object[] informacion) {
         String idUser = getUsuarioActual().getUid();
+        LatLng miLatlng = new LatLng((Double)informacion[1],(Double)informacion[2]);
         informacion[0] = idUser;
         adaptadorPosicion.agregarPosicion(informacion);
+        adaptadorPosicion.traducirLatlng(miLatlng);
     }
 
     @Override
@@ -306,28 +318,4 @@ public class Modelo implements IModelo{
         adaptadorVinculo.eliminarVinculo((Object[])informacion);
         adaptadorHistorial.agregarHistorial((Object[])informacion);
     }
-
-//    public void traducirLatlng(LatLng miLatlng){
-//        String lat = String.valueOf(miLatlng.latitude);
-//        String lng = String.valueOf(miLatlng.longitude);
-//        RequestQueue requestQueue = Volley.newRequestQueue(AppMediador.getInstance().getApplicationContext());
-//        JsonObjectRequest request = new JsonObjectRequest(
-//                AppMediador.GEOCODE_URL + lat + "," + lng + "&key=" + AppMediador.GEOCODE_APIKEY, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                try {
-//                    String miOrigen = response.getJSONArray("results").getJSONObject(0).getString("formatted_address");
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//
-//            }
-//        });
-//        requestQueue.add(request);
-//    }
-
 }

@@ -3,6 +3,7 @@ package tfg.android.fcg.presentador;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -16,7 +17,7 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen{
 
     private AppMediador appMediador;
     private VistaMapaOrigen vistaMapaOrigen;
-    private Marker marcaMapa;
+    private String miOrigen;
     private IModelo modelo;
 
     private BroadcastReceiver receptorDeAvisos = new BroadcastReceiver() {
@@ -26,7 +27,17 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen{
                 boolean resultado = intent.getBooleanExtra(AppMediador.CLAVE_RESULTADO_LOCALIZACION_GUARDADA,false);
                 if(resultado){
                     vistaMapaOrigen.cerrarProgreso();
-                    vistaMapaOrigen.mostrarDialogo(0);
+                    vistaMapaOrigen.mostrarDialogo(2);
+                }
+            }
+            if(intent.getAction().equals(AppMediador.AVISO_RESULTADO_TRADUCIR_LOCALIZACION)){
+                Bundle extras = intent.getExtras();
+                if(extras.getInt(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION) == 0){
+                    //Fallo
+                }if(!extras.getBoolean(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION,false)){
+                    //Fallo
+                }else{
+                    miOrigen = extras.getString(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION);
                 }
             }
         }
@@ -64,6 +75,7 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen{
     @Override
     public void tratarOrigen(Object informacion) {
         AppMediador.getInstance().registerReceiver(receptorDeAvisos,AppMediador.AVISO_LOCALIZACION_GUARDADA);
+        AppMediador.getInstance().registerReceiver(receptorDeAvisos,AppMediador.AVISO_RESULTADO_TRADUCIR_LOCALIZACION);
         vistaMapaOrigen.cerrarDialogo();
         vistaMapaOrigen.mostrarProgreso();
         modelo.guardarLocalizacion((Object[])informacion);
@@ -81,6 +93,9 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen{
 
     @Override
     public void tratarOrigenYDestino(Object informacion) {
-
+        Object[] origenDestino = (Object[])informacion;
+        origenDestino[0] = miOrigen;
+        vistaMapaOrigen.mostrarProgreso();
+        modelo.guardarOrigenYDestino(origenDestino);
     }
 }
