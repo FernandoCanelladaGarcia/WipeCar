@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -12,6 +13,7 @@ import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.modelo.IModelo;
 import tfg.android.fcg.modelo.Modelo;
 import tfg.android.fcg.vista.VistaMapaOrigen;
+import tfg.android.fcg.vista.VistaPrincipal;
 
 public class PresentadorMapaOrigen implements IPresentadorMapaOrigen{
 
@@ -19,6 +21,8 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen{
     private VistaMapaOrigen vistaMapaOrigen;
     private String miOrigen;
     private IModelo modelo;
+
+    private final static String TAG = "depurador";
 
     private BroadcastReceiver receptorDeAvisos = new BroadcastReceiver() {
         @Override
@@ -38,6 +42,13 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen{
                     //Fallo
                 }else{
                     miOrigen = extras.getString(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION);
+                    Log.i(TAG, miOrigen);
+                }
+            }if(intent.getAction().equals(AppMediador.AVISO_ACTUALIZACION_USUARIO)){
+                Object[] datos = (Object[]) intent.getExtras().getSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO);
+                if((boolean)datos[0] && datos[1].equals("origenydestino")){
+                    vistaMapaOrigen.cerrarProgreso();
+                    vistaMapaOrigen.mostrarDialogo(3);
                 }
             }
         }
@@ -66,7 +77,7 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen{
     }
     @Override
     public void iniciar() {
-        AppMediador.getInstance().registerReceiver(receptorGPS,AppMediador.AVISO_LOCALIZACION_GPS);
+        appMediador.registerReceiver(receptorGPS,AppMediador.AVISO_LOCALIZACION_GPS);
         vistaMapaOrigen.cerrarDialogo();
         vistaMapaOrigen.mostrarProgreso();
         modelo.obtenerPosicionUsuario();
@@ -74,8 +85,8 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen{
 
     @Override
     public void tratarOrigen(Object informacion) {
-        AppMediador.getInstance().registerReceiver(receptorDeAvisos,AppMediador.AVISO_LOCALIZACION_GUARDADA);
-        AppMediador.getInstance().registerReceiver(receptorDeAvisos,AppMediador.AVISO_RESULTADO_TRADUCIR_LOCALIZACION);
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_LOCALIZACION_GUARDADA);
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_RESULTADO_TRADUCIR_LOCALIZACION);
         vistaMapaOrigen.cerrarDialogo();
         vistaMapaOrigen.mostrarProgreso();
         modelo.guardarLocalizacion((Object[])informacion);
@@ -87,12 +98,13 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen{
     }
 
     @Override
-    public void tratarSalirMapa(Object informacion) {
-
+    public void tratarSalirMapa() {
+        appMediador.launchActivity(VistaPrincipal.class,this,null);
     }
 
     @Override
     public void tratarOrigenYDestino(Object informacion) {
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_ACTUALIZACION_USUARIO);
         Object[] origenDestino = (Object[])informacion;
         origenDestino[0] = miOrigen;
         vistaMapaOrigen.mostrarProgreso();

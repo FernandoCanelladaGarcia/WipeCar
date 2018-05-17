@@ -149,6 +149,24 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
                 Button buttonOrigen = (Button)findViewById(R.id.buttonOrigenD);
                 buttonOrigen.setEnabled(false);
                 break;
+            case 3:
+                dialogBuild.setTitle("Origen y destino");
+                dialogBuild.setMessage("¿Esta seguro de su elección?");
+                dialogBuild.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        presentadorMapaOrigen.tratarSalirMapa();
+                    }
+                });
+                dialogBuild.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cerrarDialogo();
+                    }
+                });
+                dialogo = dialogBuild.create();
+                dialogo.show();
+                break;
         }
     }
 

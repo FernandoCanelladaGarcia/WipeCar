@@ -22,9 +22,8 @@ public interface IPresentadorMapaOrigen {
     /**
      * Presenta el diálogo a traves del cual se introducen el origen y el destino
      * cuando se sale de la pantalla de mapa.
-     * @param informacion contendra:
      */
-    public void tratarSalirMapa(Object informacion);
+    public void tratarSalirMapa();
 
     /**
      * Realiza los operaciones oportunas para almacenar
