@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.modelo.Posicion;
@@ -22,6 +23,8 @@ public class ServicioLocalizacion extends Service implements LocationListener {
     boolean gpsEstaHabilitado = false;
     protected LocationManager locationManager;
     private AppMediador appMediador;
+
+    private final static String TAG = "depurador";
 
     @Override
     public void onCreate() {
@@ -40,6 +43,7 @@ public class ServicioLocalizacion extends Service implements LocationListener {
                 //                                          int[] grantResults)
                 // to handle the case where the user grants the permission. See the documentation
                 // for ActivityCompat#requestPermissions for more details.
+                Log.i(TAG, "Error Localizacion");
                 return;
             }
             locationManager.requestLocationUpdates(
@@ -47,6 +51,7 @@ public class ServicioLocalizacion extends Service implements LocationListener {
                     TIEMPO_MINIMO_ENTRE_ACTUALIZACIONES,
                     DISTANCIA_MINIMA_ENTRE_ACTUALIZACIONES, this);
         }
+        Log.i(TAG, "Servicio Localizacion iniciado");
     }
 
     @Override
@@ -57,6 +62,7 @@ public class ServicioLocalizacion extends Service implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         if(location != null) {
+            Log.i(TAG, "Location Changed");
             Bundle extras = new Bundle();
             extras.putDouble(AppMediador.CLAVE_LATITUD, location.getLatitude());
             extras.putDouble(AppMediador.CLAVE_LONGITUD, location.getLongitude());

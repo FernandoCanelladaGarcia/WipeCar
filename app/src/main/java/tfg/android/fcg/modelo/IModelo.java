@@ -92,7 +92,7 @@ public interface IModelo {
      * Elimina de la base de datos la información de un usuario.
      * @param informacion contendra:
      */
-    public void eliminarPerfil(Object informacion);
+    public void eliminarPerfil(Object[] informacion);
 
     /**
      * Almacena en la base de datos la información del vehículo de un usuario.

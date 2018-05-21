@@ -37,6 +37,7 @@ public class BDAdaptadorUsuario {
     private String newDisplayName = "";
     private final String TAG = "depurador";
     private DatabaseReference database;
+    private Modelo modelo;
 
     public BDAdaptadorUsuario() {
         appMediador = AppMediador.getInstance();
@@ -56,16 +57,16 @@ public class BDAdaptadorUsuario {
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Usuario usuario = snapshot.getValue(Usuario.class);
-                    if(usuario.getDestino().equals(destino) && usuario.isRol()){
+                    if (usuario.getDestino().equals(destino) && usuario.isRol()) {
                         conductores.add(usuario);
                     }
                 }
                 //Se ha creado la lista de conductores que van al destino
                 Bundle extras = new Bundle();
-                extras.putSerializable(AppMediador.CLAVE_LISTA_CONDUCTORES,conductores);
-                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_CONDUCTORES,extras);
+                extras.putSerializable(AppMediador.CLAVE_LISTA_CONDUCTORES, conductores);
+                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_CONDUCTORES, extras);
                 database.removeEventListener(this);
             }
 
@@ -73,8 +74,8 @@ public class BDAdaptadorUsuario {
             public void onCancelled(DatabaseError databaseError) {
                 //Error en la referencia de la base de datos
                 Bundle extras = new Bundle();
-                extras.putSerializable(AppMediador.CLAVE_LISTA_CONDUCTORES,null);
-                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_CONDUCTORES,extras);
+                extras.putSerializable(AppMediador.CLAVE_LISTA_CONDUCTORES, null);
+                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_CONDUCTORES, extras);
                 database.removeEventListener(this);
             }
         });
@@ -91,16 +92,16 @@ public class BDAdaptadorUsuario {
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Usuario usuario = snapshot.getValue(Usuario.class);
-                    if(usuario.getDestino().equals(destino) && !usuario.isRol()){
+                    if (usuario.getDestino().equals(destino) && !usuario.isRol()) {
                         pasajeros.add(usuario);
                     }
                 }
                 //Se ha creado la lista de pasajeros que van al destino
                 Bundle extras = new Bundle();
-                extras.putSerializable(AppMediador.CLAVE_LISTA_PASAJEROS,pasajeros);
-                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_PASAJEROS,extras);
+                extras.putSerializable(AppMediador.CLAVE_LISTA_PASAJEROS, pasajeros);
+                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_PASAJEROS, extras);
                 database.removeEventListener(this);
             }
 
@@ -108,8 +109,8 @@ public class BDAdaptadorUsuario {
             public void onCancelled(DatabaseError databaseError) {
                 //Error en la referencia de la base de datos
                 Bundle extras = new Bundle();
-                extras.putSerializable(AppMediador.CLAVE_LISTA_PASAJEROS,null);
-                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_PASAJEROS,extras);
+                extras.putSerializable(AppMediador.CLAVE_LISTA_PASAJEROS, null);
+                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_PASAJEROS, extras);
                 database.removeEventListener(this);
             }
         });
@@ -511,69 +512,56 @@ public class BDAdaptadorUsuario {
 
     /**
      * Elimina de la tabla Usuarios el registro donde el campo coincide con el del parámetro.
-     *
-     * @param idUser contendra:
+     * @param idUser   contendra:
+     * @param email    contendra:
+     * @param password contendra:
      */
-    public void eliminarUsuario(String idUser) {
-        final DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios")
-                .child(idUser);
-        SharedPreferences sharedPreferences = appMediador.getSharedPreferences("login", 0);
-        AuthCredential credential = EmailAuthProvider.getCredential(usuarioActual.getEmail(), sharedPreferences.getString("password", null));
-
+    public void eliminarUsuario(String idUser, final String email, final String password) {
+        usuarioActual = auth.getCurrentUser();
+        database.child(idUser).removeValue();
+        Log.i(TAG, "Eliminado registro de la base de datos");
+        //Eliminado registro de la base de datos, notifica resultado
+        AuthCredential credential = EmailAuthProvider.getCredential(email, password);
         usuarioActual.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
+                    Log.i(TAG, "Reautenticado");
                     //Reautenticado
                     usuarioActual.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                //Eliminado correctamente, falta eliminar el registro de la base de datos.
-                                referenciaUsuario.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            //Eliminado registro de la base de datos, notifica resultado
-
-                                            Bundle extras = new Bundle();
-                                            extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_USUARIO, true);
-
-                                            appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_USUARIO, extras);
-
-                                        } else {
-                                            //Fallo al eliminar el registro de la base de datos
-                                            Bundle extras = new Bundle();
-                                            extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_USUARIO, false);
-
-                                            appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_USUARIO, extras);
-                                        }
-                                    }
-                                });
+                                //Eliminado correctamente.
+                                Log.i(TAG, "Eliminado correctamente.");
+                                Bundle extras = new Bundle();
+                                extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_USUARIO, true);
+                                appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_USUARIO, extras);
                             } else {
-                                //Fallo al eliminar el registro de la base de datos
+                                //Fallo al eliminar al usuario
+                                Log.i(TAG, "Fallo al eliminar auth");
                                 Bundle extras = new Bundle();
                                 extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_USUARIO, false);
-
                                 appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_USUARIO, extras);
                             }
                         }
                     });
                 } else {
-                    //Fallo en la reautenticacion
+                    //Fallo al reautenticar
+                    Log.i(TAG, "Fallo al reautenticar");
                     Bundle extras = new Bundle();
                     extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_USUARIO, false);
-
                     appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_USUARIO, extras);
                 }
             }
         });
     }
 
+
     //**********METODOS PRIVADOS**************//
 
     private void actualizarLogin(final String[] informacion) {
-
+        usuarioActual = auth.getCurrentUser();
         final Object datos[] = new Object[2];
 
         final String currentPassword = sharedPreferences.getString("password", null);
@@ -588,9 +576,11 @@ public class BDAdaptadorUsuario {
                 if (task.isSuccessful()) {
                     Log.i(TAG, "Reautenticacion correcta");
 
-                    String currentName = auth.getCurrentUser().getDisplayName();
-                    final String currentPhone = usuario.getTelefono();
-                    final boolean currentRol = usuario.isRol();
+                    String displayName = auth.getCurrentUser().getDisplayName();
+                    String[] partes = displayName.split("#");
+                    final String currentName = partes[0];
+                    final String currentPhone = partes[1];
+                    final boolean currentRol = Boolean.valueOf(partes[2]);
 
                     final String newName = informacion[0];
                     final String newPhone = informacion[1];
@@ -605,21 +595,21 @@ public class BDAdaptadorUsuario {
                     }
                     if (!currentName.equals(newName) && currentPhone.equals(newPhone)) {
                         newDisplayName = newName;
-                        login.setNombre(newName);
-                        usuario.setNombre(newName);
+                        //login.setNombre(newName);
+                        //usuario.setNombre(newName);
                         taskMap.put("nombre", newName);
                         taskMap.put("telefono", currentPhone);
                     }
                     if (currentName.equals(newName) && !currentPhone.equals(newPhone)) {
-                        usuario.setTelefono(newPhone);
+                        //usuario.setTelefono(newPhone);
                         taskMap.put("nombre", currentName);
                         taskMap.put("telefono", newPhone);
                     } else {
                         newDisplayName = newName;
-                        login.setNombre(newName);
+                        //login.setNombre(newName);
                         taskMap.put("nombre", newName);
-                        usuario.setNombre(newName);
-                        usuario.setTelefono(newPhone);
+                        //usuario.setNombre(newName);
+                        //usuario.setTelefono(newPhone);
                         taskMap.put("telefono", newPhone);
                     }
 
@@ -748,11 +738,12 @@ public class BDAdaptadorUsuario {
 
     private void actualizarValoracion(String informacion) {
         final Object[] datos = new Object[2];
-        String idUsuario = usuario.getIdUser();
+        usuarioActual = auth.getCurrentUser();
+        String idUsuario = usuarioActual.getUid();
         DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(idUsuario);
         Map<String, Object> taskMap = new HashMap<>();
         taskMap.put("valoracion", informacion);
-        usuario.setValoracion(informacion);
+        //usuario.setValoracion(informacion);
 
         referenciaUsuario.updateChildren(taskMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -761,7 +752,7 @@ public class BDAdaptadorUsuario {
                     //Actualizacion valoracion
                     Bundle extras = new Bundle();
                     datos[0] = true;
-                    datos[1] = "datovehiculo";
+                    datos[1] = "valoracion";
                     extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
                     appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
                 } else {
@@ -780,11 +771,12 @@ public class BDAdaptadorUsuario {
     //TODO DEBE LLAMARSE TRAS ACTUALIZAR O AGREGAR UN VEHICULO
     private void actualizarDatosVehiculo(String informacion) {
         final Object[] datos = new Object[2];
-        String idUsuario = usuario.getIdUser();
+        usuarioActual = auth.getCurrentUser();
+        String idUsuario = usuarioActual.getUid();
         DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(idUsuario);
         Map<String, Object> taskMap = new HashMap<>();
         taskMap.put("datoVehiculo", informacion);
-        usuario.setDatoVehiculo(informacion);
+        //usuario.setDatoVehiculo(informacion);
 
         referenciaUsuario.updateChildren(taskMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -810,16 +802,17 @@ public class BDAdaptadorUsuario {
     }
 
     private void actualizarHoraYFecha(String[] informacion) {
+        usuarioActual = auth.getCurrentUser();
         final Object[] datos = new Object[2];
-        String idUsuario = usuario.getIdUser();
+        String idUsuario = usuarioActual.getUid();
         DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(idUsuario);
 
         Map<String, Object> taskMap = new HashMap<>();
         taskMap.put("fecha", informacion[0]);
-        usuario.setFecha(informacion[0]);
+        //usuario.setFecha(informacion[0]);
 
         taskMap.put("hora", informacion[1]);
-        usuario.setHora(informacion[1]);
+        //usuario.setHora(informacion[1]);
 
         referenciaUsuario.updateChildren(taskMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -846,16 +839,16 @@ public class BDAdaptadorUsuario {
     }
 
     private void actualizarOrigenYDestino(String[] informacion) {
+        usuarioActual = auth.getCurrentUser();
         final Object[] datos = new Object[2];
-        String idUsuario = usuario.getIdUser();
-        DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(idUsuario);
+        DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(usuarioActual.getUid());
 
         Map<String, Object> taskMap = new HashMap<>();
         taskMap.put("origen", informacion[0]);
-        usuario.setOrigen(informacion[0]);
+        //usuario.setOrigen(informacion[0]);
 
         taskMap.put("destino", informacion[1]);
-        usuario.setDestino(informacion[1]);
+        //usuario.setDestino(informacion[1]);
 
         referenciaUsuario.updateChildren(taskMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

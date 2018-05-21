@@ -87,7 +87,7 @@ public class VistaLogin extends AppCompatActivity implements IVistaLogin, View.O
 
     @Override
     public void mostrarProgreso() {
-        Log.i(TAG," mostrar Progreso");
+        Log.i(TAG,"mostrar Progreso");
         dialogoProgreso = new ProgressDialog(this);
         dialogoProgreso.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialogoProgreso.setIndeterminate(true);

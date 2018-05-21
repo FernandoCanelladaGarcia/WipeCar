@@ -91,12 +91,12 @@ public class Modelo implements IModelo{
 
 
     @Override
-    public void comprobarLogin(final Object[] informacion) {
+    public void comprobarLogin(Object[] informacion) {
     //TODO: ENCRIPTAR PASSWORD
-        String email = (String)informacion[0];
-        String password = (String)informacion[1];
+        final String email = (String)informacion[0];
+        final String password = (String)informacion[1];
         Log.i(TAG, email + " " + password);
-        auth.signInWithEmailAndPassword((String)informacion[0],(String)informacion[1])
+        auth.signInWithEmailAndPassword(email,password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -106,19 +106,19 @@ public class Modelo implements IModelo{
                     Log.i(TAG,"Login comprobado");
                     setUsuarioActual(auth.getCurrentUser());
                     SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login",0);
-                    String email = sharedPreferences.getString("email",null);
-                    if(email != null){
-                        if(!email.equals((String)informacion[0])){
+                    String emailpref = sharedPreferences.getString("email",null);
+                    if(emailpref != null){
+                        if(!emailpref.equals(email)){
                             SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("email",(String)informacion[0]);
-                            editor.putString("password",(String)informacion[1]);
+                            editor.putString("email",email);
+                            editor.putString("password",password);
                             editor.apply();
                         }
                     }else{
                         Log.i(TAG,"Login comprobado");
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("email", (String)informacion[0]);
-                        editor.putString("password",(String)informacion[1]);
+                        editor.putString("email", email);
+                        editor.putString("password",password);
                         editor.apply();
                     }
 
@@ -263,8 +263,8 @@ public class Modelo implements IModelo{
     }
 
     @Override
-    public void eliminarPerfil(Object informacion) {
-        adaptadorUsuario.eliminarUsuario((String)informacion);
+    public void eliminarPerfil(Object[] informacion) {
+        adaptadorUsuario.eliminarUsuario((String)informacion[0],(String)informacion[1],(String)informacion[2]);
     }
 
     @Override

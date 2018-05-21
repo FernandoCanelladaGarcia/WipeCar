@@ -59,6 +59,7 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen{
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(AppMediador.AVISO_LOCALIZACION_GPS)){
                 if(intent.getExtras() != null){
+                    Log.i(TAG, "Localizacion recogida");
                     Object[] posicion = new Object[3];
                     posicion[0] = intent.getSerializableExtra(AppMediador.CLAVE_LATITUD);
                     posicion[1] = intent.getSerializableExtra(AppMediador.CLAVE_LONGITUD);
