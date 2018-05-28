@@ -89,6 +89,17 @@ public class ModeloTest extends ActivityInstrumentationTestCase2 {
 //    }
 
 //    @Test
+//    public void testComprobarLoginEmailIncorrectoPasswordCorrecto() throws Exception{
+//        Log.i(TAG, "metodo testComprobarLoginEmailCorrectoPasswordIncorrecto");
+//        String[] login = new String[] {"fernando.prueba101@ulpgc.es","123456"}; //Email registrado contraseña no correcta.
+//        modelo = Modelo.getInstance();
+//        contador = new CountDownLatch(1);
+//        esperarRespuestaLoginEmailCorrectoPasswordIncorrecto();
+//        modelo.comprobarLogin(login);
+//        contador.await(10000,TimeUnit.MILLISECONDS);
+//    }
+
+//    @Test
 //    public void testComprobarELiminarUsuario() throws Exception{
 //        Log.i(TAG, "metodo testComprobarELiminarUsuario");
 //        String[] login = new String[]{"fernando.prueba101@alu.ulpgc.es","123456"};

@@ -75,7 +75,7 @@ public class VistaLogin extends AppCompatActivity implements IVistaLogin, View.O
                 presentadorLogin.tratarNuevo();
                 break;
             case R.id.botonRecordar:
-                Log.i(TAG,"recordar");
+                Log.i(TAG,"recordarContraseña");
                 mostrarDialogo(1);
                 break;
             default:
@@ -170,12 +170,13 @@ public class VistaLogin extends AppCompatActivity implements IVistaLogin, View.O
     }
 
     private boolean camposValidos() {
+        String[] partes = email.getText().toString().split("@");
         if (TextUtils.isEmpty(email.getText().toString()) ||
                 TextUtils.isEmpty(password.getText().toString())){
             Log.i(TAG,"Algo vacio");
             Toast.makeText(getApplicationContext(), "Rellena todos los campos", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (email.getText().toString().trim().matches("^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\\.)?[a-zA-Z]+\\.)?(alu.ulpgc|)\\.com$")){
+        } else if (!partes[1].equals("alu.ulpgc.es")){
             Log.i(TAG,"no ulpgc");
             Toast.makeText(getApplicationContext(), "El correo no pertenece a la ULPGC", Toast.LENGTH_SHORT).show();
             return false;

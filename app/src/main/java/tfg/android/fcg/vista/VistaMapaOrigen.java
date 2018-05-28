@@ -84,8 +84,8 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
                 }
             });
         }
-        presentadorMapaOrigen.iniciar();
         Log.i(TAG, "onMapReady");
+        presentadorMapaOrigen.iniciar();
     }
 
     @Override
@@ -207,7 +207,8 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
         String titulo = (String) posicion[2];
 
         LatLng lugar = new LatLng(latitud, longitud);
-        if (titulo.equals("Mi ubicación")) {
+        Log.i("depurador", titulo+" " +miUbicacion);
+        if (titulo.equals("Mi Ubicación")) {
 
             if (miUbicacion != null) {
                 miUbicacion.remove();
@@ -216,7 +217,7 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
                     icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation)));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lugar, AppMediador.ZOOM));
         }
-
+        cerrarProgreso();
     }
 
     @Override

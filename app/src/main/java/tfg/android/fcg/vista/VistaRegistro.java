@@ -143,6 +143,7 @@ public class VistaRegistro extends AppCompatActivity implements IVistaRegistro, 
     }
 
     private boolean camposValidos(){
+        String[] partes = email.getText().toString().split("@");
         if(TextUtils.isEmpty(nombre.getText().toString())||
                 TextUtils.isEmpty(telefono.getText().toString())||
                 TextUtils.isEmpty(origen.getText().toString())||
@@ -152,8 +153,7 @@ public class VistaRegistro extends AppCompatActivity implements IVistaRegistro, 
             Log.i(TAG,"Algo vacio");
             Toast.makeText(getApplicationContext(), "Rellene todos los campos", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (email.getText().toString().trim().matches(
-                "^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\\.)?[a-zA-Z]+\\.)?(alu.ulpgc|)\\.com$")){
+        } else if (!partes[1].equals("alu.ulpgc.es")){
             Log.i(TAG,"no ulpgc");
             Toast.makeText(getApplicationContext(), "El correo introducido no pertenece a la ULPGC", Toast.LENGTH_SHORT).show();
             return false;

@@ -211,10 +211,11 @@ public class BDAdaptadorUsuario {
                                 Log.i(TAG, "Exito en Actualizacion de Display Name de Usuario");
                                 //Actualizacion de Display Name de Usuario.
                                 //Guardamos la sesion del usuario
-                                SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString("email", email);
                                 editor.putString("password", password);
+                                editor.putString("origen",origen);
+                                editor.putBoolean("rol",rol);
                                 editor.apply();
                                 //TODO ENCRIPTAR
                                 String nombreEncriptado = nombre;
@@ -561,11 +562,12 @@ public class BDAdaptadorUsuario {
     //**********METODOS PRIVADOS**************//
 
     private void actualizarLogin(final String[] informacion) {
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
         usuarioActual = auth.getCurrentUser();
         final Object datos[] = new Object[2];
-
         final String currentPassword = sharedPreferences.getString("password", null);
         final String currentEmail = sharedPreferences.getString("email", null);
+        final boolean currentRol = sharedPreferences.getBoolean("rol", false);
         final Map<String, Object> taskMap = new HashMap<>();
 
         AuthCredential credential = EmailAuthProvider.getCredential(currentEmail, currentPassword);
@@ -580,7 +582,7 @@ public class BDAdaptadorUsuario {
                     String[] partes = displayName.split("#");
                     final String currentName = partes[0];
                     final String currentPhone = partes[1];
-                    final boolean currentRol = Boolean.valueOf(partes[2]);
+
 
                     final String newName = informacion[0];
                     final String newPhone = informacion[1];
@@ -595,21 +597,15 @@ public class BDAdaptadorUsuario {
                     }
                     if (!currentName.equals(newName) && currentPhone.equals(newPhone)) {
                         newDisplayName = newName;
-                        //login.setNombre(newName);
-                        //usuario.setNombre(newName);
                         taskMap.put("nombre", newName);
                         taskMap.put("telefono", currentPhone);
                     }
                     if (currentName.equals(newName) && !currentPhone.equals(newPhone)) {
-                        //usuario.setTelefono(newPhone);
                         taskMap.put("nombre", currentName);
                         taskMap.put("telefono", newPhone);
                     } else {
                         newDisplayName = newName;
-                        //login.setNombre(newName);
                         taskMap.put("nombre", newName);
-                        //usuario.setNombre(newName);
-                        //usuario.setTelefono(newPhone);
                         taskMap.put("telefono", newPhone);
                     }
 
@@ -623,6 +619,7 @@ public class BDAdaptadorUsuario {
                                 //Comprobamos el rol, sino no varia.
                                 if (currentRol != newRol) {
                                     taskMap.put("rol", newRol);
+                                    editor.putBoolean("rol", newRol);
                                 }
                                 DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(usuarioActual.getUid());
                                 referenciaUsuario.updateChildren(taskMap).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -632,8 +629,6 @@ public class BDAdaptadorUsuario {
                                             //Actualizacion name en tabla usuarios
                                             Log.i(TAG, "Actualizacion nombre");
                                             if (!currentPassword.equals(newPassword)) {
-                                                SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
-                                                SharedPreferences.Editor editor = sharedPreferences.edit();
                                                 editor.putString("password", newPassword);
                                                 editor.apply();
                                                 //TODO ENCRIPTAR
@@ -661,9 +656,6 @@ public class BDAdaptadorUsuario {
                                                     }
                                                 });
                                             } else if (!currentEmail.equals(newEmail)) {
-                                                login.setEmail(newEmail);
-                                                SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
-                                                SharedPreferences.Editor editor = sharedPreferences.edit();
                                                 editor.putString("email", newEmail);
                                                 editor.apply();
                                                 usuarioActual.updateEmail(newEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -743,7 +735,6 @@ public class BDAdaptadorUsuario {
         DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(idUsuario);
         Map<String, Object> taskMap = new HashMap<>();
         taskMap.put("valoracion", informacion);
-        //usuario.setValoracion(informacion);
 
         referenciaUsuario.updateChildren(taskMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -776,7 +767,6 @@ public class BDAdaptadorUsuario {
         DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(idUsuario);
         Map<String, Object> taskMap = new HashMap<>();
         taskMap.put("datoVehiculo", informacion);
-        //usuario.setDatoVehiculo(informacion);
 
         referenciaUsuario.updateChildren(taskMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -809,10 +799,7 @@ public class BDAdaptadorUsuario {
 
         Map<String, Object> taskMap = new HashMap<>();
         taskMap.put("fecha", informacion[0]);
-        //usuario.setFecha(informacion[0]);
-
         taskMap.put("hora", informacion[1]);
-        //usuario.setHora(informacion[1]);
 
         referenciaUsuario.updateChildren(taskMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -845,11 +832,7 @@ public class BDAdaptadorUsuario {
 
         Map<String, Object> taskMap = new HashMap<>();
         taskMap.put("origen", informacion[0]);
-        //usuario.setOrigen(informacion[0]);
-
         taskMap.put("destino", informacion[1]);
-        //usuario.setDestino(informacion[1]);
-
         referenciaUsuario.updateChildren(taskMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
