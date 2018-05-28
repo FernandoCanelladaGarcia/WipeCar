@@ -33,32 +33,34 @@ public class ServicioLocalizacion extends Service implements LocationListener {
     public void onCreate() {
         appMediador = AppMediador.getInstance();
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        mprovider = locationManager.getBestProvider(criteria, false);
         gpsEstaHabilitado = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         Log.i("depurador", "1" + gpsEstaHabilitado);
         if (gpsEstaHabilitado) {
-            Log.i("depurador", "3");
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                Log.i(TAG, "Error Localizacion");
-                return;
-            }
-            Location location = locationManager.getLastKnownLocation(mprovider);
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    TIEMPO_MINIMO_ENTRE_ACTUALIZACIONES,
-                    DISTANCIA_MINIMA_ENTRE_ACTUALIZACIONES, this);
+                Log.i("depurador", "3");
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    Log.i(TAG, "Error Localizacion");
+                    return;
+                }
+                Location location = locationManager.getLastKnownLocation(mprovider);
+                locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        TIEMPO_MINIMO_ENTRE_ACTUALIZACIONES,
+                        DISTANCIA_MINIMA_ENTRE_ACTUALIZACIONES, this);
 
-            Log.i("depurador", "4");
-            if (location != null)
-                onLocationChanged(location);
-            else
-                Toast.makeText(getBaseContext(), "No Location Provider Found Check Your Code", Toast.LENGTH_SHORT).show();
+                Log.i("depurador", "4");
+                if (location != null)
+                    onLocationChanged(location);
+                else
+                    Toast.makeText(getBaseContext(), "No Location Provider Found Check Your Code", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -90,5 +92,13 @@ public class ServicioLocalizacion extends Service implements LocationListener {
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        stopSelf();
+        locationManager.removeUpdates(this);
+        locationManager = null;
+        Log.i(TAG,"Servicio finalizado");
     }
 }

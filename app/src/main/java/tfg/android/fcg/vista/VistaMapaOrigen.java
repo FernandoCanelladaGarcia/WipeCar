@@ -34,6 +34,7 @@ import org.json.JSONObject;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
+import tfg.android.fcg.modelo.bajonivel.ServicioLocalizacion;
 import tfg.android.fcg.presentador.IPresentadorMapaOrigen;
 
 /**
@@ -146,7 +147,7 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
                 dialogBuild.setView(dialogoOrigen);
                 dialogo = dialogBuild.create();
                 dialogo.show();
-                Button buttonOrigen = (Button)findViewById(R.id.buttonOrigenD);
+                Button buttonOrigen = dialogo.findViewById(R.id.buttonOrigenD);
                 buttonOrigen.setEnabled(false);
                 break;
             case 3:
@@ -184,8 +185,8 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
                     Toast.makeText(getApplicationContext(),
                             "Por favor, seleccione un origen", Toast.LENGTH_SHORT).show();
                 } else {
-                    Spinner destino = findViewById(R.id.spinnerDestino);
-                    String d = destino.getSelectedItem().toString();
+                    Spinner destinos = dialogo.findViewById(R.id.spinnerDestino);
+                    String d = destinos.getSelectedItem().toString();
                     Object[] origenDestino = new Object[2];
                     origenDestino[1] = d;
                     presentadorMapaOrigen.tratarOrigenYDestino(origenDestino);
@@ -217,6 +218,7 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
                     icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation)));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lugar, AppMediador.ZOOM));
         }
+        appMediador.stopService(ServicioLocalizacion.class);
         cerrarProgreso();
     }
 

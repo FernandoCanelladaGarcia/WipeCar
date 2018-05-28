@@ -41,6 +41,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="110dp"
         android:text="Guardar"
+        android:onClick="onClick"
         android:background="@drawable/back"
         android:layout_width="140dp"
         android:layout_height="50dp"

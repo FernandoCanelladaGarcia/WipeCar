@@ -53,10 +53,10 @@ public class BDAdaptadorPosicion {
     public void agregarPosicion(Object[] informacion){
         //INFORMACION 0=idUser, 1=latitud 2=longitud
         String idUser = (String)informacion[0];
-        String latitud = (String)informacion[1];
-        String longitud = (String)informacion[2];
+        Double latitud = (Double)informacion[1];
+        Double longitud = (Double)informacion[2];
 
-        posicion = new Posicion(idUser,latitud,longitud);
+        posicion = new Posicion(idUser,latitud.toString(),longitud.toString());
 
         database.setValue(posicion).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

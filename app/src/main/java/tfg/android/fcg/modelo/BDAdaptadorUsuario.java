@@ -285,7 +285,7 @@ public class BDAdaptadorUsuario {
         String[] fechaYHora = new String[]{(String) informacion[9], (String) informacion[10]};
         String datoVehiculo = (String) informacion[8];
 
-        int tarea = Integer.parseInt((String) informacion[0]);
+        int tarea = (int) informacion[0];
 
         switch (tarea) {
             case 1:
@@ -735,6 +735,7 @@ public class BDAdaptadorUsuario {
         DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(idUsuario);
         Map<String, Object> taskMap = new HashMap<>();
         taskMap.put("valoracion", informacion);
+
 
         referenciaUsuario.updateChildren(taskMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

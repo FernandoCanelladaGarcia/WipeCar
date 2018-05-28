@@ -12,6 +12,7 @@ import com.google.android.gms.maps.model.Marker;
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.modelo.IModelo;
 import tfg.android.fcg.modelo.Modelo;
+import tfg.android.fcg.modelo.bajonivel.ServicioLocalizacion;
 import tfg.android.fcg.vista.VistaMapaOrigen;
 import tfg.android.fcg.vista.VistaPrincipal;
 
@@ -60,13 +61,13 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(AppMediador.AVISO_LOCALIZACION_GPS)) {
+                appMediador.unRegisterReceiver(this);
                 Object[] posicion = new Object[3];
                 posicion[0] = intent.getSerializableExtra(AppMediador.CLAVE_LATITUD);
                 posicion[1] = intent.getSerializableExtra(AppMediador.CLAVE_LONGITUD);
                 posicion[2] = "Mi Ubicación";
                 Log.i(TAG, "latitud: " + posicion[0] + " longitud: " + posicion[1]);
                 vistaMapaOrigen.mostrarMapaConPosicion(posicion);
-                appMediador.unRegisterReceiver(this);
             }
         }
     };
