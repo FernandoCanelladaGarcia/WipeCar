@@ -264,7 +264,7 @@ public class BDAdaptadorUsuario {
                     Log.i(TAG, task.getException().toString());
                     //Fallo en la creacion del usuario
                     Bundle extras = new Bundle();
-                    extras.putBoolean(AppMediador.CLAVE_RESULTADO_REGISTRO_USUARIO, false);
+                    extras.putString(AppMediador.CLAVE_RESULTADO_REGISTRO_USUARIO, "Usuario ya existente");
                     appMediador.sendBroadcast(AppMediador.AVISO_REGISTRO_USUARIO, extras);
                 }
             }

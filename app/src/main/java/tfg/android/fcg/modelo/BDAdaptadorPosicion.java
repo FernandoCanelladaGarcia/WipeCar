@@ -124,7 +124,7 @@ public class BDAdaptadorPosicion {
         List<Address> addresses;
         Geocoder geocoder = new Geocoder(AppMediador.getInstance().getApplicationContext());
         try {
-            addresses = geocoder.getFromLocation(miLatlng.latitude,miLatlng.longitude,1);
+            addresses = geocoder.getFromLocation(miLatlng.latitude,miLatlng.longitude,5);
 
             if(addresses == null){
                 extras.putBoolean(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION,false);

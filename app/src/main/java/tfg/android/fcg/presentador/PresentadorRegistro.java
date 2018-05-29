@@ -27,11 +27,13 @@ public class PresentadorRegistro implements IPresentadorRegistro {
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(AppMediador.AVISO_REGISTRO_USUARIO)){
                 appMediador.unRegisterReceiver(this);
-                boolean resultado = intent.getBooleanExtra(AppMediador.CLAVE_RESULTADO_REGISTRO_USUARIO,false);
-                if(resultado){
+                if(intent.getBooleanExtra(AppMediador.CLAVE_RESULTADO_REGISTRO_USUARIO,false)){
                     vistaRegistro.cerrarProgreso();
                     vistaRegistro.mostrarDialogo(2);
                     appMediador.launchActivity(VistaMapaOrigen.class,this,null);
+                }else if (intent.getStringExtra(AppMediador.CLAVE_RESULTADO_REGISTRO_USUARIO).equals("Usuario ya existente")){
+                    vistaRegistro.cerrarProgreso();
+                    vistaRegistro.mostrarDialogo(3);
                 }else{
                     vistaRegistro.cerrarProgreso();
                     vistaRegistro.mostrarDialogo(0);

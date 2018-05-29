@@ -52,7 +52,7 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
     private LatLng miLatLng;
     private String miOrigen;
     private int anchoPantalla, altoPantalla;
-
+    private boolean porDefecto;
     private final static String TAG = "depurador";
 
     @Override
@@ -69,6 +69,7 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
         altoPantalla = size.y;
         miLatLng = null;
         miOrigen = null;
+        porDefecto = false;
         mostrarDialogo(0);
         Log.i(TAG, "Mapa Origen");
     }
@@ -129,7 +130,6 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
                         Object[] posicion = new Object[3];
                         posicion[1] = miLatLng.latitude;
                         posicion[2] = miLatLng.longitude;
-                        //traducirLatLn(miLatLng);
                         presentadorMapaOrigen.tratarOrigen(posicion);
                     }
                 });
@@ -143,12 +143,14 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
                 dialogo.show();
                 break;
             case 2:
-                Log.i(TAG,"DIALOGO FINAL");
+                Log.i(TAG, "DIALOGO FINAL");
                 dialogBuild.setView(dialogoOrigen);
                 dialogo = dialogBuild.create();
                 dialogo.show();
                 Button buttonOrigen = dialogo.findViewById(R.id.buttonOrigenD);
                 buttonOrigen.setEnabled(false);
+                Button buttonDefault = dialogo.findViewById(R.id.botonPorDefecto);
+                buttonDefault.setEnabled(false);
                 break;
             case 3:
                 dialogBuild.setTitle("Origen y destino");
@@ -175,22 +177,42 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.buttonOrigenD:
-                Log.i(TAG, "INICIAR");
                 SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                         .findFragmentById(R.id.map);
                 mapFragment.getMapAsync(this);
                 break;
             case R.id.botonGuardarOyD:
-                if (miLatLng == null) {
+                if (miLatLng == null && !porDefecto) {
                     Toast.makeText(getApplicationContext(),
                             "Por favor, seleccione un origen", Toast.LENGTH_SHORT).show();
                 } else {
                     Spinner destinos = dialogo.findViewById(R.id.spinnerDestino);
-                    String d = destinos.getSelectedItem().toString();
-                    Object[] origenDestino = new Object[2];
-                    origenDestino[1] = d;
-                    presentadorMapaOrigen.tratarOrigenYDestino(origenDestino);
+                    if (destinos.getSelectedItem().toString().equals("Destinos")) {
+                        Toast.makeText(getApplicationContext(),
+                                "Por favor, seleccione un destino", Toast.LENGTH_SHORT).show();
+                    } else if(!porDefecto){
+                        String d = destinos.getSelectedItem().toString();
+                        Object[] origenDestino = new Object[2];
+                        origenDestino[1] = d;
+                        presentadorMapaOrigen.tratarOrigenYDestino(origenDestino);
+                    } else {
+                        Log.i(TAG,"POR DEFECTO");
+                        String d = destinos.getSelectedItem().toString();
+                        Object[] origenDestino = new Object[2];
+                        origenDestino[0] = "default";
+                        origenDestino[1] = d;
+                        presentadorMapaOrigen.tratarOrigenYDestino(origenDestino);
+                    }
                 }
+                break;
+            case R.id.botonPorDefecto:
+                Toast.makeText(getApplicationContext(),
+                        "Se ha tomado como origen su dirección", Toast.LENGTH_LONG).show();
+                Button buttonOrigen = dialogo.findViewById(R.id.buttonOrigenD);
+                buttonOrigen.setEnabled(false);
+                Button buttonDefault = dialogo.findViewById(R.id.botonPorDefecto);
+                buttonDefault.setEnabled(false);
+                porDefecto = true;
         }
     }
 
@@ -208,18 +230,15 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
         String titulo = (String) posicion[2];
 
         LatLng lugar = new LatLng(latitud, longitud);
-        Log.i("depurador", titulo+" " +miUbicacion);
         if (titulo.equals("Mi Ubicación")) {
-
             if (miUbicacion != null) {
                 miUbicacion.remove();
             }
             miUbicacion = mMap.addMarker(new MarkerOptions().position(lugar).title(titulo).
-                    icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation)));
+                    icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_dialog_map)));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lugar, AppMediador.ZOOM));
         }
         appMediador.stopService(ServicioLocalizacion.class);
-        cerrarProgreso();
     }
 
     @Override

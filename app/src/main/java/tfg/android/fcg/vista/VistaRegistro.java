@@ -125,6 +125,20 @@ public class VistaRegistro extends AppCompatActivity implements IVistaRegistro, 
             case 2:
                 Toast.makeText(getApplicationContext(), "Registro realizado satisfactoriamente", Toast.LENGTH_LONG).show();
                 break;
+            case 3:
+                dialogBuild.setTitle("Usuario ya existente");
+                dialogBuild.setMessage("No se ha podido registrar." +
+                        "Compruebe los parámetros introducidos");
+                dialogBuild.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cerrarDialogo();
+                    }
+                });
+                dialogo = dialogBuild.create();
+                dialogo.show();
+                break;
+
         }
 
 

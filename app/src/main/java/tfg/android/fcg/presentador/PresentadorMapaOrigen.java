@@ -3,6 +3,7 @@ package tfg.android.fcg.presentador;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -35,18 +36,6 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen {
                     vistaMapaOrigen.mostrarDialogo(2);
                 }
             }
-            if (intent.getAction().equals(AppMediador.AVISO_RESULTADO_TRADUCIR_LOCALIZACION)) {
-                Bundle extras = intent.getExtras();
-                if (extras.getInt(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION) == 0) {
-                    //Fallo
-                }
-                if (!extras.getBoolean(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION, false)) {
-                    //Fallo
-                } else {
-                    miOrigen = extras.getString(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION);
-                    Log.i(TAG, miOrigen);
-                }
-            }
             if (intent.getAction().equals(AppMediador.AVISO_ACTUALIZACION_USUARIO)) {
                 Object[] datos = (Object[]) intent.getExtras().getSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO);
                 if ((boolean) datos[0] && datos[1].equals("origenydestino")) {
@@ -67,7 +56,27 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen {
                 posicion[1] = intent.getSerializableExtra(AppMediador.CLAVE_LONGITUD);
                 posicion[2] = "Mi Ubicación";
                 Log.i(TAG, "latitud: " + posicion[0] + " longitud: " + posicion[1]);
+                vistaMapaOrigen.cerrarProgreso();
                 vistaMapaOrigen.mostrarMapaConPosicion(posicion);
+            }
+        }
+    };
+
+    private BroadcastReceiver receptorDeTraduccion = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(AppMediador.AVISO_RESULTADO_TRADUCIR_LOCALIZACION)) {
+                appMediador.unRegisterReceiver(this);
+                Bundle extras = intent.getExtras();
+                if (extras.getInt(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION) == 0) {
+                    //Fallo
+                }
+                if (!extras.getBoolean(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION, false)) {
+                    //Fallo
+                } else {
+                    miOrigen = extras.getString(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION);
+                    Log.i(TAG, miOrigen);
+                }
             }
         }
     };
@@ -89,7 +98,7 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen {
     @Override
     public void tratarOrigen(Object informacion) {
         appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_LOCALIZACION_GUARDADA);
-        appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_RESULTADO_TRADUCIR_LOCALIZACION);
+        appMediador.registerReceiver(receptorDeTraduccion, AppMediador.AVISO_RESULTADO_TRADUCIR_LOCALIZACION);
         vistaMapaOrigen.cerrarDialogo();
         vistaMapaOrigen.mostrarProgreso();
         modelo.guardarLocalizacion((Object[]) informacion);
@@ -97,7 +106,8 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen {
 
     @Override
     public void tratarSeleccionarOrigen(Object informacion) {
-        vistaMapaOrigen.mostrarDialogo(1);
+         vistaMapaOrigen.mostrarDialogo(1);
+
     }
 
     @Override
@@ -107,10 +117,20 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen {
 
     @Override
     public void tratarOrigenYDestino(Object informacion) {
+        vistaMapaOrigen.cerrarDialogo();
         appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_ACTUALIZACION_USUARIO);
         Object[] origenDestino = (Object[]) informacion;
-        origenDestino[0] = miOrigen;
-        vistaMapaOrigen.mostrarProgreso();
-        modelo.guardarOrigenYDestino(origenDestino);
+        if(origenDestino[0]!= "default"){
+            origenDestino[0] = miOrigen;
+            vistaMapaOrigen.mostrarProgreso();
+            modelo.guardarOrigenYDestino(origenDestino);
+        }else{
+            SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login",0);
+            String origenDefault = sharedPreferences.getString("origen",null);
+            Log.i(TAG, origenDefault);
+            origenDestino[0] = origenDefault;
+            vistaMapaOrigen.mostrarProgreso();
+            modelo.guardarOrigenYDestino(origenDestino);
+        }
     }
 }

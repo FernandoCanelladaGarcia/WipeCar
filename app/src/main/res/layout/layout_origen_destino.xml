@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
@@ -8,42 +10,88 @@
 
     <TextView
         android:id="@+id/origenDestino"
-        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="250dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="Origen y Destino"
         android:textAlignment="center"
         android:textSize="30dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonOrigenD"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/back"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:onClick="onClick"
         android:text="Origen"
-        android:textSize="17dp" />
+        android:textAlignment="center"
+        android:textSize="17dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/origenDestino"
+        app:layout_constraintVertical_bias="0.066" />
 
     <Spinner
         android:id="@+id/spinnerDestino"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
-        android:textSize="20dp"
+        android:background="@drawable/back"
         android:entries="@array/destinos"
         android:prompt="@string/destinos_promt"
-        android:background="@drawable/back"/>
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonOrigenD"
+        app:layout_constraintVertical_bias="0.014"
+        tools:textAlignment="center" />
 
     <Button
         android:id="@+id/botonGuardarOyD"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="110dp"
-        android:text="Guardar"
-        android:onClick="onClick"
-        android:background="@drawable/back"
-        android:layout_width="140dp"
+        android:layout_width="172dp"
         android:layout_height="50dp"
-        android:textSize="17dp" />
-</LinearLayout>
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/back"
+        android:onClick="onClick"
+        android:text="Guardar"
+        android:textSize="17dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerDestino"
+        app:layout_constraintVertical_bias="0.493" />
+
+    <Button
+        android:id="@+id/botonPorDefecto"
+        android:layout_width="172dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/back"
+        android:onClick="onClick"
+        android:text="Origen por Defecto"
+        android:textSize="17dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/botonGuardarOyD"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerDestino" />
+</android.support.constraint.ConstraintLayout>

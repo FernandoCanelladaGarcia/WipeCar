@@ -3,6 +3,7 @@
 
     <string name="destinos_promt">Destino</string>
     <string-array name="destinos">
+        <item>Destinos</item>
         <item>Facultad de Ingeniería</item>
         <item>Facultad de Ciencias Sociales</item>
         <item>Facultad de Humanidades</item>
