@@ -30,15 +30,20 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(AppMediador.AVISO_LOCALIZACION_GUARDADA)) {
-                boolean resultado = intent.getBooleanExtra(AppMediador.CLAVE_RESULTADO_LOCALIZACION_GUARDADA, false);
-                if (resultado) {
+                Object[] resultado = (Object[])intent.getSerializableExtra(AppMediador.CLAVE_RESULTADO_LOCALIZACION_GUARDADA);
+                if (resultado != null) {
+                    appMediador.unRegisterReceiver(this);
                     vistaMapaOrigen.cerrarProgreso();
                     vistaMapaOrigen.mostrarDialogo(2);
+                    appMediador.registerReceiver(receptorDeTraduccion, AppMediador.AVISO_RESULTADO_TRADUCIR_LOCALIZACION);
+                    resultado[3] = 1;
+                    modelo.guardarLocalizacion(resultado);
                 }
             }
             if (intent.getAction().equals(AppMediador.AVISO_ACTUALIZACION_USUARIO)) {
                 Object[] datos = (Object[]) intent.getExtras().getSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO);
                 if ((boolean) datos[0] && datos[1].equals("origenydestino")) {
+                    appMediador.unRegisterReceiver(this);
                     vistaMapaOrigen.cerrarProgreso();
                     vistaMapaOrigen.mostrarDialogo(3);
                 }
@@ -68,15 +73,13 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen {
             if (intent.getAction().equals(AppMediador.AVISO_RESULTADO_TRADUCIR_LOCALIZACION)) {
                 appMediador.unRegisterReceiver(this);
                 Bundle extras = intent.getExtras();
-                if (extras.getInt(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION) == 0) {
-                    //Fallo
-                }
-                if (!extras.getBoolean(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION, false)) {
-                    //Fallo
-                } else {
+                if (extras.getString(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION) != null){
                     miOrigen = extras.getString(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION);
                     Log.i(TAG, miOrigen);
+                    appMediador.stopService(ServicioLocalizacion.class);
                 }
+            }else{
+                Log.i(TAG,"No furrula");
             }
         }
     };
@@ -98,7 +101,6 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen {
     @Override
     public void tratarOrigen(Object informacion) {
         appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_LOCALIZACION_GUARDADA);
-        appMediador.registerReceiver(receptorDeTraduccion, AppMediador.AVISO_RESULTADO_TRADUCIR_LOCALIZACION);
         vistaMapaOrigen.cerrarDialogo();
         vistaMapaOrigen.mostrarProgreso();
         modelo.guardarLocalizacion((Object[]) informacion);
@@ -120,15 +122,16 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen {
         vistaMapaOrigen.cerrarDialogo();
         appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_ACTUALIZACION_USUARIO);
         Object[] origenDestino = (Object[]) informacion;
-        if(origenDestino[0]!= "default"){
-            origenDestino[0] = miOrigen;
-            vistaMapaOrigen.mostrarProgreso();
-            modelo.guardarOrigenYDestino(origenDestino);
-        }else{
+        if(origenDestino[0] == "default"){
             SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login",0);
             String origenDefault = sharedPreferences.getString("origen",null);
             Log.i(TAG, origenDefault);
             origenDestino[0] = origenDefault;
+            vistaMapaOrigen.mostrarProgreso();
+            modelo.guardarOrigenYDestino(origenDestino);
+        }else{
+            origenDestino[0] = miOrigen;
+            Log.i(TAG, origenDestino[0].toString() +" "+ origenDestino[1].toString());
             vistaMapaOrigen.mostrarProgreso();
             modelo.guardarOrigenYDestino(origenDestino);
         }

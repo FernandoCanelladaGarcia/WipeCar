@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import tfg.android.fcg.AppMediador;
@@ -26,12 +27,14 @@ public class BDAdaptadorPosicion {
     private AppMediador appMediador;
     private DatabaseReference database;
     private Posicion posicion;
+    protected Geocoder geocoder;
 
     private final String TAG = "depurador";
 
     public BDAdaptadorPosicion(){
         appMediador = AppMediador.getInstance();
         database = FirebaseDatabase.getInstance().getReference().child("posicion");
+        geocoder = new Geocoder(appMediador.getApplicationContext(), Locale.getDefault());
     }
 
     public void iniciarGps(){
@@ -50,7 +53,7 @@ public class BDAdaptadorPosicion {
      * Añade a la tabla Posición una latitud y longitud a un usuario determinado.
      * @param informacion contendra:
      */
-    public void agregarPosicion(Object[] informacion){
+    public void agregarPosicion(final Object[] informacion){
         //INFORMACION 0=idUser, 1=latitud 2=longitud
         String idUser = (String)informacion[0];
         Double latitud = (Double)informacion[1];
@@ -66,7 +69,7 @@ public class BDAdaptadorPosicion {
                     Log.i(TAG,"Agregada posicion correctamente");
 
                     Bundle extras = new Bundle();
-                    extras.putBoolean(AppMediador.CLAVE_RESULTADO_LOCALIZACION_GUARDADA,true);
+                    extras.putSerializable(AppMediador.CLAVE_RESULTADO_LOCALIZACION_GUARDADA,informacion);
                     appMediador.sendBroadcast(AppMediador.AVISO_LOCALIZACION_GUARDADA,extras);
                 }else{
                     Log.i(TAG,"Error a la hora de agregar posicion");
@@ -77,8 +80,6 @@ public class BDAdaptadorPosicion {
                 }
             }
         });
-
-
     }
 
     /**
@@ -121,28 +122,38 @@ public class BDAdaptadorPosicion {
 
     public void traducirLatlng(LatLng miLatlng){
         Bundle extras = new Bundle();
-        List<Address> addresses;
-        Geocoder geocoder = new Geocoder(AppMediador.getInstance().getApplicationContext());
+        List<Address> addresses = null;
+        String errorMessage = "";
         try {
-            addresses = geocoder.getFromLocation(miLatlng.latitude,miLatlng.longitude,5);
+            if(geocoder.isPresent())
+            addresses = geocoder.getFromLocation(miLatlng.latitude,miLatlng.longitude,1);
 
-            if(addresses == null){
-                extras.putBoolean(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION,false);
-                appMediador.sendBroadcast(AppMediador.AVISO_RESULTADO_TRADUCIR_LOCALIZACION,extras);
+        } catch (IOException ioException) {
+            // Catch network or other I/O problems.
+            errorMessage = "Servicio no disponible";
+            Log.e(TAG, errorMessage, ioException);
+        } catch (IllegalArgumentException illegalArgumentException) {
+            // Catch invalid latitude or longitude values.
+            errorMessage = "Latitud y longitud invalidas";
+            Log.e(TAG, errorMessage + ". " +
+                    "Latitude = " + miLatlng.latitude +
+                    ", Longitude = " +
+                    miLatlng.longitude, illegalArgumentException);
+        }
+
+        if (addresses == null || addresses.size()  == 0) {
+            if (errorMessage.isEmpty()) {
+                errorMessage = "no se han obtenido direcciones";
+                Log.e(TAG, errorMessage);
+                extras.putBoolean(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION, false);
+                appMediador.sendBroadcast(AppMediador.AVISO_RESULTADO_TRADUCIR_LOCALIZACION, extras);
                 return;
             }
-            if(addresses.size() == 0){
-                extras.getInt(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION,addresses.size());
-                appMediador.sendBroadcast(AppMediador.AVISO_RESULTADO_TRADUCIR_LOCALIZACION,extras);
-                return;
-            }
+        }else{
             String address = addresses.get(0).getAddressLine(0);
+            Log.i(TAG,"Calle encontrada: " + address);
             extras.putString(AppMediador.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION,address);
             appMediador.sendBroadcast(AppMediador.AVISO_RESULTADO_TRADUCIR_LOCALIZACION,extras);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(AppMediador.getInstance().getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 

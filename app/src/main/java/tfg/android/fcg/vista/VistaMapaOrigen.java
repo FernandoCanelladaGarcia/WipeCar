@@ -127,9 +127,10 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
                 dialogBuild.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Object[] posicion = new Object[3];
+                        Object[] posicion = new Object[4];
                         posicion[1] = miLatLng.latitude;
                         posicion[2] = miLatLng.longitude;
+                        posicion[3] = 0;
                         presentadorMapaOrigen.tratarOrigen(posicion);
                     }
                 });
@@ -238,7 +239,6 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
                     icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_dialog_map)));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lugar, AppMediador.ZOOM));
         }
-        appMediador.stopService(ServicioLocalizacion.class);
     }
 
     @Override

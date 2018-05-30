@@ -290,11 +290,21 @@ public class Modelo implements IModelo{
 
     @Override
     public void guardarLocalizacion(Object[] informacion) {
-        String idUser = auth.getCurrentUser().getUid();
+        int tarea = (int) informacion[3];
         LatLng miLatlng = new LatLng((Double)informacion[1],(Double)informacion[2]);
-        informacion[0] = idUser;
-        adaptadorPosicion.agregarPosicion(informacion);
-        adaptadorPosicion.traducirLatlng(miLatlng);
+        switch (tarea){
+            case 0:
+                Log.i(TAG,"agregando posicion en Modelo");
+                String idUser = auth.getCurrentUser().getUid();
+                informacion[0] = idUser;
+                adaptadorPosicion.agregarPosicion(informacion);
+                break;
+            case 1:
+                Log.i(TAG,"traduciendo posicion en Modelo");
+                adaptadorPosicion.traducirLatlng(miLatlng);
+                break;
+        }
+
     }
 
     @Override

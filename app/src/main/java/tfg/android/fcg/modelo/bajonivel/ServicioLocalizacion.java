@@ -5,7 +5,9 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -15,6 +17,12 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.modelo.Posicion;
 
@@ -22,7 +30,6 @@ public class ServicioLocalizacion extends Service implements LocationListener {
 
     private static final long DISTANCIA_MINIMA_ENTRE_ACTUALIZACIONES = 0;
     private static final long TIEMPO_MINIMO_ENTRE_ACTUALIZACIONES = 0;
-
     boolean gpsEstaHabilitado = false;
     protected LocationManager locationManager;
     private AppMediador appMediador;
@@ -93,6 +100,7 @@ public class ServicioLocalizacion extends Service implements LocationListener {
     public void onProviderDisabled(String provider) {
 
     }
+
     @Override
     public void onDestroy(){
         super.onDestroy();
