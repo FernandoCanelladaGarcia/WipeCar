@@ -4,36 +4,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="tfg.android.fcg.vista.VistaLogin">
+    tools:context="tfg.android.fcg.vista.VistaLogin"
+    android:background="@color/background">
 
     <TextView
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="80dp"
+        android:fontFamily="@font/ubuntu_medium"
         android:text="WipeCar"
         android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColor="@color/texto"
         android:textSize="50sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.10" />
 
     <EditText
         android:id="@+id/email"
         android:layout_width="0dp"
         android:layout_height="42dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="60dp"
         android:ems="10"
+        android:fontFamily="@font/ubuntu_medium"
         android:hint="Email"
         android:inputType="textEmailAddress"
+        android:textColor="@color/texto_borde"
+        android:textColorHint="@color/texto_sombra"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintVertical_bias="0.10" />
 
     <EditText
         android:id="@+id/password"
@@ -41,53 +54,78 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
+        android:fontFamily="@font/ubuntu_medium"
         android:hint="Password"
         android:inputType="textPassword"
+        android:textColor="@color/texto_borde"
+        android:textColorHint="@color/texto_sombra"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.005"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email" />
 
     <Button
         android:id="@+id/botonlogin"
-        android:layout_width="156dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="50dp"
+        android:background="@color/botones"
+        android:fontFamily="@font/ubuntu_medium"
         android:text="Login"
+        android:textColor="@color/texto_borde"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+        app:layout_constraintTop_toBottomOf="@+id/password"
+        app:layout_constraintVertical_bias="0.050
+" />
 
     <Button
         android:id="@+id/botonRecordar"
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:background="@null"
+        android:fontFamily="@font/ubuntu_medium"
         android:text="¿Has olvidado tu contraseña?"
         android:textAlignment="center"
-        android:textStyle="bold"
+        android:textColor="@color/texto_sombra"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/botonlogin" />
+        app:layout_constraintTop_toBottomOf="@+id/botonlogin"
+        app:layout_constraintVertical_bias="0.080" />
 
     <Button
         android:id="@+id/botonRegistro"
         android:layout_width="0dp"
         android:layout_height="25dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
         android:background="@null"
+        android:fontFamily="@font/ubuntu_medium"
         android:text="¿Eres nuevo?"
         android:textAlignment="center"
-        android:textStyle="bold"
+        android:textColor="@color/texto_sombra"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/botonRecordar" />
+        app:layout_constraintTop_toBottomOf="@+id/botonRecordar"
+        app:layout_constraintVertical_bias="0.010" />
 </android.support.constraint.ConstraintLayout>

@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="texto">#e3f2fd</color>
+    <color name="texto_borde">#bbdefb</color>
+    <color name="texto_sombra">#90caf9</color>
+    <color name="texto1">#64b5f6</color>
+    <color name="texto2">#42a5f5</color>
+    <color name="botones">#2196f3</color>
+    <color name="texto4">#1e88e5</color>
+    <color name="background">#1976d2</color>
+    <color name="background2">#1565c0</color>
+    <!--<color name="botones">#0d47a1</color>-->
+    <!--<color name="texto8">#82b1ff</color>-->
+    <!--<color name="texto9">#448aff</color>-->
+    <!--<color name="texto0">#2979ff</color>-->
+    <!--<color name="texto11">#2962ff</color>-->
+
 </resources>
