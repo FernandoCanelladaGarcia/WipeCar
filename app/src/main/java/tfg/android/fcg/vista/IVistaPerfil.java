@@ -29,4 +29,10 @@ public interface IVistaPerfil {
      */
     public void prepararEdicion(Object informacion);
 
+    /**
+     * Muestra los datos de perfil del usuario en la pantalla
+     * @param informacion contendra:
+     */
+    public void prepararVista(Object informacion);
+
 }

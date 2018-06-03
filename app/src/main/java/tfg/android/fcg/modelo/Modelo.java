@@ -46,11 +46,11 @@ public class Modelo implements IModelo{
     private Login loginActual;
 
     private final String TAG = "depurador";
+
     //Constructor
     private Modelo(){
         auth = FirebaseAuth.getInstance();
         appMediador = AppMediador.getInstance();
-
         adaptadorHistorial = new BDAdaptadorHistorial();
         adaptadorPosicion = new BDAdaptadorPosicion();
         adaptadorUsuario = new BDAdaptadorUsuario();
@@ -199,6 +199,16 @@ public class Modelo implements IModelo{
     }
 
     @Override
+    public void obtenerUsuario(Object informacion) {
+        adaptadorUsuario.obtenerUsuario((String)informacion);
+    }
+
+    @Override
+    public void obtenerVehiculoUsuario(Object informacion) {
+        adaptadorVehiculo.obtenerVehiculo((String) informacion);
+    }
+
+    @Override
     public void obtenerMapa(Object informacion) {
 
     }
@@ -328,4 +338,5 @@ public class Modelo implements IModelo{
         adaptadorVinculo.eliminarVinculo((Object[])informacion);
         adaptadorHistorial.agregarHistorial((Object[])informacion);
     }
+
 }

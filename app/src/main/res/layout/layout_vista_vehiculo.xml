@@ -37,7 +37,7 @@
         app:layout_constraintTop_toBottomOf="@+id/PerfilTitle" />
 
     <EditText
-        android:id="@+id/apellidoTitle"
+        android:id="@+id/telefonoTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -64,10 +64,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.043"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/apellidoTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/telefonoTitle" />
 
     <EditText
-        android:id="@+id/emailTitle"
+        android:id="@+id/passwordTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -94,7 +94,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.043"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordTitle" />
 
     <Button
         android:id="@+id/historialButton"

@@ -3,6 +3,11 @@ package tfg.android.fcg.presentador;
 public interface IPresentadorPerfil {
 
     /**
+     * Prepara la vista para su uso
+     * @param informacion contendra:
+     */
+    public void iniciar(Object informacion);
+    /**
      * Comprueba la nueva información de perfil de un usuario
      * e informa si es correcto o no.
      * @param informacion contendra:

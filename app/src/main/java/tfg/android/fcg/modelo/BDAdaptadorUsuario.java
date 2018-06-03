@@ -46,6 +46,27 @@ public class BDAdaptadorUsuario {
         database = FirebaseDatabase.getInstance().getReference().child("usuarios");
     }
 
+    public void obtenerUsuario(String idUser){
+        database.child(idUser).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                usuario = dataSnapshot.getValue(Usuario.class);
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_OBTENER_USUARIO,usuario);
+                appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_USUARIO,extras);
+                database.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_OBTENER_USUARIO,null);
+                appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_USUARIO,extras);
+                database.removeEventListener(this);
+            }
+        });
+    }
+
     /**
      * Busca en la tabla Usuarios aquellos registros que coincidan con el parámetro.
      *
@@ -211,15 +232,16 @@ public class BDAdaptadorUsuario {
                                 Log.i(TAG, "Exito en Actualizacion de Display Name de Usuario");
                                 //Actualizacion de Display Name de Usuario.
                                 //Guardamos la sesion del usuario
+                                String idUser = usuarioActual.getUid();
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString("email", email);
                                 editor.putString("password", password);
                                 editor.putString("origen",origen);
                                 editor.putBoolean("rol",rol);
+                                editor.putString("idUser",idUser);
                                 editor.apply();
                                 //TODO ENCRIPTAR
                                 String nombreEncriptado = nombre;
-                                String idUser = usuarioActual.getUid();
                                 //Creamos el Login del usuario
                                 login = new Login(idUser, nombreEncriptado, email);
                                 //Guardamos en la tabla el usuario

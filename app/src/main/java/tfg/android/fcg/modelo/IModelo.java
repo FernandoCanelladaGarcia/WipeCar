@@ -151,4 +151,16 @@ public interface IModelo {
      * @param informacion contendra:
      */
     public void pararRuta(Object informacion);
+
+    /**
+     * Recupera la informacion del usuario de la base de datos.
+     * @param informacion contendra:
+     */
+    public void obtenerUsuario(Object informacion);
+
+    /**
+     * Recupera la información del vehículo del usuario de la base de datos.
+     * @param informacion contendra:
+     */
+    public void obtenerVehiculoUsuario(Object informacion);
 }

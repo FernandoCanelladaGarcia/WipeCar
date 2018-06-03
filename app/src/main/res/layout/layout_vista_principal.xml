@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
@@ -27,26 +28,34 @@
     </android.support.design.widget.TabLayout>
 
     <Button
-        android:id="@+id/button8"
+        android:id="@+id/botonSalir"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@color/botones"
+        android:fontFamily="@font/ubuntu_medium"
+        android:textColor="@color/texto_borde"
+        android:onClick="onClick"
         android:text="Salir"
         app:layout_constraintBottom_toTopOf="@+id/tabLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button9"
+        app:layout_constraintStart_toEndOf="@+id/botonPerfil"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button9"
+        android:id="@+id/botonPerfil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="224dp"
         android:layout_marginTop="8dp"
+        android:onClick="onClick"
+        android:background="@color/botones"
+        android:fontFamily="@font/ubuntu_medium"
+        android:textColor="@color/texto_borde"
         android:text="Perfil"
         app:layout_constraintBottom_toTopOf="@+id/tabLayout"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,11 +68,13 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:fontFamily="@font/ubuntu_medium"
+        android:textColor="@color/texto"
         android:text="WipeCar"
         android:textAlignment="center"
         android:textSize="30sp"
         android:textStyle="bold|italic"
-        app:layout_constraintEnd_toStartOf="@+id/button9"
+        app:layout_constraintEnd_toStartOf="@+id/botonPerfil"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
