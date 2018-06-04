@@ -25,9 +25,8 @@ public interface IVistaPerfil {
 
     /**
      * Habilita la edición de los datos personales del usuario.
-     * @param informacion contendra:
      */
-    public void prepararEdicion(Object informacion);
+    public void prepararEdicion();
 
     /**
      * Muestra los datos de perfil del usuario en la pantalla

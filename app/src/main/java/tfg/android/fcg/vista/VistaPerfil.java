@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
     private Button botonOrigen, botonHistorial;
     private FloatingActionButton botonEditar;
     private TextView nombre,telefono,email,password,marca,modelo,matricula;
+    private EditText editNombre, editTelefono, editEmail, editPass, editMarca, editModelo, editMatricula;
     private Switch modoConductor;
     private ProgressDialog dialogoProgreso;
     private AlertDialog dialogo;
@@ -63,7 +65,18 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
         modelo = (TextView) findViewById(R.id.modeloTitle);
         matricula = (TextView) findViewById(R.id.matriculaTitle);
 
+        editNombre = (EditText) findViewById(R.id.editTextNombre);
+        editTelefono = (EditText) findViewById(R.id.editTextTelefono);
+        editEmail = (EditText) findViewById(R.id.editTextEmail);
+        editPass = (EditText) findViewById(R.id.editTextPassword);
+        editMarca = (EditText) findViewById(R.id.editTextMarca);
+        editModelo = (EditText) findViewById(R.id.editTextModelo);
+        editMatricula = (EditText) findViewById(R.id.editTextMatricula);
+
         sharedPreferences = appMediador.getSharedPreferences("Login",0);
+        String idUser = sharedPreferences.getString("idUser",null);
+        presentadorPerfil.iniciar(idUser);
+
         boolean rol = sharedPreferences.getBoolean("rol",false);
         modoConductor.setChecked(rol);
         modoConductor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -86,8 +99,9 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
         });
         email.setText(sharedPreferences.getString("email",null));
         password.setText(sharedPreferences.getString("password",null));
-        String idUser = sharedPreferences.getString("idUser",null);
-        presentadorPerfil.iniciar(idUser);
+        editEmail.setText(sharedPreferences.getString("email",null));
+        editPass.setText(sharedPreferences.getString("password",null));
+
         Log.i(TAG, "Vista Perfil");
     }
 
@@ -95,10 +109,16 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.editButton:
+                presentadorPerfil.tratarEditar(1);
                 break;
             case R.id.historialButton:
+                presentadorPerfil.tratarHistorial();
                 break;
             case R.id.origenButton:
+                break;
+            case R.id.guardarPerfil:
+                break;
+            case R.id.eliminarPerfil:
                 break;
         }
     }
@@ -147,6 +167,26 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
                 dialogo = dialogBuild.create();
                 dialogo.show();
                 break;
+            case 1:
+                dialogBuild.setTitle("Modo Edición");
+                dialogBuild.setMessage("¿Desea editar o eliminar su perfil?");
+                dialogBuild.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mostrarProgreso();
+                        presentadorPerfil.tratarOk(1);
+                        botonEditar.setEnabled(false);
+                    }
+                });
+                dialogBuild.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cerrarDialogo();
+                    }
+                });
+                dialogo = dialogBuild.create();
+                dialogo.show();
+                break;
         }
     }
 
@@ -156,8 +196,24 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
     }
 
     @Override
-    public void prepararEdicion(Object informacion) {
+    public void prepararEdicion() {
+        Log.i(TAG,"Modo Edicion");
+        nombre.setVisibility(View.INVISIBLE);
+        telefono.setVisibility(View.INVISIBLE);
+        email.setVisibility(View.INVISIBLE);
+        password.setVisibility(View.INVISIBLE);
+        modelo.setVisibility(View.INVISIBLE);
+        marca.setVisibility(View.INVISIBLE);
+        matricula.setVisibility(View.INVISIBLE);
 
+        editNombre.setVisibility(View.VISIBLE);
+        editTelefono.setVisibility(View.VISIBLE);
+        editEmail.setVisibility(View.VISIBLE);
+        editPass.setVisibility(View.VISIBLE);
+        editModelo.setVisibility(View.VISIBLE);
+        editMarca.setVisibility(View.VISIBLE);
+        editMatricula.setVisibility(View.VISIBLE);
+        cerrarProgreso();
     }
 
     @Override
@@ -169,9 +225,14 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
             modelo.setText(vehiculo.getModelo());
             marca.setText(vehiculo.getMarca());
             matricula.setText(vehiculo.getMatricula());
+            editModelo.setText(vehiculo.getModelo());
+            editMarca.setText(vehiculo.getMarca());
+            editMatricula.setText(vehiculo.getMatricula());
         }
         nombre.setText(user.getNombre());
         telefono.setText(user.getTelefono());
+        editNombre.setText(user.getNombre());
+        editTelefono.setText(user.getTelefono());
         cerrarProgreso();
     }
 

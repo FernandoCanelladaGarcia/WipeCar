@@ -41,9 +41,8 @@ public interface IPresentadorPerfil {
     /**
      * Presenta la vista de historial para que el usuario
      * pueda comprobar el listado de su historial.
-     * @param informacion contendra:
      */
-    public void tratarHistorial(Object informacion);
+    public void tratarHistorial();
 
     /**
      * Presenta uan ventana de diálogo con la información de ayuda.

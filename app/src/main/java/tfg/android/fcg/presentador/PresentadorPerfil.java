@@ -10,6 +10,7 @@ import tfg.android.fcg.modelo.IModelo;
 import tfg.android.fcg.modelo.Modelo;
 import tfg.android.fcg.modelo.Usuario;
 import tfg.android.fcg.modelo.Vehiculo;
+import tfg.android.fcg.vista.VistaHistorial;
 import tfg.android.fcg.vista.VistaPerfil;
 import tfg.android.fcg.vista.VistaPrincipal;
 import tfg.android.fcg.vista.VistaVehiculo;
@@ -64,6 +65,7 @@ public class PresentadorPerfil implements IPresentadorPerfil {
     @Override
     public void iniciar(Object informacion) {
         appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_OBTENER_USUARIO);
+        vistaPerfil.mostrarProgreso();
         modelo.obtenerUsuario(informacion);
     }
 
@@ -78,6 +80,9 @@ public class PresentadorPerfil implements IPresentadorPerfil {
         switch (tarea){
             case 0:
                 appMediador.launchActivity(VistaVehiculo.class,this,null);
+                break;
+            case 1:
+                vistaPerfil.prepararEdicion();
                 break;
         }
     }
@@ -94,11 +99,13 @@ public class PresentadorPerfil implements IPresentadorPerfil {
 
     @Override
     public void tratarEditar(Object informacion) {
+        vistaPerfil.mostrarDialogo(informacion);
 
     }
 
     @Override
-    public void tratarHistorial(Object informacion) {
+    public void tratarHistorial() {
+        appMediador.launchActivity(VistaHistorial.class,this,null);
 
     }
 
