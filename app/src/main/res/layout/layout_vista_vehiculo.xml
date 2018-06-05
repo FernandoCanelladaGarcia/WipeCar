@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <TextView
         android:id="@+id/PerfilTitle"
@@ -13,7 +14,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        android:fontFamily="@font/ubuntu_medium"
         android:text="Registro Vehiculo"
+        android:textColor="@color/texto"
         android:textSize="30sp"
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,94 +25,113 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/nombreTitle"
-        android:layout_width="wrap_content"
+        android:id="@+id/marcaRegistro"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Marca de coche"
+        android:hint="Marca de coche"
+        android:textColor="@color/texto_borde"
+        android:textSize="16sp"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.043"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/PerfilTitle" />
 
     <EditText
-        android:id="@+id/telefonoTitle"
-        android:layout_width="wrap_content"
+        android:id="@+id/modeloRegistro"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Modelo de coche"
+        android:hint="Modelo de coche"
+        android:textColor="@color/texto_borde"
+        android:textSize="16sp"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.043"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nombreTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/marcaRegistro" />
 
     <EditText
-        android:id="@+id/direccionTitle"
-        android:layout_width="wrap_content"
+        android:id="@+id/matriculaRegistro"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Matrícula"
+        android:hint="Matrícula"
+        android:textColor="@color/texto_borde"
+        android:textSize="16sp"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.043"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/telefonoTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/modeloRegistro" />
 
     <EditText
-        android:id="@+id/passwordTitle"
-        android:layout_width="wrap_content"
+        android:id="@+id/emailVehiculo"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="156dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Confirma Email"
+        android:inputType="textWebEmailAddress"
+        android:hint="Confirma Email"
+        android:textColor="@color/texto_borde"
+        android:textSize="16sp"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.043"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/direccionTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/matriculaRegistro" />
 
     <EditText
-        android:id="@+id/editText6"
-        android:layout_width="wrap_content"
+        android:id="@+id/passwordVehiculo"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="15dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Confirma Contraseña"
+        android:inputType="textPassword"
+        android:hint="Confirma Contraseña"
+        android:textColor="@color/texto_borde"
+        android:textSize="16sp"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.043"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/emailVehiculo" />
 
     <Button
-        android:id="@+id/historialButton"
-        android:layout_width="127dp"
+        android:id="@+id/regisVehiculoButton"
+        android:layout_width="200dp"
         android:layout_height="58dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@color/botones"
+        android:fontFamily="@font/ubuntu_medium"
+        android:onClick="onClick"
         android:text="Registrar Vehículo"
+        android:textColor="@color/texto_borde"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText6"
-        app:layout_constraintVertical_bias="0.287" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordVehiculo"
+        app:layout_constraintVertical_bias="0.557" />
 
 </android.support.constraint.ConstraintLayout>

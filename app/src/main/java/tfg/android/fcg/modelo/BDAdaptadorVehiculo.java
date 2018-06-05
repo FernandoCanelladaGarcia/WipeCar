@@ -71,7 +71,7 @@ public class BDAdaptadorVehiculo {
         String marca = (String)informacion[0];
         String modelo = (String)informacion[1];
         String matricula = (String)informacion[2];
-        String datoVehiculo = database.push().getKey();
+        final String datoVehiculo = database.push().getKey();
 
         vehiculo = new Vehiculo(datoVehiculo,marca,modelo,matricula);
 
@@ -82,7 +82,7 @@ public class BDAdaptadorVehiculo {
                 //Se ha agregado correctamente vehiculo
                     Log.i(TAG,"Agregado vehiculo correctamente");
                     Bundle extras = new Bundle();
-                    extras.putBoolean(AppMediador.CLAVE_RESULTADO_NUEVO_VEHICULO,true);
+                    extras.putString(AppMediador.CLAVE_RESULTADO_NUEVO_VEHICULO,datoVehiculo);
 
                     appMediador.sendBroadcast(AppMediador.AVISO_REGISTRO_VEHICULO,extras);
                 }else{

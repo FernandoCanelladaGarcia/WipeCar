@@ -279,7 +279,17 @@ public class Modelo implements IModelo{
 
     @Override
     public void guardarVehiculo(Object[] informacion) {
-        adaptadorVehiculo.agregarVehiculo(informacion);
+        int tarea = (int)informacion[4];
+        switch (tarea){
+            case 0:
+                Log.i(TAG,"Agregando vehiculo");
+                adaptadorVehiculo.agregarVehiculo(informacion);
+                break;
+            case 1:
+                Log.i(TAG,"Actualizando vehiculo");
+                adaptadorVehiculo.actualizarVehiculo(informacion);
+                break;
+        }
     }
 
     @Override

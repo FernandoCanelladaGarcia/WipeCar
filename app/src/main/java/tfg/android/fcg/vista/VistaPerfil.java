@@ -29,7 +29,7 @@ import tfg.android.fcg.presentador.IPresentadorPerfil;
 public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View.OnClickListener {
 
     private Button botonOrigen, botonHistorial;
-    private FloatingActionButton botonEditar;
+    private FloatingActionButton botonEditar, botonGuardarPerfil, botonEliminarPerfil;
     private TextView nombre,telefono,email,password,marca,modelo,matricula;
     private EditText editNombre, editTelefono, editEmail, editPass, editMarca, editModelo, editMatricula;
     private Switch modoConductor;
@@ -40,7 +40,9 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
     private Vehiculo vehiculo;
     private SharedPreferences sharedPreferences;
     private IPresentadorPerfil presentadorPerfil;
-
+    private Object[] perfil;
+    private boolean datosVehiculo;
+    private String datoVehiculo;
     private final static String TAG = "depurador";
 
     @Override
@@ -50,17 +52,23 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
         appMediador = AppMediador.getInstance();
         appMediador.setVistaPerfil(this);
         presentadorPerfil = appMediador.getPresentadorPerfil();
+        perfil = new Object[9];
         mostrarProgreso();
 
+        datosVehiculo = false;
+        datoVehiculo = "";
+
         botonEditar = (FloatingActionButton) findViewById(R.id.editButton);
-        botonHistorial = (Button) findViewById(R.id.historialButton);
+        botonGuardarPerfil = (FloatingActionButton) findViewById(R.id.guardarPerfil);
+        botonEliminarPerfil = (FloatingActionButton) findViewById(R.id.eliminarPerfil);
+        botonHistorial = (Button) findViewById(R.id.regisVehiculoButton);
         botonOrigen = (Button) findViewById(R.id.origenButton);
         modoConductor = (Switch) findViewById(R.id.modoConductor);
 
-        nombre = (TextView) findViewById(R.id.nombreTitle);
-        telefono = (TextView) findViewById(R.id.telefonoTitle);
-        email = (TextView) findViewById(R.id.emailTitle2);
-        password = (TextView) findViewById(R.id.passwordTitle);
+        nombre = (TextView) findViewById(R.id.marcaRegistro);
+        telefono = (TextView) findViewById(R.id.modeloRegistro);
+        email = (TextView) findViewById(R.id.emailPerfil);
+        password = (TextView) findViewById(R.id.passwordPerfil);
         marca = (TextView) findViewById(R.id.marcaTitle);
         modelo = (TextView) findViewById(R.id.modeloTitle);
         matricula = (TextView) findViewById(R.id.matriculaTitle);
@@ -92,6 +100,14 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
                     }else{
                         Toast.makeText(getApplicationContext(), "MODO PASAJERO", Toast.LENGTH_SHORT).show();
                     }
+                }else if(!botonEditar.isEnabled()){
+                    if(isChecked){
+                        Toast.makeText(getApplicationContext(), "MODO CONDUCTOR", Toast.LENGTH_SHORT).show();
+                        perfil[7] = isChecked;
+                    }else{
+                        Toast.makeText(getApplicationContext(), "MODO PASAJERO", Toast.LENGTH_SHORT).show();
+                        perfil[7] = isChecked;
+                    }
                 }else{
                     mostrarDialogo(0);
                 }
@@ -111,12 +127,13 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
             case R.id.editButton:
                 presentadorPerfil.tratarEditar(1);
                 break;
-            case R.id.historialButton:
+            case R.id.regisVehiculoButton:
                 presentadorPerfil.tratarHistorial();
                 break;
             case R.id.origenButton:
                 break;
             case R.id.guardarPerfil:
+                presentadorPerfil.tratarGuardar(2);
                 break;
             case R.id.eliminarPerfil:
                 break;
@@ -173,9 +190,33 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
                 dialogBuild.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mostrarProgreso();
                         presentadorPerfil.tratarOk(1);
                         botonEditar.setEnabled(false);
+                    }
+                });
+                dialogBuild.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cerrarDialogo();
+                    }
+                });
+                dialogo = dialogBuild.create();
+                dialogo.show();
+                break;
+            case 2:
+                dialogBuild.setTitle("Modo Edición");
+                dialogBuild.setMessage("¿Esta seguro?");
+                dialogBuild.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(obtenerNuevoPerfil() != null) {
+                            presentadorPerfil.tratarGuardarPerfil(obtenerNuevoPerfil());
+                            botonEditar.setEnabled(true);
+                        }else{
+                            Toast.makeText(getApplicationContext(),
+                                    "No ha introducido cambios", Toast.LENGTH_SHORT).show();
+                            cerrarDialogo();
+                        }
                     }
                 });
                 dialogBuild.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -213,6 +254,9 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
         editModelo.setVisibility(View.VISIBLE);
         editMarca.setVisibility(View.VISIBLE);
         editMatricula.setVisibility(View.VISIBLE);
+        botonGuardarPerfil.setVisibility(View.VISIBLE);
+        botonEliminarPerfil.setVisibility(View.VISIBLE);
+        botonHistorial.setEnabled(false);
         cerrarProgreso();
     }
 
@@ -221,6 +265,8 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
         Object[] info = (Object[])informacion;
         user = (Usuario)info[0];
         if(info[1] != ""){
+            datosVehiculo = true;
+            datoVehiculo = (String) user.getDatoVehiculo();
             vehiculo = (Vehiculo)info[1];
             modelo.setText(vehiculo.getModelo());
             marca.setText(vehiculo.getMarca());
@@ -240,5 +286,30 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
     public void onDestroy() {
         super.onDestroy();
         appMediador.removePresentadorPerfil();
+    }
+
+    private Object obtenerNuevoPerfil(){
+        String[] partes = editEmail.getText().toString().split("@");
+
+        if(nombre.getText().toString() != editNombre.getText().toString()) {
+            perfil[0] = editNombre.getText().toString();
+        }if(telefono.getText().toString() != editTelefono.getText().toString()){
+            perfil[1] = editTelefono.getText().toString();
+        }if(email.getText().toString() != editEmail.getText().toString() && partes[1].equals("alu.ulpgc.es") ){
+            perfil[2] = editEmail.getText().toString();
+        }if(password.getText().toString() != editPass.getText().toString()){
+            perfil[3] = editPass.getText().toString();
+        }if(modelo.getText().toString() != editModelo.getText().toString()){
+            perfil[5] = editModelo.getText().toString();
+        }if(marca.getText().toString() != editMarca.getText().toString()){
+            perfil[4] = editMarca.getText().toString();
+        }if(matricula.getText().toString() != editMatricula.getText().toString()) {
+            perfil[6] = editMatricula.getText().toString();
+        }if(datoVehiculo != ""){
+            perfil[8] = datoVehiculo;
+        }else{
+            return null;
+        }
+        return perfil;
     }
 }

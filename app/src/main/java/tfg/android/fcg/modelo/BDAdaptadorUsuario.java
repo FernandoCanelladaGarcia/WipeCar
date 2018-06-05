@@ -600,35 +600,20 @@ public class BDAdaptadorUsuario {
                 if (task.isSuccessful()) {
                     Log.i(TAG, "Reautenticacion correcta");
 
-                    String displayName = auth.getCurrentUser().getDisplayName();
-                    String[] partes = displayName.split("#");
-                    final String currentName = partes[0];
-                    final String currentPhone = partes[1];
-
+                    String currentName = auth.getCurrentUser().getDisplayName();
 
                     final String newName = informacion[0];
-                    final String newPhone = informacion[1];
+                    //final String newPhone = informacion[1];
                     final String newEmail = informacion[2];
                     final String newPassword = informacion[3];
                     final boolean newRol = Boolean.valueOf(informacion[4]);
 
-                    if (currentName.equals(newName) && currentPhone.equals(newPhone)) {
+                    if (currentName.equals(newName)) {
                         newDisplayName = currentName;
                         taskMap.put("nombre", currentName);
-                        taskMap.put("telefono", currentPhone);
-                    }
-                    if (!currentName.equals(newName) && currentPhone.equals(newPhone)) {
-                        newDisplayName = newName;
-                        taskMap.put("nombre", newName);
-                        taskMap.put("telefono", currentPhone);
-                    }
-                    if (currentName.equals(newName) && !currentPhone.equals(newPhone)) {
-                        taskMap.put("nombre", currentName);
-                        taskMap.put("telefono", newPhone);
                     } else {
                         newDisplayName = newName;
                         taskMap.put("nombre", newName);
-                        taskMap.put("telefono", newPhone);
                     }
 
                     UserProfileChangeRequest actualizacion = new UserProfileChangeRequest.Builder().setDisplayName(newDisplayName).build();
@@ -661,7 +646,7 @@ public class BDAdaptadorUsuario {
                                                             //Actualizacion de password
                                                             Log.i(TAG, "Actualizacion password");
                                                             datos[0] = true;
-                                                            datos[1] = "password";
+                                                            datos[1] = "LOGIN";
                                                             Bundle extras = new Bundle();
                                                             extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
                                                             appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
@@ -688,7 +673,7 @@ public class BDAdaptadorUsuario {
                                                             Log.i(TAG, "Actualizacion email");
                                                             Bundle extras = new Bundle();
                                                             datos[0] = true;
-                                                            datos[1] = "email";
+                                                            datos[1] = "LOGIN";
                                                             extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
                                                             appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
                                                         } else {
@@ -708,7 +693,7 @@ public class BDAdaptadorUsuario {
                                                 Log.i(TAG, "Actualizacion solo display");
                                                 Bundle extras = new Bundle();
                                                 datos[0] = true;
-                                                datos[1] = "displayname";
+                                                datos[1] = "LOGIN";
                                                 extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
                                                 appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
                                             }

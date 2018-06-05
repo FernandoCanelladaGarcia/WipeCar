@@ -12,6 +12,9 @@ public class Vehiculo implements Serializable {
     private String matricula;
 
     //Constructor
+    public Vehiculo(){
+
+    }
 
     public Vehiculo(String datoVehiculo, String marca, String modelo, String matricula) {
         this.datoVehiculo = datoVehiculo;
