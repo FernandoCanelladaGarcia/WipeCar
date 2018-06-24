@@ -46,6 +46,10 @@ public class BDAdaptadorUsuario {
         database = FirebaseDatabase.getInstance().getReference().child("usuarios");
     }
 
+    /**
+     * Busca en la tabla Usuarios aquel registro que coincida con el parámetro
+     * @param idUser
+     */
     public void obtenerUsuario(String idUser){
         database.child(idUser).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

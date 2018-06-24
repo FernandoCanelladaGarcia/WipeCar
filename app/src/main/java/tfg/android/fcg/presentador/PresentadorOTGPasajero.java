@@ -53,7 +53,7 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
     @Override
     public void iniciar() {
         appMediador.registerReceiver(receptorGps,AppMediador.AVISO_LOCALIZACION_GPS);
-        modelo.obtenerPosicionUsuario();
+        modelo.iniciarGps();
     }
 
     @Override

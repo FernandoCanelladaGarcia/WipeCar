@@ -37,16 +37,19 @@ public class BDAdaptadorPosicion {
         geocoder = new Geocoder(appMediador.getApplicationContext(), Locale.getDefault());
     }
 
+    /**
+     * Inicia el servicio de localización
+     */
     public void iniciarGps(){
         appMediador.launchService(ServicioLocalizacion.class,null);
     }
     /**
-     * Busca la posicion del usuario y la almacena en la tabla usuario que posee
+     * Busca la posición del usuario en la tabla posición que posee
      * el identificador que coincide con el parámetro.
+     * @param informacion contendra:
      */
-    public void obtenerPosicion(){
-        //TODO Llamada al GPS para obtener ubicacion
-        iniciarGps();
+    public void obtenerPosicion(Object informacion){
+    //TODO: OBTENER POSICION LAT-LONG DE LA TABLA POSICIONES
     }
 
     /**
@@ -61,7 +64,7 @@ public class BDAdaptadorPosicion {
 
         posicion = new Posicion(idUser,latitud.toString(),longitud.toString());
 
-        database.setValue(posicion).addOnCompleteListener(new OnCompleteListener<Void>() {
+        database.child(idUser).setValue(posicion).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){

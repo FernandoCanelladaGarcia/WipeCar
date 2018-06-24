@@ -159,6 +159,7 @@ public class Modelo implements IModelo{
         });
     }
 
+    //TODO: NO SE HA UTILIZADO, REDACCION
     @Override
     public void cambiarPassword(final Object[] informacion) {
         //informacion 0 = vieja, informacion 1 = nueva, informacion 2 = correo
@@ -194,8 +195,8 @@ public class Modelo implements IModelo{
     }
 
     @Override
-    public void registrarUsuario(Object[] informacion) {
-       adaptadorUsuario.agregarUsuario(informacion);
+    public void registrarUsuario(Object informacion) {
+       adaptadorUsuario.agregarUsuario((Object[]) informacion);
     }
 
     @Override
@@ -213,9 +214,15 @@ public class Modelo implements IModelo{
 
     }
 
+    //TODO: NUEVO, REDACCION
     @Override
-    public void obtenerPosicionUsuario() {
-        adaptadorPosicion.obtenerPosicion();
+    public void iniciarGps() {
+        adaptadorPosicion.iniciarGps();
+    }
+
+    @Override
+    public void obtenerPosicionUsuario(Object informacion){
+        adaptadorPosicion.obtenerPosicion(informacion);
     }
 
     @Override

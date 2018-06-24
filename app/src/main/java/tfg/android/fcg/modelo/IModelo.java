@@ -28,7 +28,7 @@ public interface IModelo {
      * Añdade un nuevo usuario a la aplicación.
      * @param informacion contendra:
      */
-    public void registrarUsuario(Object[] informacion);
+    public void registrarUsuario(Object informacion);
 
     /**
      * Obtiene un mapa centrado en la ubicación del usuario
@@ -38,10 +38,15 @@ public interface IModelo {
     public void obtenerMapa(Object informacion);
 
     /**
-     * Obtiene la posición del usuario a través del GPS.
-
+     * Inicia el GPS del usuario para obtener su posición.
      */
-    public void obtenerPosicionUsuario();
+    public void iniciarGps();
+
+    /**
+     * Recupera la posicion del usuario de la base de datos.
+     * @param informacion
+     */
+    public void obtenerPosicionUsuario(Object informacion);
 
     /**
      * Almacena la localización origen que ha seleccionado

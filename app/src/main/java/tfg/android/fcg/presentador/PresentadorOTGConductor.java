@@ -163,7 +163,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor{
 
     private void buscarPosicion(){
         AppMediador.getInstance().registerReceiver(receptorGPS,AppMediador.AVISO_LOCALIZACION_GPS);
-        modelo.obtenerPosicionUsuario();
+        modelo.iniciarGps();
     }
 
     private void aceptarPeticion(Object informacion){

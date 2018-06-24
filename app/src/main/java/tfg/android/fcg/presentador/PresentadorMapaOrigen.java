@@ -7,9 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.modelo.IModelo;
 import tfg.android.fcg.modelo.Modelo;
@@ -95,7 +92,7 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen {
         appMediador.registerReceiver(receptorGPS, AppMediador.AVISO_LOCALIZACION_GPS);
         vistaMapaOrigen.cerrarDialogo();
         vistaMapaOrigen.mostrarProgreso();
-        modelo.obtenerPosicionUsuario();
+        modelo.iniciarGps();
     }
 
     @Override
