@@ -112,6 +112,7 @@ public class AppMediador extends Application {
 	public static final String AVISO_LOCALIZACION_GUARDADA = "tfg.android.fcg.AVISO_LOCALIZACION_GUARDADA";
 	public static final String AVISO_RESULTADO_TRADUCIR_LOCALIZACION = "tfg.android.fcg.AVISO_RESULTADO_TRADUCIR_LOCALIZACION";
 	public static final String AVISO_OBTENER_USUARIO = "tfg.android.fcg.AVISO_OBTENER_USUARIO";
+	public static final String AVISO_DESLOGIN = "tfg.android.fcg.AVISO_DESLOGIN";
 
 	public static final String CLAVE_RESULTADO_LOGIN = "tfg.android.fcg.CLAVE_RESULTADO_LOGIN";
 	public static final String CLAVE_RESULTADO_CAMBIO_PASSWORD = "tfg.android.fcg.CLAVE_RESULTADO_CAMBIO_PASSWORD";
@@ -146,6 +147,7 @@ public class AppMediador extends Application {
 	public static final String CLAVE_LONGITUD = "tfg.android.fcg.CLAVE_LONGITUD";
 	public static final String CLAVE_RESULTADO_TRADUCIR_LOCALIZACION = "tfg.android.fcg.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION";
 	public static final String CLAVE_OBTENER_USUARIO = "tfg.android.fcg.CLAVE_OBTENER_USUARIO";
+	public static final String CLAVE_DESLOGIN = "tfg.android.fcg.CLAVE_DESLOGIN";
 
 	public static final String ERROR_ACTUALIZACION_USUARIO_CORREO = "tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_CORREO";
 	public static final String ERROR_ACTUALIZACION_USUARIO_PASSWORD ="tfg.android.fcg.ERROR_ACTUALIZACION_USUARIO_PASSWORD";

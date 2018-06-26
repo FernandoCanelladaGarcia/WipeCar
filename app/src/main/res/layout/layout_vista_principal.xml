@@ -1,81 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="395dp"
-        android:layout_height="684dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background">
 
-        <android.support.design.widget.TabItem
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/MainTitle"
+            android:layout_width="155dp"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="WipeCar"
+            android:textColor="@color/texto"
+            android:textSize="34dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="5dp"
+            android:textStyle="bold|italic" />
+
+        <Button
+            android:id="@+id/botonSalir"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="PickUp" />
+            android:background="@color/botones"
+            android:layout_marginLeft="315dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/ubuntu_medium"
+            android:onClick="onClick"
+            android:text="Salir"
+            android:textColor="@color/texto_borde" />
 
-        <android.support.design.widget.TabItem
+        <Button
+            android:id="@+id/botonPerfil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="OnTheGo" />
-    </android.support.design.widget.TabLayout>
+            android:background="@color/botones"
+            android:layout_marginLeft="225dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/ubuntu_medium"
+            android:onClick="onClick"
+            android:text="Perfil"
+            android:textColor="@color/texto_borde"/>
+    </RelativeLayout>
 
-    <Button
-        android:id="@+id/botonSalir"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/botones"
-        android:fontFamily="@font/ubuntu_medium"
-        android:textColor="@color/texto_borde"
-        android:onClick="onClick"
-        android:text="Salir"
-        app:layout_constraintBottom_toTopOf="@+id/tabLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/botonPerfil"
-        app:layout_constraintTop_toTopOf="parent" />
+        <!-- Tab Layout for creating tabs -->
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </android.support.design.widget.AppBarLayout>
 
-    <Button
-        android:id="@+id/botonPerfil"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="224dp"
-        android:layout_marginTop="8dp"
-        android:onClick="onClick"
-        android:background="@color/botones"
-        android:fontFamily="@font/ubuntu_medium"
-        android:textColor="@color/texto_borde"
-        android:text="Perfil"
-        app:layout_constraintBottom_toTopOf="@+id/tabLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="128dp"
-        android:layout_height="44dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/ubuntu_medium"
-        android:text="WipeCar"
-        android:textAlignment="center"
-        android:textColor="@color/texto"
-        android:textSize="30sp"
-        android:textStyle="bold|italic"
-        app:layout_constraintEnd_toStartOf="@+id/botonPerfil"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</android.support.constraint.ConstraintLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPagerPrincipal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+</android.support.design.widget.CoordinatorLayout>

@@ -168,4 +168,10 @@ public interface IModelo {
      * @param informacion contendra:
      */
     public void obtenerVehiculoUsuario(Object informacion);
+
+    /**
+     * Encargado de desloguear al usuario que ha iniciado sesion y se encuentra utilizando
+     * la aplicacion en dicho momento.
+     */
+    public void deslogearUsuario();
 }

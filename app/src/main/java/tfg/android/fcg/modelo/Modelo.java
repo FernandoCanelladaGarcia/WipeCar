@@ -356,4 +356,15 @@ public class Modelo implements IModelo{
         adaptadorHistorial.agregarHistorial((Object[])informacion);
     }
 
+    @Override
+    public void deslogearUsuario(){
+        auth.signOut();
+
+        Log.i(TAG, "deslogeado usuario: " + auth.getCurrentUser());
+
+        Bundle extras = new Bundle();
+        extras.putBoolean(AppMediador.CLAVE_DESLOGIN, true);
+        appMediador.sendBroadcast(AppMediador.AVISO_DESLOGIN,extras);
+    }
+
 }

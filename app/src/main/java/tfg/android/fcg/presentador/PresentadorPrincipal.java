@@ -1,5 +1,9 @@
 package tfg.android.fcg.presentador;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.modelo.IModelo;
 import tfg.android.fcg.modelo.Modelo;
@@ -19,6 +23,16 @@ public class PresentadorPrincipal implements IPresentadorPrincipal{
         vistaPrincipal = (VistaPrincipal) appMediador.getVistaPrincipal();
     }
 
+    private BroadcastReceiver receptorDeAvisos = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(AppMediador.AVISO_DESLOGIN)){
+                appMediador.unRegisterReceiver(this);
+                vistaPrincipal.cerrarProgreso();
+                appMediador.launchActivity(VistaLogin.class, this, null);
+            }
+        }
+    };
     @Override
     public void iniciar(Object informacion) {
 
@@ -63,7 +77,9 @@ public class PresentadorPrincipal implements IPresentadorPrincipal{
                 appMediador.launchActivity(VistaPerfil.class, this, null);
                 break;
             case 1:
-                appMediador.launchActivity(VistaLogin.class, this, null);
+                vistaPrincipal.mostrarProgreso();
+                appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_DESLOGIN);
+                modelo.deslogearUsuario();
                 break;
         }
 

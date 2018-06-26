@@ -2,6 +2,7 @@ package tfg.android.fcg.vista;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 
 import tfg.android.fcg.R;
 
@@ -10,6 +11,8 @@ import tfg.android.fcg.R;
  */
 
 public class VistaHistorial extends AppCompatActivity implements IVistaHistorial{
+
+    private LinearLayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
