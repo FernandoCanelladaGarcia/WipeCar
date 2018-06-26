@@ -5,15 +5,14 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBarLayoutHistorial"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarLayoutHistorial"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/background"/>
 
-
     <Button
-        android:id="@+id/button7"
+        android:id="@+id/buttonCargarHistorial"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
@@ -45,7 +44,7 @@
             android:textStyle="bold|italic" />
 
         <Button
-            android:id="@+id/botonSalir"
+            android:id="@+id/botonSalirHistorial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/botones"
@@ -57,7 +56,7 @@
             android:textColor="@color/texto_borde" />
 
         <Button
-            android:id="@+id/botonBack"
+            android:id="@+id/botonBackHistorial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/botones"
@@ -69,6 +68,7 @@
             android:textColor="@color/texto_borde"/>
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="8dp"
