@@ -41,7 +41,7 @@ public class VistaVehiculo extends AppCompatActivity implements IVistaVehiculo, 
         appMediador.setVistaVehiculo(this);
         presentadorVehiculo = appMediador.getPresentadorVehiculo();
 
-        registroVehiculo = findViewById(R.id.regisVehiculoButton);
+        registroVehiculo = findViewById(R.id.regisHistorialButton);
         marca = (EditText) findViewById(R.id.marcaRegistro);
         modelo = (EditText) findViewById(R.id.modeloRegistro);
         matricula = (EditText) findViewById(R.id.matriculaRegistro);
@@ -117,7 +117,7 @@ public class VistaVehiculo extends AppCompatActivity implements IVistaVehiculo, 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.regisVehiculoButton:
+            case R.id.regisHistorialButton:
                 if(checkEditText()){
                     presentadorVehiculo.tratarGuardar(0);
                 }

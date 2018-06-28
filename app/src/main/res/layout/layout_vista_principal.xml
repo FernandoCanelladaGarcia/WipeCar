@@ -1,39 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/background">
-
     <RelativeLayout
+        android:id="@+id/relativeLayout2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="64dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/MainTitle"
             android:layout_width="155dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="5dp"
             android:fontFamily="@font/ubuntu_medium"
             android:text="WipeCar"
             android:textColor="@color/texto"
             android:textSize="34dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginTop="5dp"
             android:textStyle="bold|italic" />
 
         <Button
             android:id="@+id/botonSalir"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/botones"
             android:layout_marginLeft="315dp"
             android:layout_marginTop="5dp"
+            android:background="@color/botones"
             android:fontFamily="@font/ubuntu_medium"
             android:onClick="onClick"
             android:text="Salir"
@@ -43,27 +45,38 @@
             android:id="@+id/botonPerfil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/botones"
             android:layout_marginLeft="225dp"
             android:layout_marginTop="5dp"
+            android:background="@color/botones"
             android:fontFamily="@font/ubuntu_medium"
             android:onClick="onClick"
             android:text="Perfil"
-            android:textColor="@color/texto_borde"/>
+            android:textColor="@color/texto_borde" />
     </RelativeLayout>
 
-        <!-- Tab Layout for creating tabs -->
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-    </android.support.design.widget.AppBarLayout>
-
+    <!-- Tab Layout for creating tabs -->
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPagerPrincipal"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_height="600dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
-</android.support.design.widget.CoordinatorLayout>
+</android.support.constraint.ConstraintLayout>

@@ -11,6 +11,8 @@ public class Usuario implements Serializable {
     private String telefono;
     private boolean rol;
     private String valoracion;
+    //TODO: NUEVO, REDACCION
+    private String origenDef;
     private String origen;
     private String destino;
     private String fecha;
@@ -19,13 +21,14 @@ public class Usuario implements Serializable {
 
     //Constructor
 
-    public Usuario (String idUser, String nombre, String telefono, boolean rol, String valoracion, String origen, String destino, String fecha, String hora, String datoVehiculo){
+    public Usuario (String idUser, String nombre, String telefono, boolean rol, String valoracion, String origen,String origenDef, String destino, String fecha, String hora, String datoVehiculo){
         this.idUser = idUser;
         this.nombre = nombre;
         this.telefono = telefono;
         this.rol = rol;
         this.valoracion = valoracion;
         this.origen = origen;
+        this.origenDef = origenDef;
         this.destino = destino;
         this.fecha = fecha;
         this.hora = hora;
@@ -83,6 +86,14 @@ public class Usuario implements Serializable {
 
     public void setOrigen(String origen) {
         this.origen = origen;
+    }
+
+    public String getOrigenDef() {
+        return origenDef;
+    }
+
+    public void setOrigenDef(String origenDef) {
+        this.origenDef = origenDef;
     }
 
     public String getDestino() {

@@ -61,7 +61,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
         botonEditar = (FloatingActionButton) findViewById(R.id.editButton);
         botonGuardarPerfil = (FloatingActionButton) findViewById(R.id.guardarPerfil);
         botonEliminarPerfil = (FloatingActionButton) findViewById(R.id.eliminarPerfil);
-        botonHistorial = (Button) findViewById(R.id.regisVehiculoButton);
+        botonHistorial = (Button) findViewById(R.id.regisHistorialButton);
         botonOrigen = (Button) findViewById(R.id.origenButton);
         modoConductor = (Switch) findViewById(R.id.modoConductor);
 
@@ -83,7 +83,6 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
 
         sharedPreferences = appMediador.getSharedPreferences("Login",0);
         String idUser = sharedPreferences.getString("idUser",null);
-        presentadorPerfil.iniciar(idUser);
 
         boolean rol = sharedPreferences.getBoolean("rol",false);
         modoConductor.setChecked(rol);
@@ -118,6 +117,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
         editEmail.setText(sharedPreferences.getString("email",null));
         editPass.setText(sharedPreferences.getString("password",null));
 
+        presentadorPerfil.iniciar(idUser);
         Log.i(TAG, "Vista Perfil");
     }
 
@@ -127,7 +127,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
             case R.id.editButton:
                 presentadorPerfil.tratarEditar(1);
                 break;
-            case R.id.regisVehiculoButton:
+            case R.id.regisHistorialButton:
                 presentadorPerfil.tratarHistorial();
                 break;
             case R.id.origenButton:

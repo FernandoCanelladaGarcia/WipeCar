@@ -127,7 +127,7 @@
         app:layout_constraintTop_toBottomOf="@+id/origenButton" />
 
     <Button
-        android:id="@+id/regisVehiculoButton"
+        android:id="@+id/regisHistorialButton"
         android:layout_width="145dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
@@ -159,7 +159,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.798"
-        app:layout_constraintStart_toEndOf="@+id/regisVehiculoButton"
+        app:layout_constraintStart_toEndOf="@+id/regisHistorialButton"
         app:srcCompat="@android:drawable/ic_menu_edit" />
 
     <Switch

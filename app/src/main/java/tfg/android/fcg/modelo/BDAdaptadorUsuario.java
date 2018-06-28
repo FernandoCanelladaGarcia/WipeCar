@@ -71,6 +71,35 @@ public class BDAdaptadorUsuario {
         });
     }
 
+    //TODO: NUEVO, REDACCION
+
+    /**
+     * Metodo al que se recurre en caso de una mala actualización, desinstalación de la aplicación
+     * o pérdida de cache para que no se sucedan errores debido a la falta de datos.
+     * @param idUser
+     */
+    public void obtenerSharedPreferences(String idUser){
+        database.child(idUser).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                usuario = dataSnapshot.getValue(Usuario.class);
+                SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login",0);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("origendef",usuario.getOrigenDef());
+                editor.putBoolean("rol",usuario.isRol());
+                editor.putString("idUser",usuario.getIdUser());
+                editor.apply();
+                Log.i(TAG,"SHARED PREFERENCES ACTUALIZADO");
+                database.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                database.removeEventListener(this);
+            }
+        });
+    }
+
     /**
      * Busca en la tabla Usuarios aquellos registros que coincidan con el parámetro.
      *
@@ -240,7 +269,7 @@ public class BDAdaptadorUsuario {
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString("email", email);
                                 editor.putString("password", password);
-                                editor.putString("origen",origen);
+                                editor.putString("origendef",origen);
                                 editor.putBoolean("rol",rol);
                                 editor.putString("idUser",idUser);
                                 editor.apply();
@@ -249,7 +278,7 @@ public class BDAdaptadorUsuario {
                                 //Creamos el Login del usuario
                                 login = new Login(idUser, nombreEncriptado, email);
                                 //Guardamos en la tabla el usuario
-                                usuario = new Usuario(idUser, nombreEncriptado, telefono, rol, "", origen, "", "", "", null);
+                                usuario = new Usuario(idUser, nombreEncriptado, telefono, rol, "", "",origen, "", "", "", null);
                                 DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(idUser);
                                 referenciaUsuario.setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     //                                    referenciaUsuario.setValue(usuario, new DatabaseReference.CompletionListener() {

@@ -33,7 +33,11 @@ public interface IPresentadorHistorial {
 
     /**
      * Presenta la vista de perfil.
-     * @param informacion
      */
-    public void tratarVolver(Object informacion);
+    public void tratarVolver();
+
+    /**
+     * Realiza el logout del usuario conectado en la aplicación
+     */
+    public void tratarSalir();
 }

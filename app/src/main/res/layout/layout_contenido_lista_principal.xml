@@ -5,8 +5,7 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/listaPrincipal"
-        />
+        android:id="@+id/listaPrincipal" />
 
     <include layout="@layout/layout_lista_principal_vacia"
         android:id="@+id/elementoListaVacia"

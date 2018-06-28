@@ -105,29 +105,29 @@ public class Modelo implements IModelo{
                     //Usuario logged.
                     Log.i(TAG,"Login comprobado");
                     setUsuarioActual(auth.getCurrentUser());
+
+                    String idUser = auth.getCurrentUser().getUid();
+
                     SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login",0);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
                     String emailpref = sharedPreferences.getString("email",null);
                     if(emailpref != null){
                         if(!emailpref.equals(email)){
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString("email",email);
                             editor.putString("password",password);
                             editor.apply();
                         }
                     }else{
                         Log.i(TAG,"Login comprobado");
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("email", email);
                         editor.putString("password",password);
                         editor.apply();
                     }
-
-                    String idUser = auth.getCurrentUser().getUid();
-                    String emailUser = auth.getCurrentUser().getEmail();
-                    String nombre = auth.getCurrentUser().getDisplayName();
-
-                    loginActual = new Login(idUser,nombre,emailUser);
-                    Log.i(TAG, "Usuario actual: " + loginActual.getNombre());
+                    String id = sharedPreferences.getString("idUser", null);
+                    if(id == null){
+                        Log.i(TAG,"ACTUALIZANDO SHARED PREFERENCES");
+                        adaptadorUsuario.obtenerSharedPreferences(idUser);
+                    }
                     extras.putBoolean(AppMediador.CLAVE_RESULTADO_LOGIN, true);
                     appMediador.sendBroadcast(AppMediador.AVISO_USER_LOGIN, extras);
                 }
@@ -138,6 +138,18 @@ public class Modelo implements IModelo{
                 }
             }
         });
+    }
+
+    //TODO: NUEVO METODO, REDACCION
+    @Override
+    public void deslogearUsuario(){
+        auth.signOut();
+
+        Log.i(TAG, "deslogeado usuario" );
+
+        Bundle extras = new Bundle();
+        extras.putBoolean(AppMediador.CLAVE_DESLOGIN, true);
+        appMediador.sendBroadcast(AppMediador.AVISO_DESLOGIN,extras);
     }
 
     @Override
@@ -209,6 +221,7 @@ public class Modelo implements IModelo{
         adaptadorVehiculo.obtenerVehiculo((String) informacion);
     }
 
+    //TODO: NO SE USA, REDACCION
     @Override
     public void obtenerMapa(Object informacion) {
 
@@ -312,7 +325,7 @@ public class Modelo implements IModelo{
     @Override
     public void asignarValoracion(Object[] informacion) {
         adaptadorUsuario.actualizarUsuario(informacion);
-        adaptadorHistorial.agregarValoracion((String[]) informacion);
+        //adaptadorHistorial.agregarValoracion((String[]) informacion);
     }
 
     @Override
@@ -354,17 +367,6 @@ public class Modelo implements IModelo{
         adaptadorPosicion.finalizarGps();
         adaptadorVinculo.eliminarVinculo((Object[])informacion);
         adaptadorHistorial.agregarHistorial((Object[])informacion);
-    }
-
-    @Override
-    public void deslogearUsuario(){
-        auth.signOut();
-
-        Log.i(TAG, "deslogeado usuario: " + auth.getCurrentUser());
-
-        Bundle extras = new Bundle();
-        extras.putBoolean(AppMediador.CLAVE_DESLOGIN, true);
-        appMediador.sendBroadcast(AppMediador.AVISO_DESLOGIN,extras);
     }
 
 }

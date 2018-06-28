@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import tfg.android.fcg.AppMediador;
@@ -46,8 +47,11 @@ public class BDAdaptadorHistorial {
         String hora = (String)informacion[3];
         String origen = (String)informacion[4];
         String destino = (String)informacion[5];
+        //TODO: NUEVOS VALORES, REDACCION
+        String nombrePasajero = (String)informacion[6];
+        String nombreConductor = (String)informacion[7];
 
-        historial = new Historial(idPasajero,idConductor,fecha,hora,origen,destino,"", "");
+        historial = new Historial(idPasajero,idConductor,fecha,hora,origen,destino, nombreConductor,nombrePasajero);
 
         reference.setValue(historial).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -127,7 +131,7 @@ public class BDAdaptadorHistorial {
      * @param idUser contendra:
      */
     public void obtenerHistorial(final String idUser){
-        final ArrayList<Historial> listaHistorial = new ArrayList();
+        final ArrayList<Historial> listaHistorial = new ArrayList<>();
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -172,6 +176,11 @@ public class BDAdaptadorHistorial {
             }
         });
     }
+
+    //TODO: EDITAR ERROR A LA HORA DE AGREGAR VALORACION
+    //AGREGA VALORACION A AMBOS USUARIOS CUANDO DEBERIA AGREGAR VALORACION
+    //EN LA TABLA DE USUARIOS, SOBRE EL USUARIO AL QUE VALORA.
+    //NO HAY QUE ACCEDER A HISTORIAL, SINO A USUARIO.
 
     public void agregarValoracion(String[] informacion){
     //Informacion => 0 idPasajero, 1 idConductor, 2 valorPasajero, 3 valorConductor.

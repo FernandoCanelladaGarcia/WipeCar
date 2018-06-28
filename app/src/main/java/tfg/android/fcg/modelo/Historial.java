@@ -10,21 +10,25 @@ public class Historial {
     private String hora;
     private String origen;
     private String destino;
-    private String valoracionPasajero;
-    private String valoracionConductor;
+    //TODO: NO NECESARIOS, REDACCION
+    //private String valoracionPasajero;
+    //private String valoracionConductor;
+    //TODO: NUEVOS VALORES, REDACCION
+    private String nombreConductor;
+    private String nombrePasajero;
 
     //Constructor
 
     public Historial(String idPasajero, String idConductor, String fecha, String hora, String origen,
-                     String destino, String valoracionPasajero, String valoracionConductor) {
+                     String destino, String nombreConductor, String nombrePasajero) {
         this.idPasajero = idPasajero;
         this.idConductor = idConductor;
         this.fecha = fecha;
         this.hora = hora;
         this.origen = origen;
         this.destino = destino;
-        this.valoracionPasajero = valoracionPasajero;
-        this.valoracionConductor = valoracionConductor;
+        this.nombreConductor = nombreConductor;
+        this.nombrePasajero = nombrePasajero;
     }
 
     public Historial(){
@@ -82,19 +86,19 @@ public class Historial {
         this.destino = destino;
     }
 
-    public String getValoracionPasajero() {
-        return valoracionPasajero;
+    public String getNombreConductor() {
+        return nombreConductor;
     }
 
-    public void setValoracionPasajero(String valoracionPasajero) {
-        this.valoracionPasajero = valoracionPasajero;
+    public void setNombreConductor(String nombreConductor) {
+        this.nombreConductor = nombreConductor;
     }
 
-    public String getValoracionConductor() {
-        return valoracionConductor;
+    public String getNombrePasajero() {
+        return nombrePasajero;
     }
 
-    public void setValoracionConductor(String valoracionConductor) {
-        this.valoracionConductor = valoracionConductor;
+    public void setNombrePasajero(String nombrePasajero) {
+        this.nombrePasajero = nombrePasajero;
     }
 }

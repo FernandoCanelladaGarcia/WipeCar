@@ -121,7 +121,7 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen {
         Object[] origenDestino = (Object[]) informacion;
         if(origenDestino[0] == "default"){
             SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login",0);
-            String origenDefault = sharedPreferences.getString("origen",null);
+            String origenDefault = sharedPreferences.getString("origendef",null);
             Log.i(TAG, origenDefault);
             origenDestino[0] = origenDefault;
             vistaMapaOrigen.mostrarProgreso();

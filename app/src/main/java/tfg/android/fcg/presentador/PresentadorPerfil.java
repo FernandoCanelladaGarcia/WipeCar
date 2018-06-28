@@ -132,8 +132,10 @@ public class PresentadorPerfil implements IPresentadorPerfil {
 
     }
 
+    //TODO: SIN DATOS, REDACCION
     @Override
     public void tratarHistorial() {
+        vistaPerfil.cerrarProgreso();
         appMediador.launchActivity(VistaHistorial.class, this, null);
 
     }
