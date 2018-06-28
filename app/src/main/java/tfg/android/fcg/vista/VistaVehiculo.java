@@ -51,7 +51,6 @@ public class VistaVehiculo extends AppCompatActivity implements IVistaVehiculo, 
         SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login",0);
         emailActual = sharedPreferences.getString("email",null);
         passwordActual = sharedPreferences.getString("password",null);
-        Log.i(TAG, "Vista Vehiculo" + " email: "+ emailActual + " password: " + passwordActual);
     }
 
     @Override
@@ -94,7 +93,7 @@ public class VistaVehiculo extends AppCompatActivity implements IVistaVehiculo, 
                 dialogBuild.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        cerrarDialogo();
                     }
                 });
                 dialogo = dialogBuild.create();
@@ -106,7 +105,8 @@ public class VistaVehiculo extends AppCompatActivity implements IVistaVehiculo, 
 
     @Override
     public void cerrarDialogo() {
-
+        Log.i(TAG,"cerrar Dialogo");
+        dialogo.cancel();
     }
 
     @Override
@@ -141,5 +141,11 @@ public class VistaVehiculo extends AppCompatActivity implements IVistaVehiculo, 
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        appMediador.removePresentadorVehiculo();
     }
 }

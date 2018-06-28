@@ -124,7 +124,7 @@ public class BDAdaptadorVehiculo {
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     //Actualizacion vehiculo correctamente
-                    Log.i(TAG,"Actualizada posicion correctamente");
+                    Log.i(TAG,"Actualizada vehiculo correctamente");
 
                     Bundle extras = new Bundle();
                     extras.putBoolean(AppMediador.CLAVE_RESULTADO_ACTUALIZACION_VEHICULO,true);

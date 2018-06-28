@@ -192,6 +192,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
                     public void onClick(DialogInterface dialog, int which) {
                         presentadorPerfil.tratarOk(1);
                         botonEditar.setEnabled(false);
+                        botonHistorial.setEnabled(false);
                     }
                 });
                 dialogBuild.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {

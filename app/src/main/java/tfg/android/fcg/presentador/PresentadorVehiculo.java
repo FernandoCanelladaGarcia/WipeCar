@@ -36,12 +36,18 @@ public class PresentadorVehiculo implements IPresentadorVehiculo{
                     Object[] dato = new Object[13];
                     dato[0] = 5;
                     dato[8] = datoVehiculo;
-                    appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_ACTUALIZACION_USUARIO);
+                    appMediador.registerReceiver(receptor, AppMediador.AVISO_ACTUALIZACION_USUARIO);
                     modelo.guardarPerfil(dato);
                 }else{
                     Log.i(TAG,"ERROR AL REGISTRAR VEHICULO");
                 }
             }
+        }
+    };
+
+    private BroadcastReceiver receptor = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(AppMediador.AVISO_ACTUALIZACION_USUARIO)) {
                 Object[] datos = (Object[]) intent.getSerializableExtra(AppMediador.CLAVE_ACTUALIZACION_USUARIO);
                 if ((boolean) datos[0]) {
