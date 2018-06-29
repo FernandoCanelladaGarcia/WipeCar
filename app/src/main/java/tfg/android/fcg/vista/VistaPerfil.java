@@ -53,6 +53,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
         appMediador.setVistaPerfil(this);
         presentadorPerfil = appMediador.getPresentadorPerfil();
         perfil = new Object[9];
+
         mostrarProgreso();
 
         datosVehiculo = false;
@@ -83,6 +84,9 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
 
         sharedPreferences = appMediador.getSharedPreferences("Login",0);
         String idUser = sharedPreferences.getString("idUser",null);
+        presentadorPerfil.iniciar(idUser);
+        email.setText(sharedPreferences.getString("email",null));
+        password.setText(sharedPreferences.getString("password",null));
 
         boolean rol = sharedPreferences.getBoolean("rol",false);
         modoConductor.setChecked(rol);
@@ -112,12 +116,8 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
                 }
             }
         });
-        email.setText(sharedPreferences.getString("email",null));
-        password.setText(sharedPreferences.getString("password",null));
         editEmail.setText(sharedPreferences.getString("email",null));
         editPass.setText(sharedPreferences.getString("password",null));
-
-        presentadorPerfil.iniciar(idUser);
         Log.i(TAG, "Vista Perfil");
     }
 

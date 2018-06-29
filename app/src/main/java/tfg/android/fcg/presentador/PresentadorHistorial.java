@@ -93,7 +93,7 @@ public class PresentadorHistorial implements IPresentadorHistorial{
     @Override
     public void tratarVolver() {
         Log.i(TAG,"Volver");
-        appMediador.launchActivity(VistaPerfil.class,this,null);
+        vistaHistorial.finish();
     }
     //TODO: NUEVO METODO, REDACCION
     @Override
