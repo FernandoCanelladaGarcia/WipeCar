@@ -295,6 +295,8 @@ public class Modelo implements IModelo{
     @Override
     public void eliminarPerfil(Object[] informacion) {
         adaptadorUsuario.eliminarUsuario((String)informacion[0],(String)informacion[1],(String)informacion[2]);
+        adaptadorVehiculo.eliminarVehiculo(informacion[0]);
+        adaptadorPosicion.eliminarPosicion(informacion[0]);
     }
 
     @Override

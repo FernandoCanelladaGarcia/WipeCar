@@ -106,10 +106,11 @@ public class AppMediador extends Application {
 	public static final String AVISO_ELIMINAR_HISTORIAL = "tfg.android.fcg.AVISO_ELIMINAR_HISTORIAL";
 	public static final String AVISO_VALORACION = "tfg.android.fcg.AVISO_VALORACION";
 	public static final String AVISO_LOCALIZACION_GPS = "tfg.android.fcg.AVISO_LOCALIZACION_GPS";
+	public static final String AVISO_LOCALIZACION_GUARDADA = "tfg.android.fcg.AVISO_LOCALIZACION_GUARDADA";
+	public static final String AVISO_LOCALIZACION_ELIMINADA = "tfg.android.fcg.AVISO_LOCALIZACION_ELIMINADA";
 	public static final String AVISO_PETICION_OTGCONDUCTOR = "tfg.android.fcg.AVISO_PETICION_OTGCONDUCTOR";
 	public static final String AVISO_ACEPTAR_PETICION_OTGCONDUCTOR = "tfg.android.fcg.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR";
 	public static final String AVISO_RECHAZAR_PETICION_OTGCONDUCTOR = "tfg.android.fcg.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR";
-	public static final String AVISO_LOCALIZACION_GUARDADA = "tfg.android.fcg.AVISO_LOCALIZACION_GUARDADA";
 	public static final String AVISO_RESULTADO_TRADUCIR_LOCALIZACION = "tfg.android.fcg.AVISO_RESULTADO_TRADUCIR_LOCALIZACION";
 	public static final String AVISO_OBTENER_USUARIO = "tfg.android.fcg.AVISO_OBTENER_USUARIO";
 	public static final String AVISO_DESLOGIN = "tfg.android.fcg.AVISO_DESLOGIN";
@@ -140,12 +141,13 @@ public class AppMediador extends Application {
 	public static final String CLAVE_OBTENER_CONDUCTOR = "tfg.android.fcg.CLAVE_OBTENER_CONDUCTOR";
 	public static final String CLAVE_OBTENER_PASAJERO = "tfg.android.fcg.CLAVE_OBTENER_PASAJERO";
 	public static final String CLAVE_RESULTADO_LOCALIZACION_GUARDADA = "tfg.android.fcg.CLAVE_RESULTADO_LOCALIZACION_GUARDADA";
+	public static final String CLAVE_RESULTADO_LOCALIZACION_ELIMINADA = "tfg.android.fcg.CLAVE_RESULTADO_LOCALIZACION_ELIMINADA";
+	public static final String CLAVE_RESULTADO_TRADUCIR_LOCALIZACION = "tfg.android.fcg.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION";
 	public static final String CLAVE_HISTORIAL = "tfg.android.fcg.CLAVE_HISTORIAL";
 	public static final String CLAVE_VALORACION = "tfg.android.fcg.CLAVE_VALORACION";
 	public static final String CLAVE_RESULTADO_ELIMINAR_HISTORIAL = "tfg.android.fcg.CLAVE_RESULTADO_ELIMINAR_HISTORIAL";
 	public static final String CLAVE_LATITUD = "tfg.android.fcg.CLAVE_LATITUD";
 	public static final String CLAVE_LONGITUD = "tfg.android.fcg.CLAVE_LONGITUD";
-	public static final String CLAVE_RESULTADO_TRADUCIR_LOCALIZACION = "tfg.android.fcg.CLAVE_RESULTADO_TRADUCIR_LOCALIZACION";
 	public static final String CLAVE_OBTENER_USUARIO = "tfg.android.fcg.CLAVE_OBTENER_USUARIO";
 	public static final String CLAVE_DESLOGIN = "tfg.android.fcg.CLAVE_DESLOGIN";
 

@@ -31,7 +31,7 @@ import tfg.android.fcg.presentador.IPresentadorPerfil;
 
 public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View.OnClickListener {
 
-    private Button botonHistorial;
+    private Button botonHistorial, botonAyuda;
     private FloatingActionButton botonEditar, botonGuardarPerfil, botonEliminarPerfil;
     private TextView nombre,telefono,email,password,marca,modelo,matricula, guardarPerfilTitle, eliminarPerfilTitle;
     private EditText editNombre, editTelefono, editEmail, editPass, editMarca, editModelo, editMatricula;
@@ -80,6 +80,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
         botonGuardarPerfil = (FloatingActionButton) findViewById(R.id.guardarPerfil);
         botonEliminarPerfil = (FloatingActionButton) findViewById(R.id.eliminarPerfil);
         botonHistorial = (Button) findViewById(R.id.regisHistorialButton);
+        botonAyuda = (Button) findViewById(R.id.ayudaButton);
         modoConductor = (Switch) findViewById(R.id.modoConductor);
 
         nombre = (TextView) findViewById(R.id.marcaRegistro);
@@ -155,6 +156,9 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
                 break;
             case R.id.eliminarPerfil:
                 presentadorPerfil.tratarPapelera(4);
+                break;
+            case R.id.ayudaButton:
+                Toast.makeText(getApplicationContext(), "Ayuda para el usuario como Dialogo", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

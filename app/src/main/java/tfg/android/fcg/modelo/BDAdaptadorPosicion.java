@@ -85,6 +85,29 @@ public class BDAdaptadorPosicion {
         });
     }
 
+    public void eliminarPosicion(Object informacion){
+        String idUser = (String) informacion;
+
+        database.child(idUser).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Log.i(TAG, "Eliminada posicion usuario correctamente");
+
+                    Bundle extras = new Bundle();
+                    extras.putBoolean(AppMediador.CLAVE_RESULTADO_LOCALIZACION_ELIMINADA,true);
+                    appMediador.sendBroadcast(AppMediador.AVISO_LOCALIZACION_ELIMINADA,extras);
+                }else{
+                    Log.i(TAG,"Error a la hora de eliminar posicion");
+
+                    Bundle extras = new Bundle();
+                    extras.putBoolean(AppMediador.CLAVE_RESULTADO_LOCALIZACION_ELIMINADA,false);
+                    appMediador.sendBroadcast(AppMediador.AVISO_LOCALIZACION_ELIMINADA,extras);
+                }
+            }
+        });
+    }
+
     /**
      * Modifica en la tabla Posición una latitud y longitud de un usuario determinado.
      * @param informacion
