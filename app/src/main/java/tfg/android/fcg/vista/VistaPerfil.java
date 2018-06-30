@@ -31,7 +31,7 @@ import tfg.android.fcg.presentador.IPresentadorPerfil;
 
 public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View.OnClickListener {
 
-    private Button botonOrigen, botonHistorial;
+    private Button botonHistorial;
     private FloatingActionButton botonEditar, botonGuardarPerfil, botonEliminarPerfil;
     private TextView nombre,telefono,email,password,marca,modelo,matricula, guardarPerfilTitle, eliminarPerfilTitle;
     private EditText editNombre, editTelefono, editEmail, editPass, editMarca, editModelo, editMatricula;
@@ -80,7 +80,6 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
         botonGuardarPerfil = (FloatingActionButton) findViewById(R.id.guardarPerfil);
         botonEliminarPerfil = (FloatingActionButton) findViewById(R.id.eliminarPerfil);
         botonHistorial = (Button) findViewById(R.id.regisHistorialButton);
-        botonOrigen = (Button) findViewById(R.id.origenButton);
         modoConductor = (Switch) findViewById(R.id.modoConductor);
 
         nombre = (TextView) findViewById(R.id.marcaRegistro);
@@ -151,13 +150,11 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
             case R.id.regisHistorialButton:
                 presentadorPerfil.tratarHistorial();
                 break;
-            case R.id.origenButton:
-                break;
             case R.id.guardarPerfil:
                 presentadorPerfil.tratarGuardar(2);
                 break;
             case R.id.eliminarPerfil:
-                presentadorPerfil.tratarEliminarPerfil(3);
+                presentadorPerfil.tratarPapelera(4);
                 break;
         }
     }
@@ -274,6 +271,32 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
                 dialogo = dialogBuild.create();
                 dialogo.show();
                 break;
+            case 4:
+                dialogBuild.setTitle("¡ATENCIÓN!");
+                dialogBuild.setMessage("Esta a punto de eliminar su cuenta en WipeCar. Esta acción no puede ser deshecha. ¿Esta seguro?");
+                dialogBuild.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(obtenerNuevoPerfil() != null) {
+                            Object[] perfil = new Object[3];
+                            perfil[0] = user.getIdUser();
+                            perfil[1] = email.getText().toString();
+                            perfil[2] = password.getText().toString();
+                            presentadorPerfil.tratarEliminarPerfil(perfil);
+                        }else{
+                            cerrarDialogo();
+                        }
+                    }
+                });
+                dialogBuild.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cerrarDialogo();
+                    }
+                });
+                dialogo = dialogBuild.create();
+                dialogo.show();
+                break;
         }
     }
 
@@ -305,6 +328,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
         showFabButtons();
     }
 
+    //TODO: NUEVO, REDACCION
     @Override
     public void salirEdicion(){
         Log.i(TAG,"Salir modo Edicion");
@@ -395,7 +419,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
     private void hideFabButtons(){
         guardarPerfilTitle.setVisibility(View.INVISIBLE);
         eliminarPerfilTitle.setVisibility(View.INVISIBLE);
-        
+
         botonGuardarPerfil.startAnimation(hide_guardar);
         botonEliminarPerfil.startAnimation(hide_eliminar);
 

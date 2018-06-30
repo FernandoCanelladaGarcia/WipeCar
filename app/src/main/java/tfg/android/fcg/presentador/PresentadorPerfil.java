@@ -3,6 +3,7 @@ package tfg.android.fcg.presentador;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import tfg.android.fcg.AppMediador;
@@ -11,6 +12,7 @@ import tfg.android.fcg.modelo.Modelo;
 import tfg.android.fcg.modelo.Usuario;
 import tfg.android.fcg.modelo.Vehiculo;
 import tfg.android.fcg.vista.VistaHistorial;
+import tfg.android.fcg.vista.VistaLogin;
 import tfg.android.fcg.vista.VistaPerfil;
 import tfg.android.fcg.vista.VistaVehiculo;
 
@@ -23,6 +25,7 @@ public class PresentadorPerfil implements IPresentadorPerfil {
     private Vehiculo vehiculo;
     private Object[] perfil;
     private Object[] datoVehiculo;
+    private SharedPreferences sharedPreferences;
     private final static String TAG = "depurador";
 
     public PresentadorPerfil() {
@@ -31,6 +34,7 @@ public class PresentadorPerfil implements IPresentadorPerfil {
         vistaPerfil = (VistaPerfil) appMediador.getVistaPerfil();
         perfil = new Object[13];
         datoVehiculo = new Object[13];
+        sharedPreferences = appMediador.getSharedPreferences("Login", 0);
     }
 
     private BroadcastReceiver receptorDeAvisos = new BroadcastReceiver() {
@@ -72,6 +76,17 @@ public class PresentadorPerfil implements IPresentadorPerfil {
                 appMediador.unRegisterReceiver(this);
                 Log.i(TAG,"Datos vehiculo actualizado con exito");
                 vistaPerfil.cerrarProgreso();
+            }
+            if (intent.getAction().equals(AppMediador.AVISO_ELIMINAR_USUARIO)){
+                appMediador.unRegisterReceiver(this);
+                Log.i(TAG, "Usuario eliminado con exito");
+                vistaPerfil.cerrarProgreso();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.apply();
+                Log.i(TAG, "Limpiado de Shared Preferences");
+                appMediador.launchActivity(VistaLogin.class,this,null);
+                vistaPerfil.finish();
             }
         }
     };
@@ -151,13 +166,15 @@ public class PresentadorPerfil implements IPresentadorPerfil {
     //TODO: NUEVO, REDACCION
     @Override
     public void tratarPapelera(Object informacion) {
-
+        vistaPerfil.mostrarDialogo(informacion);
     }
 
 
     @Override
     public void tratarEliminarPerfil(Object informacion) {
-
+        vistaPerfil.mostrarProgreso();
+        appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_ELIMINAR_USUARIO);
+        modelo.eliminarPerfil((Object[])informacion);
     }
 
 

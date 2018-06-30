@@ -96,35 +96,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailPerfil" />
 
-    <Button
-        android:id="@+id/origenButton"
-        android:layout_width="220dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="50dp"
-        android:background="@color/botones"
-        android:fontFamily="@font/ubuntu_medium"
-        android:text="Origen"
-        android:textColor="@color/texto_borde"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.045"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordPerfil" />
-
     <Spinner
         android:id="@+id/destino"
         android:layout_width="220dp"
-        android:layout_height="41dp"
+        android:layout_height="45dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="30dp"
         android:entries="@array/destinos"
         android:fontFamily="@font/ubuntu_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.045"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/origenButton" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
     <Button
         android:id="@+id/regisHistorialButton"
@@ -361,9 +345,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/include"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@android:drawable/ic_menu_edit" />
-
-        <include
-            android:id="@+id/include"
-            layout="@layout/fab_layout" />
-
+    <include
+        android:id="@+id/include"
+        layout="@layout/fab_layout" />
 </android.support.constraint.ConstraintLayout>
