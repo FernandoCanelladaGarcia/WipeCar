@@ -35,7 +35,6 @@ public class VistaHistorial extends AppCompatActivity implements IVistaHistorial
     private ProgressDialog dialogoProgreso;
     private AlertDialog dialogo;
 
-    private LinearLayoutManager layoutManager;
     private AdapterHistorialLista adaptador;
     private List<Historial> listaHistorial;
     private String idUser;
@@ -54,8 +53,6 @@ public class VistaHistorial extends AppCompatActivity implements IVistaHistorial
 
         botonSalir = (Button) findViewById(R.id.botonSalirHistorial);
         botonSalir.setOnClickListener(this);
-
-        layoutManager = new LinearLayoutManager(VistaHistorial.this);
 
         SharedPreferences sharedPreferences = appMediador.getSharedPreferences("login",0);
         idUser = sharedPreferences.getString("idUser",null);
@@ -106,17 +103,32 @@ public class VistaHistorial extends AppCompatActivity implements IVistaHistorial
                 break;
             case 1:
                 CharSequence[] values = {"0","1","2","3","4","5"};
-                dialogBuild.setTitle("Valore al usuario");
+                dialogBuild.setTitle("Valoración del usuario");
                 dialogBuild.setSingleChoiceItems(values, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
-                        Toast.makeText(appMediador.getApplicationContext(),i,Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(appMediador.getApplicationContext(),i,Toast.LENGTH_SHORT).show();
+                        presentadorHistorial.tratarValoracion(i);
                         cerrarDialogo();
                     }
                 });
                 dialogo = dialogBuild.create();
                 dialogo.show();
                 break;
+            case 2:
+                dialogBuild.setTitle("Eliminar Historial");
+                dialogBuild.setMessage("¿Esta seguro?");
+                dialogBuild.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cerrarDialogo();
+                        presentadorHistorial.eliminarHistorial();
+                    }
+                });
+                dialogo = dialogBuild.create();
+                dialogo.show();
+                break;
+
         }
     }
 

@@ -84,9 +84,11 @@ public class AdapterHistorialLista extends BaseAdapter{
                         switch (id){
                             case R.id.eliminarHistorial:
                                 Toast.makeText(contexto,"Eliminar Historial", Toast.LENGTH_SHORT).show();
+                                Object[] datos = new Object[]{historial.getIdPasajero(),historial.getIdConductor()};
+                                appMediador.getPresentadorHistorial().tratarEliminar(datos);
                                 break;
                             case R.id.agregarValoracion:
-                                Toast.makeText(contexto,"Agregar Valoracion", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(contexto,"Agregar Valoracion", Toast.LENGTH_SHORT).show();
                                 if(idUser == historial.getIdPasajero()){
                                     appMediador.getPresentadorHistorial().tratarValoracion(historial.getIdConductor());
                                 }else{

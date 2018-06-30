@@ -125,6 +125,12 @@ public interface IModelo {
     public void asignarValoracion(Object[] informacion);
 
     /**
+     * Elimina de la base de datos la informacion relacionada con un viaje realizado por el usuario.
+     * @param informacion contendra:
+     */
+    public void eliminarHistorial(Object informacion);
+
+    /**
      * Almacena en la base de datos la localización de un usuario.
      * @param informacion contendra:
      */

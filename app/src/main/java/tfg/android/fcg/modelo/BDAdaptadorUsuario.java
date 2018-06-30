@@ -336,7 +336,7 @@ public class BDAdaptadorUsuario {
 
         String[] loginUsuario = new String[]{(String) informacion[1], (String) informacion[2], (String) informacion[3], (String) informacion[4], (String) informacion[7]};
         String[] origenDestino = new String[]{(String) informacion[5], (String) informacion[6]};
-        String valoracion = (String) informacion[11];
+        String[] valoracion = new String[]{(String) informacion[11],(String)informacion[12]};
         String[] fechaYHora = new String[]{(String) informacion[9], (String) informacion[10]};
         String datoVehiculo = (String) informacion[8];
 
@@ -768,34 +768,50 @@ public class BDAdaptadorUsuario {
         });
     }
 
-    private void actualizarValoracion(String informacion) {
-        final Object[] datos = new Object[2];
-        usuarioActual = auth.getCurrentUser();
-        String idUsuario = usuarioActual.getUid();
-        DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(idUsuario);
-        Map<String, Object> taskMap = new HashMap<>();
-        taskMap.put("valoracion", informacion);
+    private void actualizarValoracion(String[] informacion) {
+        String idUserValorar = informacion[0];
+        final float valoracion = Float.parseFloat(informacion[1]);
+        DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(idUserValorar);
 
-
-        referenciaUsuario.updateChildren(taskMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+        referenciaUsuario.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    //Actualizacion valoracion
-                    Bundle extras = new Bundle();
-                    datos[0] = true;
-                    datos[1] = "valoracion";
-                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
-                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
-                } else {
-                    //Error de actualizacion valoracion
-                    Bundle extras = new Bundle();
-                    String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_VALORACION;
-                    datos[0] = true;
-                    datos[1] = error;
-                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
-                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                usuario = dataSnapshot.getValue(Usuario.class);
+                float valoracionActual = 0;
+                if(usuario.getValoracion() != null){
+                    float valoracionUsuario = Float.parseFloat(usuario.getValoracion());
+                    valoracionActual = (valoracion + valoracionUsuario)/2;
+                }else{
+                    valoracionActual = valoracion;
                 }
+                dataSnapshot.getRef().child("valoracion").setValue(valoracionActual).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            //Actualizacion valoracion
+                            Bundle extras = new Bundle();
+                            Object[] datos = new Object[2];
+                            datos[0] = true;
+                            datos[1] = "valoracion";
+                            extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
+                            appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
+                        } else {
+                            //Error de actualizacion valoracion
+                            Bundle extras = new Bundle();
+                            Object[] datos = new Object[2];
+                            String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_VALORACION;
+                            datos[0] = true;
+                            datos[1] = error;
+                            extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
+                            appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

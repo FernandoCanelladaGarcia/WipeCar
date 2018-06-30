@@ -24,6 +24,17 @@ public interface IPresentadorHistorial {
     public void tratarValoracion(Object informacion);
 
     /**
+     * Comprueba la eliminacion del usuario sobre la referencia del vinculo del historial
+     * @param informacion contendra:
+     */
+    public void tratarEliminar(Object informacion);
+    /**
+     * Elimina de la tabla Historial la referencia de un vinculo
+     * realizado por el usuario de la aplicación
+     */
+    public void eliminarHistorial();
+
+    /**
      * Realiza los operaciones oportunas para obtener
      * la información necesaria para cargar más datos en la lista
      * de conductores y pasajeros que han realizado un viaje con el usuario.

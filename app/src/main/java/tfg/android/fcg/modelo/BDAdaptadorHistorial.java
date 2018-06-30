@@ -181,6 +181,7 @@ public class BDAdaptadorHistorial {
     //AGREGA VALORACION A AMBOS USUARIOS CUANDO DEBERIA AGREGAR VALORACION
     //EN LA TABLA DE USUARIOS, SOBRE EL USUARIO AL QUE VALORA.
     //NO HAY QUE ACCEDER A HISTORIAL, SINO A USUARIO.
+    //TODO: REDACTAR, NO SE USA.
 
     public void agregarValoracion(String[] informacion){
     //Informacion => 0 idPasajero, 1 idConductor, 2 valorPasajero, 3 valorConductor.

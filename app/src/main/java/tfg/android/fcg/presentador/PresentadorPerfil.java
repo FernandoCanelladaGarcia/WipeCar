@@ -158,6 +158,7 @@ public class PresentadorPerfil implements IPresentadorPerfil {
 
     }
 
+    //TODO: NO SE USA, REDACCION
     @Override
     public void tratarAyuda(Object informacion) {
 
@@ -177,7 +178,7 @@ public class PresentadorPerfil implements IPresentadorPerfil {
         modelo.eliminarPerfil((Object[])informacion);
     }
 
-
+    //TODO: NO SE USA, REDACCION
     @Override
     public void tratarConductor(Object informacion) {
 

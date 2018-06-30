@@ -331,6 +331,12 @@ public class Modelo implements IModelo{
     }
 
     @Override
+    public void eliminarHistorial(Object informacion) {
+        Object[] datos = (Object[])informacion;
+        adaptadorHistorial.eliminarHistorial((String)datos[0],(String)datos[1]);
+    }
+
+    @Override
     public void guardarLocalizacion(Object[] informacion) {
         int tarea = (int) informacion[3];
         LatLng miLatlng = new LatLng((Double)informacion[1],(Double)informacion[2]);

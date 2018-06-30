@@ -20,8 +20,8 @@ public class PresentadorHistorial implements IPresentadorHistorial{
     private IModelo modelo;
     private AppMediador appMediador;
     private VistaHistorial vistaHistorial;
-    private String idUserValorar;
-
+    private String idUserValorar, idUser;
+    private Object[] datosHistorial;
     private final static String TAG = "depurador";
 
     public PresentadorHistorial(){
@@ -63,13 +63,19 @@ public class PresentadorHistorial implements IPresentadorHistorial{
                 Log.i(TAG,"Salir");
                 appMediador.launchActivity(VistaLogin.class,this,null);
             }
+            if(intent.getAction().equals(AppMediador.AVISO_ELIMINAR_HISTORIAL)){
+                appMediador.unRegisterReceiver(this);
+                vistaHistorial.cerrarProgreso();
+                Log.i(TAG,"Historial eliminado");
+                iniciar(idUser);
+            }
         }
     };
 
     @Override
     public void iniciar(Object informacion) {
         vistaHistorial.mostrarProgreso();
-        String idUser = (String) informacion;
+        idUser = (String) informacion;
         appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_HISTORIAL);
         modelo.obtenerHistorial(idUser);
     }
@@ -82,9 +88,28 @@ public class PresentadorHistorial implements IPresentadorHistorial{
 
     @Override
     public void tratarValoracion(Object informacion) {
-
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_ACTUALIZACION_USUARIO);
+        Object[] datos = new Object[13];
+        datos[0] = 3;
+        datos[11] = idUserValorar;
+        datos[12] = informacion;
+        modelo.guardarPerfil(datos);
     }
 
+    @Override
+    public void tratarEliminar(Object informacion){
+        vistaHistorial.mostrarDialogo(3);
+        datosHistorial = (Object[]) informacion;
+    }
+    //TODO: EDITADO, REDACCION
+    @Override
+    public void eliminarHistorial() {
+        vistaHistorial.mostrarProgreso();
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_ELIMINAR_HISTORIAL);
+        modelo.eliminarHistorial(datosHistorial);
+    }
+
+    //TODO: NO SE USA, REDACCION
     @Override
     public void tratarCarga(Object informacion) {
 
