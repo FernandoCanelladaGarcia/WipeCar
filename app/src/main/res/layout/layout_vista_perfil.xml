@@ -146,22 +146,6 @@
         app:layout_constraintTop_toBottomOf="@+id/matriculaTitle"
         app:layout_constraintVertical_bias="1.0" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/editButton"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:clickable="true"
-        android:onClick="onClick"
-        app:backgroundTint="@color/texto_borde"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.798"
-        app:layout_constraintStart_toEndOf="@+id/regisHistorialButton"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
-
     <Switch
         android:id="@+id/modoConductor"
         android:layout_width="215dp"
@@ -363,39 +347,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextModelo" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/guardarPerfil"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginBottom="12dp"
-        android:layout_marginEnd="6dp"
-        android:layout_marginStart="8dp"
-        android:clickable="true"
-        android:onClick="onClick"
-        android:visibility="invisible"
-        app:backgroundTint="@color/background2"
-        app:layout_constraintBottom_toTopOf="@+id/editButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.675"
-        app:layout_constraintStart_toEndOf="@+id/matriculaTitle"
-        app:srcCompat="@android:drawable/ic_menu_save" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/editButton"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:backgroundTint="@color/texto_borde"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@+id/include"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@android:drawable/ic_menu_edit" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/eliminarPerfil"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginBottom="12dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:clickable="true"
-        android:onClick="onClick"
-        android:visibility="invisible"
-        app:backgroundTint="@color/background2"
-        app:layout_constraintBottom_toTopOf="@+id/guardarPerfil"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.682"
-        app:layout_constraintStart_toEndOf="@+id/modeloTitle"
-        app:srcCompat="@android:drawable/ic_menu_delete" />
-
+        <include
+            android:id="@+id/include"
+            layout="@layout/fab_layout" />
 
 </android.support.constraint.ConstraintLayout>

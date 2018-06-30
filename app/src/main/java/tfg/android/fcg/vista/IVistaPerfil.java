@@ -29,6 +29,11 @@ public interface IVistaPerfil {
     public void prepararEdicion();
 
     /**
+     * Configura la vista para salir de la edición de los datos del usuario.
+     */
+    public void salirEdicion();
+
+    /**
      * Muestra los datos de perfil del usuario en la pantalla
      * @param informacion contendra:
      */

@@ -98,6 +98,10 @@ public class PresentadorPerfil implements IPresentadorPerfil {
                 vistaPerfil.mostrarProgreso();
                 vistaPerfil.prepararEdicion();
                 break;
+            case 2:
+                vistaPerfil.mostrarProgreso();
+                vistaPerfil.salirEdicion();
+                break;
         }
     }
 
@@ -144,6 +148,7 @@ public class PresentadorPerfil implements IPresentadorPerfil {
 
     }
 
+    //TODO: NUEVO, REDACCION
     @Override
     public void tratarPapelera(Object informacion) {
 

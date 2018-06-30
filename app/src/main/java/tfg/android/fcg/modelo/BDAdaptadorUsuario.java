@@ -363,8 +363,8 @@ public class BDAdaptadorUsuario {
                 Log.i(TAG, "actualizar datos vehiculo");
                 actualizarDatosVehiculo(datoVehiculo);
             default:
-                Log.i(TAG, "NO HAY TAREA == " + informacion[0]);
-                return;
+                Log.i(TAG, "TAREA == " + informacion[0]);
+                //return;
         }
 //TODO EN CASO DE ALGUN PROBLEMA. CODIGO MUERTO DE LA SEPARACION DE ACTUALIZARUSUARIO
 

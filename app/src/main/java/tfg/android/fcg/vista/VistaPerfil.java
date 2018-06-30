@@ -9,9 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +33,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
 
     private Button botonOrigen, botonHistorial;
     private FloatingActionButton botonEditar, botonGuardarPerfil, botonEliminarPerfil;
-    private TextView nombre,telefono,email,password,marca,modelo,matricula;
+    private TextView nombre,telefono,email,password,marca,modelo,matricula, guardarPerfilTitle, eliminarPerfilTitle;
     private EditText editNombre, editTelefono, editEmail, editPass, editMarca, editModelo, editMatricula;
     private Switch modoConductor;
     private ProgressDialog dialogoProgreso;
@@ -41,9 +44,14 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
     private SharedPreferences sharedPreferences;
     private IPresentadorPerfil presentadorPerfil;
     private Object[] perfil;
-    private boolean datosVehiculo;
+    private boolean fabAbierto, datosVehiculo;
     private String datoVehiculo;
     private final static String TAG = "depurador";
+
+    private Animation show_guardar;
+    private Animation hide_guardar;
+    private Animation show_eliminar;
+    private Animation hide_eliminar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +64,17 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
 
         mostrarProgreso();
 
+        fabAbierto = false;
         datosVehiculo = false;
         datoVehiculo = "";
+
+        show_guardar = AnimationUtils.loadAnimation(this,R.anim.guardar_show);
+        hide_guardar = AnimationUtils.loadAnimation(this,R.anim.guardar_hide);
+        show_eliminar = AnimationUtils.loadAnimation(this,R.anim.eliminar_show);
+        hide_eliminar = AnimationUtils.loadAnimation(this,R.anim.eliminar_hide);
+
+        guardarPerfilTitle = (TextView) findViewById(R.id.guardarPerfilTitle);
+        eliminarPerfilTitle = (TextView) findViewById(R.id.eliminarPerfilTitle);
 
         botonEditar = (FloatingActionButton) findViewById(R.id.editButton);
         botonGuardarPerfil = (FloatingActionButton) findViewById(R.id.guardarPerfil);
@@ -125,7 +142,11 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.editButton:
-                presentadorPerfil.tratarEditar(1);
+                if(!fabAbierto){
+                    presentadorPerfil.tratarEditar(1);
+                }else{
+                    presentadorPerfil.tratarEditar(3);
+                }
                 break;
             case R.id.regisHistorialButton:
                 presentadorPerfil.tratarHistorial();
@@ -136,6 +157,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
                 presentadorPerfil.tratarGuardar(2);
                 break;
             case R.id.eliminarPerfil:
+                presentadorPerfil.tratarEliminarPerfil(3);
                 break;
         }
     }
@@ -191,7 +213,6 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         presentadorPerfil.tratarOk(1);
-                        botonEditar.setEnabled(false);
                         botonHistorial.setEnabled(false);
                     }
                 });
@@ -213,9 +234,33 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
                         if(obtenerNuevoPerfil() != null) {
                             presentadorPerfil.tratarGuardarPerfil(obtenerNuevoPerfil());
                             botonEditar.setEnabled(true);
+                            hideFabButtons();
                         }else{
                             Toast.makeText(getApplicationContext(),
                                     "No ha introducido cambios", Toast.LENGTH_SHORT).show();
+                            cerrarDialogo();
+                        }
+                    }
+                });
+                dialogBuild.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cerrarDialogo();
+                    }
+                });
+                dialogo = dialogBuild.create();
+                dialogo.show();
+                break;
+            case 3:
+                dialogBuild.setTitle("Modo Edición");
+                dialogBuild.setMessage("¿Desea cancelar su edicion?");
+                dialogBuild.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(obtenerNuevoPerfil() != null) {
+                            presentadorPerfil.tratarOk(2);
+                            hideFabButtons();
+                        }else{
                             cerrarDialogo();
                         }
                     }
@@ -240,6 +285,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
     @Override
     public void prepararEdicion() {
         Log.i(TAG,"Modo Edicion");
+        fabAbierto = true;
         nombre.setVisibility(View.INVISIBLE);
         telefono.setVisibility(View.INVISIBLE);
         email.setVisibility(View.INVISIBLE);
@@ -255,10 +301,31 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
         editModelo.setVisibility(View.VISIBLE);
         editMarca.setVisibility(View.VISIBLE);
         editMatricula.setVisibility(View.VISIBLE);
-        botonGuardarPerfil.setVisibility(View.VISIBLE);
-        botonEliminarPerfil.setVisibility(View.VISIBLE);
-        botonHistorial.setEnabled(false);
         cerrarProgreso();
+        showFabButtons();
+    }
+
+    @Override
+    public void salirEdicion(){
+        Log.i(TAG,"Salir modo Edicion");
+        fabAbierto = false;
+        nombre.setVisibility(View.VISIBLE);
+        telefono.setVisibility(View.VISIBLE);
+        email.setVisibility(View.VISIBLE);
+        password.setVisibility(View.VISIBLE);
+        modelo.setVisibility(View.VISIBLE);
+        marca.setVisibility(View.VISIBLE);
+        matricula.setVisibility(View.VISIBLE);
+
+        editNombre.setVisibility(View.INVISIBLE);
+        editTelefono.setVisibility(View.INVISIBLE);
+        editEmail.setVisibility(View.INVISIBLE);
+        editPass.setVisibility(View.INVISIBLE);
+        editModelo.setVisibility(View.INVISIBLE);
+        editMarca.setVisibility(View.INVISIBLE);
+        editMatricula.setVisibility(View.INVISIBLE);
+        cerrarProgreso();
+        hideFabButtons();
     }
 
     @Override
@@ -312,5 +379,27 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
             return null;
         }
         return perfil;
+    }
+
+    private void showFabButtons(){
+        botonGuardarPerfil.setVisibility(View.VISIBLE);
+        botonEliminarPerfil.setVisibility(View.VISIBLE);
+
+        botonGuardarPerfil.startAnimation(show_guardar);
+        botonEliminarPerfil.startAnimation(show_eliminar);
+
+        guardarPerfilTitle.setVisibility(View.VISIBLE);
+        eliminarPerfilTitle.setVisibility(View.VISIBLE);
+    }
+
+    private void hideFabButtons(){
+        guardarPerfilTitle.setVisibility(View.INVISIBLE);
+        eliminarPerfilTitle.setVisibility(View.INVISIBLE);
+        
+        botonGuardarPerfil.startAnimation(hide_guardar);
+        botonEliminarPerfil.startAnimation(hide_eliminar);
+
+        botonGuardarPerfil.setVisibility(View.INVISIBLE);
+        botonEliminarPerfil.setVisibility(View.INVISIBLE);
     }
 }
