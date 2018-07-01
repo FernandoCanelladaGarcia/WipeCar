@@ -5,6 +5,9 @@ import android.app.TabActivity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,12 +18,15 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
 import tfg.android.fcg.modelo.Usuario;
 import tfg.android.fcg.presentador.IPresentadorPrincipal;
 import tfg.android.fcg.vista.adaptadores.AdapterPrincipalLista;
+import tfg.android.fcg.vista.fragmentos.FragmentoPrincipalLista;
+import tfg.android.fcg.vista.fragmentos.FragmentoPrincipalMapa;
 
 public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal, View.OnClickListener{
 
@@ -51,38 +57,25 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
         Boolean rol = sharedPreferences.getBoolean("rol",false);
 
-//        viewPager = (ViewPager) findViewById(R.id.viewPagerPrincipal);
-//        setUpViewPager(viewPager);
-//
-//        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-//        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-//                viewPager.setCurrentItem(tab.getPosition());
-//                switch (tab.getPosition()){
-//                    case 0:
-//                        //PickUp
-//                        break;
-//                    case 1:
-//                        //OnTheGo
-//                        break;
-//                }
-//            }
-//
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//
-//            }
-//        });
+        setUpViewPager(rol);
     }
 
-    private void setUpViewPager(ViewPager viewPager){
+    private void setUpViewPager(boolean rol){
+        viewPager = (ViewPager) findViewById(R.id.viewPagerPrincipal);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        if(rol){
+            adapter.addFragment(new FragmentoPrincipalLista(), "Pick Up Conductor");
+            adapter.addFragment(new FragmentoPrincipalMapa(), "On The Go Conductor");
+            Log.i(TAG,"Vista principal - Modo conductor");
+        }else{
+            adapter.addFragment(new FragmentoPrincipalLista(), "Pick Up Pasajero");
+            adapter.addFragment(new FragmentoPrincipalMapa(), "On The Go Pasajero");
+            Log.i(TAG,"Vista principal - Modo pasajero");
+        }
+        viewPager.setAdapter(adapter);
 
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -149,5 +142,35 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     public void onDestroy(){
         super.onDestroy();
         appMediador.removePresentadorPrincipal();
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter{
+
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title){
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 }

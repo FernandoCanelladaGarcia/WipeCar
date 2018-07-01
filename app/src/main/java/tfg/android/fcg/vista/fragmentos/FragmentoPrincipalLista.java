@@ -20,29 +20,19 @@ import tfg.android.fcg.vista.adaptadores.AdapterPrincipalLista;
 
 public class FragmentoPrincipalLista extends Fragment{
 
-//    private AppMediador appMediador;
-//
-//    private View rootView;
-//    private ListView listView;
-//    private TextView nombreUsuario, direccion, fecha;
-//    private ImageView icono;
-//    private ImageButton opciones;
-//
-//    private final String TAG = "depurador";
-//
-//    private ArrayList<Usuario> listaUsuarios;
-//    private Usuario usuario;
-//    private AdapterPrincipalLista adaptador;
-//
-//    public FragmentoPrincipalLista(){
-//        setRetainInstance(true);
-//    }
-//
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-//        Log.i(TAG,"FragmentoPrincipalLista - onCreateView");
-//        appMediador = AppMediador.getInstance();
-//        //TODO: OJO EL LAYOUT!!
-//        return inflater.inflate(R.layout.layout_vista_principal,container,false);
-//    }
+    public FragmentoPrincipalLista(){
+
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_pickup, container, false);
+    }
 }

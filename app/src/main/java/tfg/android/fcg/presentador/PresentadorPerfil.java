@@ -76,6 +76,7 @@ public class PresentadorPerfil implements IPresentadorPerfil {
                 appMediador.unRegisterReceiver(this);
                 Log.i(TAG,"Datos vehiculo actualizado con exito");
                 vistaPerfil.cerrarProgreso();
+                vistaPerfil.salirEdicion();
             }
             if (intent.getAction().equals(AppMediador.AVISO_ELIMINAR_USUARIO)){
                 appMediador.unRegisterReceiver(this);

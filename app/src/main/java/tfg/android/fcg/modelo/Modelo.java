@@ -240,7 +240,7 @@ public class Modelo implements IModelo{
 
     @Override
     public void guardarOrigenYDestino(Object[] informacion) {
-        Object[] datos = new Object[12];
+        Object[] datos = new Object[13];
         datos[0] = 1;
         datos[5] = informacion[0];
         datos[6] = informacion[1];

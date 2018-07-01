@@ -33,7 +33,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
 
     private Button botonHistorial, botonAyuda;
     private FloatingActionButton botonEditar, botonGuardarPerfil, botonEliminarPerfil;
-    private TextView nombre,telefono,email,password,marca,modelo,matricula, guardarPerfilTitle, eliminarPerfilTitle;
+    private TextView nombre, telefono, email, password, marca, modelo, matricula, guardarPerfilTitle, eliminarPerfilTitle;
     private EditText editNombre, editTelefono, editEmail, editPass, editMarca, editModelo, editMatricula;
     private Switch modoConductor;
     private ProgressDialog dialogoProgreso;
@@ -68,10 +68,10 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
         datosVehiculo = false;
         datoVehiculo = "";
 
-        show_guardar = AnimationUtils.loadAnimation(this,R.anim.guardar_show);
-        hide_guardar = AnimationUtils.loadAnimation(this,R.anim.guardar_hide);
-        show_eliminar = AnimationUtils.loadAnimation(this,R.anim.eliminar_show);
-        hide_eliminar = AnimationUtils.loadAnimation(this,R.anim.eliminar_hide);
+        show_guardar = AnimationUtils.loadAnimation(this, R.anim.guardar_show);
+        hide_guardar = AnimationUtils.loadAnimation(this, R.anim.guardar_hide);
+        show_eliminar = AnimationUtils.loadAnimation(this, R.anim.eliminar_show);
+        hide_eliminar = AnimationUtils.loadAnimation(this, R.anim.eliminar_hide);
 
         guardarPerfilTitle = (TextView) findViewById(R.id.guardarPerfilTitle);
         eliminarPerfilTitle = (TextView) findViewById(R.id.eliminarPerfilTitle);
@@ -99,52 +99,52 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
         editModelo = (EditText) findViewById(R.id.editTextModelo);
         editMatricula = (EditText) findViewById(R.id.editTextMatricula);
 
-        sharedPreferences = appMediador.getSharedPreferences("Login",0);
-        String idUser = sharedPreferences.getString("idUser",null);
+        sharedPreferences = appMediador.getSharedPreferences("Login", 0);
+        String idUser = sharedPreferences.getString("idUser", null);
         presentadorPerfil.iniciar(idUser);
-        email.setText(sharedPreferences.getString("email",null));
-        password.setText(sharedPreferences.getString("password",null));
+        email.setText(sharedPreferences.getString("email", null));
+        password.setText(sharedPreferences.getString("password", null));
 
-        boolean rol = sharedPreferences.getBoolean("rol",false);
+        boolean rol = sharedPreferences.getBoolean("rol", false);
         modoConductor.setChecked(rol);
         modoConductor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(user.getDatoVehiculo() != null){
+                if (user.getDatoVehiculo() != null) {
                     modoConductor.setChecked(isChecked);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean("rol",isChecked);
+                    editor.putBoolean("rol", isChecked);
                     editor.apply();
-                    if(isChecked){
+                    if (isChecked) {
                         Toast.makeText(getApplicationContext(), "MODO CONDUCTOR", Toast.LENGTH_SHORT).show();
-                    }else{
+                    } else {
                         Toast.makeText(getApplicationContext(), "MODO PASAJERO", Toast.LENGTH_SHORT).show();
                     }
-                }else if(!botonEditar.isEnabled()){
-                    if(isChecked){
+                } else if (!botonEditar.isEnabled()) {
+                    if (isChecked) {
                         Toast.makeText(getApplicationContext(), "MODO CONDUCTOR", Toast.LENGTH_SHORT).show();
                         perfil[7] = isChecked;
-                    }else{
+                    } else {
                         Toast.makeText(getApplicationContext(), "MODO PASAJERO", Toast.LENGTH_SHORT).show();
                         perfil[7] = isChecked;
                     }
-                }else{
+                } else {
                     mostrarDialogo(0);
                 }
             }
         });
-        editEmail.setText(sharedPreferences.getString("email",null));
-        editPass.setText(sharedPreferences.getString("password",null));
+        editEmail.setText(sharedPreferences.getString("email", null));
+        editPass.setText(sharedPreferences.getString("password", null));
         Log.i(TAG, "Vista Perfil");
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.editButton:
-                if(!fabAbierto){
+                if (!fabAbierto) {
                     presentadorPerfil.tratarEditar(1);
-                }else{
+                } else {
                     presentadorPerfil.tratarEditar(3);
                 }
                 break;
@@ -165,7 +165,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
 
     @Override
     public void mostrarProgreso() {
-        Log.i(TAG,"mostrar Progreso");
+        Log.i(TAG, "mostrar Progreso");
         dialogoProgreso = new ProgressDialog(this);
         dialogoProgreso.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialogoProgreso.setIndeterminate(true);
@@ -177,7 +177,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
 
     @Override
     public void cerrarProgreso() {
-        Log.i(TAG,"cerrar Progreso");
+        Log.i(TAG, "cerrar Progreso");
         dialogoProgreso.dismiss();
     }
 
@@ -185,7 +185,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
     public void mostrarDialogo(Object informacion) {
         int tarea = (int) informacion;
         AlertDialog.Builder dialogBuild = new AlertDialog.Builder(this);
-        switch (tarea){
+        switch (tarea) {
             case 0:
                 dialogBuild.setTitle("Modo Conductor");
                 dialogBuild.setMessage("Es la primera vez que cambia de modo. " +
@@ -232,11 +232,11 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
                 dialogBuild.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(obtenerNuevoPerfil() != null) {
+                        if (obtenerNuevoPerfil() != null) {
                             presentadorPerfil.tratarGuardarPerfil(obtenerNuevoPerfil());
                             botonEditar.setEnabled(true);
                             hideFabButtons();
-                        }else{
+                        } else {
                             Toast.makeText(getApplicationContext(),
                                     "No ha introducido cambios", Toast.LENGTH_SHORT).show();
                             cerrarDialogo();
@@ -258,10 +258,10 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
                 dialogBuild.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(obtenerNuevoPerfil() != null) {
+                        if (obtenerNuevoPerfil() != null) {
                             presentadorPerfil.tratarOk(2);
                             hideFabButtons();
-                        }else{
+                        } else {
                             cerrarDialogo();
                         }
                     }
@@ -281,15 +281,11 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
                 dialogBuild.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(obtenerNuevoPerfil() != null) {
-                            Object[] perfil = new Object[3];
-                            perfil[0] = user.getIdUser();
-                            perfil[1] = email.getText().toString();
-                            perfil[2] = password.getText().toString();
-                            presentadorPerfil.tratarEliminarPerfil(perfil);
-                        }else{
-                            cerrarDialogo();
-                        }
+                        Object[] perfil = new Object[3];
+                        perfil[0] = user.getIdUser();
+                        perfil[1] = email.getText().toString();
+                        perfil[2] = password.getText().toString();
+                        presentadorPerfil.tratarEliminarPerfil(perfil);
                     }
                 });
                 dialogBuild.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -311,7 +307,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
 
     @Override
     public void prepararEdicion() {
-        Log.i(TAG,"Modo Edicion");
+        Log.i(TAG, "Modo Edicion");
         fabAbierto = true;
         nombre.setVisibility(View.INVISIBLE);
         telefono.setVisibility(View.INVISIBLE);
@@ -334,8 +330,8 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
 
     //TODO: NUEVO, REDACCION
     @Override
-    public void salirEdicion(){
-        Log.i(TAG,"Salir modo Edicion");
+    public void salirEdicion() {
+        Log.i(TAG, "Salir modo Edicion");
         fabAbierto = false;
         nombre.setVisibility(View.VISIBLE);
         telefono.setVisibility(View.VISIBLE);
@@ -358,12 +354,12 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
 
     @Override
     public void prepararVista(Object informacion) {
-        Object[] info = (Object[])informacion;
-        user = (Usuario)info[0];
-        if(info[1] != ""){
+        Object[] info = (Object[]) informacion;
+        user = (Usuario) info[0];
+        if (info[1] != "") {
             datosVehiculo = true;
             datoVehiculo = (String) user.getDatoVehiculo();
-            vehiculo = (Vehiculo)info[1];
+            vehiculo = (Vehiculo) info[1];
             modelo.setText(vehiculo.getModelo());
             marca.setText(vehiculo.getMarca());
             matricula.setText(vehiculo.getMatricula());
@@ -384,32 +380,39 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
         appMediador.removePresentadorPerfil();
     }
 
-    private Object obtenerNuevoPerfil(){
+    private Object obtenerNuevoPerfil() {
         String[] partes = editEmail.getText().toString().split("@");
 
-        if(nombre.getText().toString() != editNombre.getText().toString()) {
+        if (nombre.getText().toString() != editNombre.getText().toString()) {
             perfil[0] = editNombre.getText().toString();
-        }if(telefono.getText().toString() != editTelefono.getText().toString()){
+        }
+        if (telefono.getText().toString() != editTelefono.getText().toString()) {
             perfil[1] = editTelefono.getText().toString();
-        }if(email.getText().toString() != editEmail.getText().toString() && partes[1].equals("alu.ulpgc.es") ){
+        }
+        if (email.getText().toString() != editEmail.getText().toString() && partes[1].equals("alu.ulpgc.es")) {
             perfil[2] = editEmail.getText().toString();
-        }if(password.getText().toString() != editPass.getText().toString()){
+        }
+        if (password.getText().toString() != editPass.getText().toString()) {
             perfil[3] = editPass.getText().toString();
-        }if(modelo.getText().toString() != editModelo.getText().toString()){
+        }
+        if (modelo.getText().toString() != editModelo.getText().toString()) {
             perfil[5] = editModelo.getText().toString();
-        }if(marca.getText().toString() != editMarca.getText().toString()){
+        }
+        if (marca.getText().toString() != editMarca.getText().toString()) {
             perfil[4] = editMarca.getText().toString();
-        }if(matricula.getText().toString() != editMatricula.getText().toString()) {
+        }
+        if (matricula.getText().toString() != editMatricula.getText().toString()) {
             perfil[6] = editMatricula.getText().toString();
-        }if(datoVehiculo != ""){
+        }
+        if (datoVehiculo != "") {
             perfil[8] = datoVehiculo;
-        }else{
+        } else {
             return null;
         }
         return perfil;
     }
 
-    private void showFabButtons(){
+    private void showFabButtons() {
         botonGuardarPerfil.setVisibility(View.VISIBLE);
         botonEliminarPerfil.setVisibility(View.VISIBLE);
 
@@ -420,7 +423,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
         eliminarPerfilTitle.setVisibility(View.VISIBLE);
     }
 
-    private void hideFabButtons(){
+    private void hideFabButtons() {
         guardarPerfilTitle.setVisibility(View.INVISIBLE);
         eliminarPerfilTitle.setVisibility(View.INVISIBLE);
 
