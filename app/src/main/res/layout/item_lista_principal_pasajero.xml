@@ -25,7 +25,7 @@
             android:layout_marginLeft="40dp"
             android:text="Nombre Pasajero"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="#000"
+            android:textColor="@color/texto_borde"
             android:textStyle="bold" />
 
         <TextView
@@ -33,13 +33,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/NombrePasajero"
+            android:textColor="@color/texto_borde"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="2dp"
             android:text="Dirección"
             android:textAppearance="@style/TextAppearance.AppCompat" />
 
         <ImageButton
-            android:id="@+id/opcionesItemNota"
+            android:id="@+id/opcionesItemPasajero"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

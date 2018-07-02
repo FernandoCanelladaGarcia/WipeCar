@@ -1,24 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
+        android:id="@+id/imagenListaVacia"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/icon_user"
-        android:id="@+id/imagenListaVacia"
-        android:layout_marginTop="32dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_horizontal"
+        android:src="@drawable/icon_user"
+        app:layout_constraintBottom_toTopOf="@+id/mensajeListaPrincipalVacia"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/mensajeListaPrincipalVacia"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imagenListaVacia"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_horizontal"
-        android:text="No existen conductores/pasajeros que se dirijan a tu destino/te hayan escogido."
-        android:id="@+id/mensajeListaPacientesVacia"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:text="No existen conductores que se dirijan a tu destino."
+        android:textColor="@color/texto_borde"
+        android:fontFamily="@font/ubuntu_medium"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

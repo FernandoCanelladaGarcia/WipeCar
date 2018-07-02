@@ -260,9 +260,7 @@ public class Modelo implements IModelo{
             case 1:
                 //buscarConductores
                 adaptadorUsuario.obtenerListaConductores((String)informacion[1]);
-            default:
-                Log.i(TAG, "ERROR INTRODUCIENDO TAREA");
-                return;
+                break;
         }
 
     }

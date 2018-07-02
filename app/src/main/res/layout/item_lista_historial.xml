@@ -12,6 +12,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/iconoUserHistorial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
@@ -54,7 +55,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         <ImageButton
-            android:id="@+id/opcionesItemNota"
+            android:id="@+id/opcionesItemHistorial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

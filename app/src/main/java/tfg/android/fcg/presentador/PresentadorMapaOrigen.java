@@ -112,6 +112,7 @@ public class PresentadorMapaOrigen implements IPresentadorMapaOrigen {
     @Override
     public void tratarSalirMapa() {
         appMediador.launchActivity(VistaPrincipal.class, this, null);
+        vistaMapaOrigen.finish();
     }
 
     @Override

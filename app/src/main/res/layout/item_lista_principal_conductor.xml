@@ -30,7 +30,7 @@
                 android:layout_marginLeft="40dp"
                 android:text="Nombre Conductor"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="#000"
+                android:textColor="@color/texto_borde"
                 android:textStyle="bold" />
 
             <TextView
@@ -39,12 +39,13 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/NombreConductor"
                 android:layout_marginLeft="40dp"
+                android:textColor="@color/texto_borde"
                 android:layout_marginTop="2dp"
                 android:text="Fecha/Hora"
                 android:textAppearance="@style/TextAppearance.AppCompat" />
 
             <ImageButton
-                android:id="@+id/opcionesItemNota"
+                android:id="@+id/opcionesItemConductor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"

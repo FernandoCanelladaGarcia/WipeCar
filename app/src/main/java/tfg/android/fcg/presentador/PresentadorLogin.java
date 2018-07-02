@@ -33,6 +33,7 @@ public class PresentadorLogin implements IPresentadorLogin {
                 if(resultado){
                     vistaLogin.cerrarProgreso();
                     appMediador.launchActivity(VistaMapaOrigen.class,this,null);
+                    vistaLogin.finish();
                 }else{
                     vistaLogin.cerrarProgreso();
                     vistaLogin.mostrarDialogo(0);

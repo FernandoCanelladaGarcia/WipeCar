@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,19 +61,22 @@ public class AdapterHistorialLista extends BaseAdapter{
         TextView nombreUsuario = (TextView)v.findViewById(R.id.NombreHistorial);
         TextView fecha = (TextView)v.findViewById(R.id.Fecha);
         TextView facultad = (TextView)v.findViewById(R.id.Facultad);
-        ImageButton options = (ImageButton)v.findViewById(R.id.opcionesItemNota);
+        ImageButton options = (ImageButton)v.findViewById(R.id.opcionesItemHistorial);
+        ImageView icono = (ImageView) v.findViewById(R.id.iconoUserHistorial);
 
         if(idUser == historial.getIdPasajero()){
             //Icono Coche
+            icono.setImageResource(R.drawable.icon_car_user);
             nombreUsuario.setText(historial.getNombreConductor());
+
         }else{
             //Icono Pasajero
+            icono.setImageResource(R.drawable.icon_user);
             nombreUsuario.setText(historial.getNombrePasajero());
         }
         fecha.setText(historial.getFecha());
         facultad.setText(historial.getDestino());
 
-        //TODO: BOTON OPTIONS EN HISTORIAL SACA DIALOGO ELIMINAR O VALORAR
         options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

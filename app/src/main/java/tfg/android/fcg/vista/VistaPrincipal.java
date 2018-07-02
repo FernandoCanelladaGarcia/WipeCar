@@ -15,20 +15,23 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
+import tfg.android.fcg.modelo.Historial;
 import tfg.android.fcg.modelo.Usuario;
 import tfg.android.fcg.presentador.IPresentadorPrincipal;
 import tfg.android.fcg.vista.adaptadores.AdapterPrincipalLista;
 import tfg.android.fcg.vista.fragmentos.FragmentoPrincipalLista;
 import tfg.android.fcg.vista.fragmentos.FragmentoPrincipalMapa;
 
-public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal, View.OnClickListener{
+public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal, View.OnClickListener {
 
     private Button botonPerfil, botonSalir;
     private ProgressDialog dialogoProgreso;
@@ -36,10 +39,14 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     private AppMediador appMediador;
     private IPresentadorPrincipal presentadorPrincipal;
     private AdapterPrincipalLista adaptador;
+    private List<Usuario> listaPrincipal;
     private final static String TAG = "depurador";
 
     private static ViewPager viewPager;
     private static TabLayout tabLayout;
+
+    private boolean deshabilitoBack = true;
+    private boolean rol;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,34 +60,28 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         botonPerfil.setOnClickListener(this);
         botonSalir = (Button) findViewById(R.id.botonSalir);
         botonSalir.setOnClickListener(this);
-
-        SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
-        Boolean rol = sharedPreferences.getBoolean("rol",false);
-
-        setUpViewPager(rol);
     }
 
-    private void setUpViewPager(boolean rol){
+    private void setUpViewPager(boolean rol) {
         viewPager = (ViewPager) findViewById(R.id.viewPagerPrincipal);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        if(rol){
+        if (rol) {
             adapter.addFragment(new FragmentoPrincipalLista(), "Pick Up Conductor");
             adapter.addFragment(new FragmentoPrincipalMapa(), "On The Go Conductor");
-            Log.i(TAG,"Vista principal - Modo conductor");
-        }else{
+            Log.i(TAG, "Vista principal - Modo conductor");
+        } else {
             adapter.addFragment(new FragmentoPrincipalLista(), "Pick Up Pasajero");
             adapter.addFragment(new FragmentoPrincipalMapa(), "On The Go Pasajero");
-            Log.i(TAG,"Vista principal - Modo pasajero");
+            Log.i(TAG, "Vista principal - Modo pasajero");
         }
         viewPager.setAdapter(adapter);
-
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
     public void mostrarProgreso() {
-        Log.i(TAG," mostrar Progreso");
+        Log.i(TAG, " mostrar Progreso");
         dialogoProgreso = new ProgressDialog(this);
         dialogoProgreso.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialogoProgreso.setIndeterminate(true);
@@ -92,7 +93,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     @Override
     public void cerrarProgreso() {
-        Log.i(TAG,"cerrar Progreso");
+        Log.i(TAG, "cerrar Progreso");
         dialogoProgreso.dismiss();
     }
 
@@ -105,13 +106,30 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     @Override
     public void cerrarDialogo() {
-        Log.i(TAG,"cerrar Dialogo");
+        Log.i(TAG, "cerrar Dialogo");
         dialogo.cancel();
     }
 
     @Override
     public void mostrarUsuarios(Object informacion) {
-
+        ListView listView = (ListView) findViewById(R.id.listaPrincipal);
+        Object[] respuesta = (Object[]) informacion;
+        listaPrincipal = (ArrayList<Usuario>) respuesta[1];
+        adaptador = new AdapterPrincipalLista(VistaPrincipal.this, listaPrincipal, appMediador);
+        listView.setAdapter(adaptador);
+        if ((int) respuesta[0] == 1) {
+            findViewById(R.id.elementoListaPrincipalVacia).setVisibility(View.GONE);
+        }if ((int) respuesta[0] == 0) {
+            findViewById(R.id.elementoListaPrincipalVacia).setVisibility(View.VISIBLE);
+            if(rol){
+                TextView mensajeListaVacia = (TextView) findViewById(R.id.mensajeListaPrincipalVacia);
+                mensajeListaVacia.setText("No existen pasajeros que le hayan escogido para ir a su destino");
+            }else{
+                ImageView iconoListaVacia = (ImageView)findViewById(R.id.imagenListaVacia);
+                iconoListaVacia.setImageResource(R.drawable.icon_car_user);
+            }
+        }
+        cerrarProgreso();
     }
 
     @Override
@@ -126,9 +144,9 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.botonPerfil:
-                Log.i(TAG,"Perfil");
+                Log.i(TAG, "Perfil");
                 presentadorPrincipal.tratarConfiguracion(0);
                 break;
             case R.id.botonSalir:
@@ -139,12 +157,35 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     }
 
     @Override
-    public void onDestroy(){
+    public void onResume() {
+        super.onResume();
+        mostrarProgreso();
+
+        SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
+        rol = sharedPreferences.getBoolean("rol", false);
+
+        String idUser = sharedPreferences.getString("idUser", null);
+        presentadorPrincipal.iniciar(idUser);
+
+        setUpViewPager(rol);
+    }
+
+    @Override
+    public void onDestroy() {
         super.onDestroy();
         appMediador.removePresentadorPrincipal();
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter{
+    @Override
+    public void onBackPressed(){
+        if(deshabilitoBack){
+
+        }else{
+            super.onBackPressed();
+        }
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
 
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
@@ -163,7 +204,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
             return mFragmentList.size();
         }
 
-        public void addFragment(Fragment fragment, String title){
+        public void addFragment(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }
