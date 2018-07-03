@@ -67,7 +67,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         if (rol) {
             adapter.addFragment(new FragmentoPrincipalLista(), "Pick Up Conductor");
-            adapter.addFragment(new FragmentoPrincipalMapa(), "On The Go Conductor");
+            adapter.addFragment(new VistaOTGPasajero(), "On The Go Conductor");
             Log.i(TAG, "Vista principal - Modo conductor");
         } else {
             adapter.addFragment(new FragmentoPrincipalLista(), "Pick Up Pasajero");

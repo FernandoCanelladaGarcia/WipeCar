@@ -6,20 +6,13 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -29,12 +22,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
-import tfg.android.fcg.modelo.bajonivel.ServicioLocalizacion;
 import tfg.android.fcg.presentador.IPresentadorMapaOrigen;
 
 /**
@@ -179,7 +168,7 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
         switch (v.getId()) {
             case R.id.buttonOrigenD:
                 SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.map);
+                        .findFragmentById(R.id.mapOrigen);
                 mapFragment.getMapAsync(this);
                 break;
             case R.id.botonGuardarOyD:
@@ -236,7 +225,7 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
                 miUbicacion.remove();
             }
             miUbicacion = mMap.addMarker(new MarkerOptions().position(lugar).title(titulo).
-                    icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_dialog_map)));
+                    icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_map)));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lugar, AppMediador.ZOOM));
         }
     }

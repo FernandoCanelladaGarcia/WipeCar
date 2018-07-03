@@ -1,7 +1,11 @@
 package tfg.android.fcg.vista;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import tfg.android.fcg.R;
 
@@ -9,12 +13,13 @@ import tfg.android.fcg.R;
  * Created by ferca on 21/03/2018.
  */
 
-public class VistaOTGConductor extends AppCompatActivity implements IVistaOTGConductor{
+public class VistaOTGConductor extends Fragment implements IVistaOTGConductor{
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView (LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_vista_otgconductor);
+        return layoutInflater.inflate(R.layout.fragment_otg, container, false);
     }
 
     @Override

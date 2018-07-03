@@ -2,15 +2,15 @@ package tfg.android.fcg.vista;
 
 import android.graphics.Point;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.view.Display;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -22,7 +22,7 @@ import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
 import tfg.android.fcg.presentador.IPresentadorOTGPasajero;
 
-public class VistaOTGPasajero extends AppCompatActivity implements IVistaOTGPasajero, OnMapReadyCallback {
+public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnMapReadyCallback {
 
     private GoogleMap mMap;
     private Marker miUbicacion;
@@ -32,21 +32,22 @@ public class VistaOTGPasajero extends AppCompatActivity implements IVistaOTGPasa
     private int anchoPantalla, altoPantalla;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_vista_otgpasajero);
-        appMediador = (AppMediador)this.getApplication();
-        appMediador.setVistaOTGPasajero(this);
-        presentadorOTGPasajero = appMediador.getPresentadorOTGPasajero();
-        miUbicacion = null;
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        anchoPantalla = size.x;
-        altoPantalla = size.y;
-        //TODO
-        //SupportMapFragment mapFragment = getSupportFragmentManager().findFragmentById(R.id.map);
-        //mapFragment.getMapAsync(this);
+    public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.layout_vista_otgpasajero);
+//        appMediador = (AppMediador)this.getApplication();
+//        appMediador.setVistaOTGPasajero(this);
+//        presentadorOTGPasajero = appMediador.getPresentadorOTGPasajero();
+//        miUbicacion = null;
+//        Display display = getWindowManager().getDefaultDisplay();
+//        Point size = new Point();
+//        display.getSize(size);
+//        anchoPantalla = size.x;
+//        altoPantalla = size.y;
+//        //TODO
+//        //SupportMapFragment mapFragment = getSupportFragmentManager().findFragmentById(R.id.map);
+//        //mapFragment.getMapAsync(this);
+        return layoutInflater.inflate(R.layout.fragment_otg, container, false);
     }
 
     @Override

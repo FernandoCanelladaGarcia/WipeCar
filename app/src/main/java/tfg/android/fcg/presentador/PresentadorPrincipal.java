@@ -33,17 +33,17 @@ public class PresentadorPrincipal implements IPresentadorPrincipal{
                 appMediador.unRegisterReceiver(this);
                 vistaPrincipal.cerrarProgreso();
                 appMediador.launchActivity(VistaLogin.class, this, null);
+                vistaPrincipal.finish();
             }
             if(intent.getAction().equals(AppMediador.AVISO_OBTENER_USUARIO)){
                 appMediador.unRegisterReceiver(this);
                 usuario = (Usuario) intent.getSerializableExtra(AppMediador.CLAVE_OBTENER_USUARIO);
-
                 if(usuario.isRol()){
-                    //CONDUCTOR
+                    //MODO - CONDUCTOR
                     appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_LISTA_PASAJEROS_VINCULO);
                     modelo.obtenerPeticionesDePasajeros(usuario.getIdUser());
                 }else{
-                    //PASAJERO
+                    //MODO - PASAJERO
                     appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_LISTA_CONDUCTORES);
                     Object[] datos = new Object[]{1,usuario.getDestino()};
                     modelo.obtenerUsuariosPickUp(datos);

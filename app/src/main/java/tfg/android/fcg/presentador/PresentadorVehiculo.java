@@ -3,6 +3,7 @@ package tfg.android.fcg.presentador;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import tfg.android.fcg.AppMediador;
@@ -17,6 +18,7 @@ public class PresentadorVehiculo implements IPresentadorVehiculo{
     private AppMediador appMediador;
     private VistaVehiculo vistaVehiculo;
     private String datoVehiculo;
+    private SharedPreferences sharedPreferences;
 
     private final static String TAG = "depurador";
 
@@ -24,6 +26,7 @@ public class PresentadorVehiculo implements IPresentadorVehiculo{
         appMediador = AppMediador.getInstance();
         modelo = Modelo.getInstance();
         vistaVehiculo = (VistaVehiculo) appMediador.getVistaVehiculo();
+        sharedPreferences = appMediador.getSharedPreferences("Login", 0);
     }
 
     private BroadcastReceiver receptorDeAvisos = new BroadcastReceiver() {
@@ -52,8 +55,12 @@ public class PresentadorVehiculo implements IPresentadorVehiculo{
                 Object[] datos = (Object[]) intent.getSerializableExtra(AppMediador.CLAVE_ACTUALIZACION_USUARIO);
                 if ((boolean) datos[0]) {
                     appMediador.unRegisterReceiver(this);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("rol",true);
+                    editor.apply();
                     vistaVehiculo.cerrarProgreso();
                     appMediador.launchActivity(VistaPerfil.class, this, null);
+                    vistaVehiculo.finish();
                 }else{
                     Log.i(TAG,"ERROR EN LA ACTUALIZACION DEL USUARIO");
                 }
@@ -72,6 +79,7 @@ public class PresentadorVehiculo implements IPresentadorVehiculo{
         modelo.guardarVehiculo((Object[]) informacion);
     }
 
+    //TODO: NO SE USAN, SE EDITA EN PERFIL.
     @Override
     public void tratarCancelar(Object informacion) {
 

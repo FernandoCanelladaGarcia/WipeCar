@@ -109,6 +109,7 @@ public class PresentadorPerfil implements IPresentadorPerfil {
         switch (tarea) {
             case 0:
                 appMediador.launchActivity(VistaVehiculo.class, this, null);
+                vistaPerfil.finish();
                 break;
             case 1:
                 vistaPerfil.mostrarProgreso();
