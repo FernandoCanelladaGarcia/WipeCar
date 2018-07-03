@@ -129,6 +129,9 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
                         perfil[7] = isChecked;
                     }
                 } else {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("rol", true);
+                    editor.apply();
                     mostrarDialogo(0);
                 }
             }

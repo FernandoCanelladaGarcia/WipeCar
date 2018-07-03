@@ -1,16 +1,23 @@
 package tfg.android.fcg.vista;
 
-import android.graphics.Point;
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.view.Display;
+import android.support.v7.app.AlertDialog;
+import android.content.DialogInterface;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -25,30 +32,42 @@ import tfg.android.fcg.presentador.IPresentadorOTGPasajero;
 public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private SupportMapFragment mapFragment;
     private Marker miUbicacion;
     private List<Marker> ubicacionConductores;
+    private ProgressDialog dialogoProgreso;
+    private AlertDialog dialogo;
     private AppMediador appMediador;
     private IPresentadorOTGPasajero presentadorOTGPasajero;
     private int anchoPantalla, altoPantalla;
 
+    private final static String TAG = "depurador";
+
+
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.layout_vista_otgpasajero);
-//        appMediador = (AppMediador)this.getApplication();
-//        appMediador.setVistaOTGPasajero(this);
-//        presentadorOTGPasajero = appMediador.getPresentadorOTGPasajero();
-//        miUbicacion = null;
-//        Display display = getWindowManager().getDefaultDisplay();
-//        Point size = new Point();
-//        display.getSize(size);
-//        anchoPantalla = size.x;
-//        altoPantalla = size.y;
-//        //TODO
-//        //SupportMapFragment mapFragment = getSupportFragmentManager().findFragmentById(R.id.map);
-//        //mapFragment.getMapAsync(this);
-        return layoutInflater.inflate(R.layout.fragment_otg, container, false);
+        View v = layoutInflater.inflate(R.layout.layout_vista_otgpasajero,container,false);
+        return v;
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+        appMediador = AppMediador.getInstance();
+        appMediador.setVistaOTGPasajero(this);
+        presentadorOTGPasajero = appMediador.getPresentadorOTGPasajero();
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view,savedInstanceState);
+
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView);
+        if(mapFragment != null){
+            mapFragment.getMapAsync(this);
+        }
+    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -62,27 +81,40 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                 }
             });
         }
+        Log.i(TAG, "onMapReady");
         presentadorOTGPasajero.iniciar();
     }
 
+
     @Override
     public void mostrarProgreso() {
-
+        Log.i(TAG, " mostrar Progreso");
+        dialogoProgreso = new ProgressDialog(getContext());
+        dialogoProgreso.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialogoProgreso.setIndeterminate(true);
+        dialogoProgreso.setCancelable(false);
+        dialogoProgreso.setTitle("Espere por favor");
+        dialogoProgreso.setMessage("Cargando...");
+        dialogoProgreso.show();
     }
 
     @Override
     public void cerrarProgreso() {
-
+        Log.i(TAG, "cerrar Progreso");
+        dialogoProgreso.dismiss();
     }
 
     @Override
     public void mostrarDialogo(Object informacion) {
-
+        AlertDialog.Builder dialogBuild = new AlertDialog.Builder(appMediador.getApplicationContext());
+        dialogo = dialogBuild.create();
+        dialogo.show();
     }
 
     @Override
     public void cerrarDialogo() {
-
+        Log.i(TAG, "cerrar Dialogo");
+        dialogo.cancel();
     }
 
     @Override
@@ -98,7 +130,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                 miUbicacion.remove();
             }
             miUbicacion = mMap.addMarker(new MarkerOptions().position(lugar).title(titulo).
-                    icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation)));
+                    icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_map)));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lugar,AppMediador.ZOOM));
         }else{
             mMap.addMarker(new MarkerOptions().position(lugar).title(titulo));

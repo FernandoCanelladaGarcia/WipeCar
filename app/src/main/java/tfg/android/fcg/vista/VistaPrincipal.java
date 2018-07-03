@@ -71,7 +71,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
             Log.i(TAG, "Vista principal - Modo conductor");
         } else {
             adapter.addFragment(new FragmentoPrincipalLista(), "Pick Up Pasajero");
-            adapter.addFragment(new FragmentoPrincipalMapa(), "On The Go Pasajero");
+            adapter.addFragment(new VistaOTGConductor(), "On The Go Pasajero");
             Log.i(TAG, "Vista principal - Modo pasajero");
         }
         viewPager.setAdapter(adapter);

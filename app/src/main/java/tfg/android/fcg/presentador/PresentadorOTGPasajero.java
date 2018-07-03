@@ -3,6 +3,7 @@ package tfg.android.fcg.presentador;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 
 import com.google.android.gms.maps.model.Marker;
 
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.modelo.IModelo;
 import tfg.android.fcg.modelo.Modelo;
+import tfg.android.fcg.modelo.bajonivel.ServicioLocalizacion;
 import tfg.android.fcg.vista.VistaOTGPasajero;
 
 public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
@@ -20,6 +22,9 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
     private Marker miUbicacion;
     private Marker marcaSeleccionada;
     private IModelo modelo;
+    private SharedPreferences sharedPreferences;
+
+    private final static String TAG = "depurador";
 
     private BroadcastReceiver receptorDeAvisos = new BroadcastReceiver() {
         @Override
@@ -35,11 +40,14 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(AppMediador.AVISO_LOCALIZACION_GPS)){
+                appMediador.unRegisterReceiver(this);
+                appMediador.stopService(ServicioLocalizacion.class);
                 Object[] posicion = new Object[3];
                 posicion[0] = intent.getSerializableExtra(AppMediador.CLAVE_LATITUD);
                 posicion[1] = intent.getSerializableExtra(AppMediador.CLAVE_LONGITUD);
-                posicion[3] = "Mi posicion";
-                AppMediador.getInstance().getVistaOTGPasajero().mostrarMapaConPosicion(posicion);
+                posicion[2] = "Mi posicion";
+                vistaOTGPasajero.cerrarProgreso();
+                vistaOTGPasajero.mostrarMapaConPosicion(posicion);
             }
         }
     };
@@ -47,11 +55,13 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
     public PresentadorOTGPasajero(){
         appMediador = AppMediador.getInstance();
         vistaOTGPasajero = (VistaOTGPasajero) appMediador.getVistaOTGPasajero();
+        sharedPreferences = appMediador.getSharedPreferences("Login", 0);
         modelo = Modelo.getInstance();
     }
 
     @Override
     public void iniciar() {
+        vistaOTGPasajero.mostrarProgreso();
         appMediador.registerReceiver(receptorGps,AppMediador.AVISO_LOCALIZACION_GPS);
         modelo.iniciarGps();
     }
