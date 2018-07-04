@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,7 +30,7 @@ import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
 import tfg.android.fcg.presentador.IPresentadorOTGPasajero;
 
-public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnMapReadyCallback {
+public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnMapReadyCallback, View.OnClickListener {
 
     private GoogleMap mMap;
     private SupportMapFragment mapFragment;
@@ -39,6 +40,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     private AlertDialog dialogo;
     private AppMediador appMediador;
     private IPresentadorOTGPasajero presentadorOTGPasajero;
+    private Button botonBuscar;
     private int anchoPantalla, altoPantalla;
 
     private final static String TAG = "depurador";
@@ -61,7 +63,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view,savedInstanceState);
-
+        botonBuscar = (Button) view.findViewById(R.id.BuscarVehiculos);
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView);
         if(mapFragment != null){
             mapFragment.getMapAsync(this);
@@ -161,4 +163,11 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.BuscarVehiculos:
+                break;
+        }
+    }
 }

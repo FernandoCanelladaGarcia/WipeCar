@@ -2,11 +2,11 @@ package tfg.android.fcg.vista.adaptadores;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -19,6 +19,7 @@ public class AdapterPrincipalLista extends BaseAdapter{
     private List<Usuario> listaUsuarios;
     private Context contexto;
     private AppMediador appMediador;
+    private FloatingActionButton floatPrincipal;
     private boolean rol;
 
     public AdapterPrincipalLista(Context contexto, List<Usuario> listaUsuarios, AppMediador appMediador){
@@ -47,7 +48,7 @@ public class AdapterPrincipalLista extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View v = convertView;
-
+        floatPrincipal = (FloatingActionButton) v.findViewById(R.id.floatPrincipal);
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater) contexto.getSystemService(contexto.LAYOUT_INFLATER_SERVICE);
             if(rol){
@@ -55,6 +56,7 @@ public class AdapterPrincipalLista extends BaseAdapter{
                 Usuario pasajero = listaUsuarios.get(position);
                 TextView nombrePasajero = (TextView) v.findViewById(R.id.NombrePasajero);
                 TextView origenPasajero = (TextView) v.findViewById(R.id.DireccionPasajero);
+                floatPrincipal.setImageResource(R.drawable.icon_edit_salida);
                 nombrePasajero.setText(pasajero.getNombre());
                 origenPasajero.setText(pasajero.getOrigen());
 
@@ -63,6 +65,7 @@ public class AdapterPrincipalLista extends BaseAdapter{
                 Usuario conductor = listaUsuarios.get(position);
                 TextView nombreConductor = (TextView) v.findViewById(R.id.NombreConductor);
                 TextView fechaSalida = (TextView) v.findViewById(R.id.Fecha);
+                floatPrincipal.setImageResource(R.drawable.icon_edit_destino);
                 nombreConductor.setText(conductor.getNombre());
                 fechaSalida.setText(conductor.getHora());
             }

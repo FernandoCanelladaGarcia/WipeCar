@@ -1,24 +1,49 @@
 package tfg.android.fcg.vista;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
+import tfg.android.fcg.presentador.IPresentadorOTGConductor;
 
 /**
  * Created by ferca on 21/03/2018.
  */
 
-public class VistaOTGConductor extends Fragment implements IVistaOTGConductor{
+public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, View.OnClickListener{
 
-
+    private AppMediador appMediador;
+    private IPresentadorOTGConductor presentadorOTGConductor;
+    private Button botonIniciarRuta, botonAceptarPasajero, botonRechazarPasajero, botonFinalizarRuta;
     @Override
     public View onCreateView (LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        return layoutInflater.inflate(R.layout.fragment_otg, container, false);
+        View v = layoutInflater.inflate(R.layout.layout_vista_otgconductor,container,false);
+        return v;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+        appMediador = AppMediador.getInstance();
+        appMediador.setVistaOTGConductor(this);
+        presentadorOTGConductor = appMediador.getPresentadorOTGConductor();
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view,savedInstanceState);
+        botonIniciarRuta = (Button) view.findViewById(R.id.botonIniciarRuta);
+        botonAceptarPasajero = (Button) view.findViewById(R.id.botonAceptarPasajero);
+        botonRechazarPasajero = (Button) view.findViewById(R.id.botonRechazarPasajero);
+        botonFinalizarRuta = (Button) view.findViewById(R.id.botonFinalizarRuta);
     }
 
     @Override
@@ -34,5 +59,20 @@ public class VistaOTGConductor extends Fragment implements IVistaOTGConductor{
     @Override
     public void indicarPasajeroRechazado(Object informacion) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.botonIniciarRuta:
+                break;
+            case R.id.botonAceptarPasajero:
+                break;
+            case R.id.botonRechazarPasajero:
+                break;
+            case R.id.botonFinalizarRuta:
+                break;
+
+        }
     }
 }

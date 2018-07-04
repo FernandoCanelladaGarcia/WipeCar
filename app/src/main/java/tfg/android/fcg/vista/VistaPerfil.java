@@ -383,10 +383,11 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
         appMediador.removePresentadorPerfil();
     }
 
-//    @Override
-//    public void onBackPressed(){
-//        appMediador.launchActivity(VistaPrincipal.class,this,null);
-//    }
+    @Override
+    public void onBackPressed(){
+        appMediador.launchActivity(VistaPrincipal.class,this,null);
+        finish();
+    }
 
     private Object obtenerNuevoPerfil() {
         String[] partes = editEmail.getText().toString().split("@");

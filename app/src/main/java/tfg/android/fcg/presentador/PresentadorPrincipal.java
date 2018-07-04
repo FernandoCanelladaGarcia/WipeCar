@@ -138,6 +138,7 @@ public class PresentadorPrincipal implements IPresentadorPrincipal{
         switch (tarea){
             case 0:
                 appMediador.launchActivity(VistaPerfil.class, this, null);
+                vistaPrincipal.finish();
                 break;
             case 1:
                 vistaPrincipal.mostrarProgreso();

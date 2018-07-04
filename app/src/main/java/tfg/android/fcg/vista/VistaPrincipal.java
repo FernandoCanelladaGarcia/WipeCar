@@ -1,9 +1,9 @@
 package tfg.android.fcg.vista;
 
 import android.app.ProgressDialog;
-import android.app.TabActivity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,23 +13,21 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
-import tfg.android.fcg.modelo.Historial;
 import tfg.android.fcg.modelo.Usuario;
 import tfg.android.fcg.presentador.IPresentadorPrincipal;
 import tfg.android.fcg.vista.adaptadores.AdapterPrincipalLista;
 import tfg.android.fcg.vista.fragmentos.FragmentoPrincipalLista;
-import tfg.android.fcg.vista.fragmentos.FragmentoPrincipalMapa;
 
 public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal, View.OnClickListener {
 
@@ -41,7 +39,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     private AdapterPrincipalLista adaptador;
     private List<Usuario> listaPrincipal;
     private final static String TAG = "depurador";
-
+    private FloatingActionButton floatPrincipal;
     private static ViewPager viewPager;
     private static TabLayout tabLayout;
 
@@ -60,6 +58,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         botonPerfil.setOnClickListener(this);
         botonSalir = (Button) findViewById(R.id.botonSalir);
         botonSalir.setOnClickListener(this);
+        //floatPrincipal = (FloatingActionButton) findViewById(R.id.floatPrincipal);
     }
 
     private void setUpViewPager(boolean rol) {
@@ -67,11 +66,13 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         if (rol) {
             adapter.addFragment(new FragmentoPrincipalLista(), "Pick Up Conductor");
-            adapter.addFragment(new VistaOTGPasajero(), "On The Go Conductor");
+            adapter.addFragment(new VistaOTGConductor(), "On The Go Conductor");
+            //floatPrincipal.setImageResource(R.drawable.icon_edit_salida);
             Log.i(TAG, "Vista principal - Modo conductor");
         } else {
             adapter.addFragment(new FragmentoPrincipalLista(), "Pick Up Pasajero");
-            adapter.addFragment(new VistaOTGConductor(), "On The Go Pasajero");
+            adapter.addFragment(new VistaOTGPasajero(), "On The Go Pasajero");
+            //floatPrincipal.setImageResource(R.drawable.icon_edit_destino);
             Log.i(TAG, "Vista principal - Modo pasajero");
         }
         viewPager.setAdapter(adapter);
@@ -153,6 +154,13 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                 Log.i(TAG, "Salir");
                 presentadorPrincipal.tratarConfiguracion(1);
                 break;
+//            case R.id.floatPrincipal:
+//                if(rol){
+//                    Toast.makeText(getApplicationContext(),"Editar fecha salida",Toast.LENGTH_SHORT).show();
+//                }else{
+//                    Toast.makeText(getApplicationContext(),"Cambiar destino",Toast.LENGTH_SHORT).show();
+//                }
+//                break;
         }
     }
 

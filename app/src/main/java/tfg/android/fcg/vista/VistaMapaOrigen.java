@@ -42,6 +42,7 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
     private String miOrigen;
     private int anchoPantalla, altoPantalla;
     private boolean porDefecto;
+    private boolean deshabilitoBack = true;
     private final static String TAG = "depurador";
 
     @Override
@@ -233,6 +234,15 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
     @Override
     public void mostrarOrigen(Object informacion) {
 
+    }
+
+    @Override
+    public void onBackPressed(){
+        if(deshabilitoBack){
+
+        }else{
+            super.onBackPressed();
+        }
     }
 
     @Override
