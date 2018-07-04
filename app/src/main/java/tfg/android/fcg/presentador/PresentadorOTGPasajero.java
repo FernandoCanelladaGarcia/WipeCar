@@ -46,7 +46,6 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
                 posicion[0] = intent.getSerializableExtra(AppMediador.CLAVE_LATITUD);
                 posicion[1] = intent.getSerializableExtra(AppMediador.CLAVE_LONGITUD);
                 posicion[2] = "Mi posicion";
-                vistaOTGPasajero.cerrarProgreso();
                 vistaOTGPasajero.mostrarMapaConPosicion(posicion);
             }
         }
@@ -61,7 +60,6 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
 
     @Override
     public void iniciar() {
-        vistaOTGPasajero.mostrarProgreso();
         appMediador.registerReceiver(receptorGps,AppMediador.AVISO_LOCALIZACION_GPS);
         modelo.iniciarGps();
     }

@@ -25,6 +25,7 @@ import java.util.List;
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
 import tfg.android.fcg.modelo.Usuario;
+import tfg.android.fcg.modelo.Vehiculo;
 import tfg.android.fcg.presentador.IPresentadorPrincipal;
 import tfg.android.fcg.vista.adaptadores.AdapterPrincipalLista;
 import tfg.android.fcg.vista.fragmentos.FragmentoPrincipalLista;
@@ -37,7 +38,8 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     private AppMediador appMediador;
     private IPresentadorPrincipal presentadorPrincipal;
     private AdapterPrincipalLista adaptador;
-    private List<Usuario> listaPrincipal;
+    private List<Usuario> listaUsuarios;
+    private List<Vehiculo> listaVehiculos;
     private final static String TAG = "depurador";
     private FloatingActionButton floatPrincipal;
     private static ViewPager viewPager;
@@ -58,7 +60,10 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         botonPerfil.setOnClickListener(this);
         botonSalir = (Button) findViewById(R.id.botonSalir);
         botonSalir.setOnClickListener(this);
-        //floatPrincipal = (FloatingActionButton) findViewById(R.id.floatPrincipal);
+
+        viewPager = null;
+        adaptador = null;
+        tabLayout = null;
     }
 
     private void setUpViewPager(boolean rol) {
@@ -100,9 +105,23 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     @Override
     public void mostrarDialogo(Object informacion) {
+        int tarea = (int)informacion;
         AlertDialog.Builder dialogBuild = new AlertDialog.Builder(this);
         dialogo = dialogBuild.create();
         dialogo.show();
+        switch(tarea){
+            case 0:
+                //Editar Destino
+                Toast.makeText(getApplicationContext(),"Editar destino",Toast.LENGTH_SHORT).show();
+                break;
+            case 1:
+                //Editar Fecha y hora de salida
+                Toast.makeText(getApplicationContext(),"Editar Fecha y hora",Toast.LENGTH_SHORT).show();
+                break;
+            case 3:
+                //Error a la hora de presentar lista
+                break;
+        }
     }
 
     @Override
@@ -115,8 +134,13 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     public void mostrarUsuarios(Object informacion) {
         ListView listView = (ListView) findViewById(R.id.listaPrincipal);
         Object[] respuesta = (Object[]) informacion;
-        listaPrincipal = (ArrayList<Usuario>) respuesta[1];
-        adaptador = new AdapterPrincipalLista(VistaPrincipal.this, listaPrincipal, appMediador);
+        listaUsuarios = (ArrayList<Usuario>) respuesta[1];
+        if(respuesta.length > 2){
+            listaVehiculos = (ArrayList<Vehiculo>)respuesta[2];
+            adaptador = new AdapterPrincipalLista(VistaPrincipal.this, listaUsuarios, appMediador, listaVehiculos);
+        }else{
+            adaptador = new AdapterPrincipalLista(VistaPrincipal.this, listaUsuarios, appMediador);
+        }
         listView.setAdapter(adaptador);
         if ((int) respuesta[0] == 1) {
             findViewById(R.id.elementoListaPrincipalVacia).setVisibility(View.GONE);
@@ -130,7 +154,6 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                 iconoListaVacia.setImageResource(R.drawable.icon_car_user);
             }
         }
-        cerrarProgreso();
     }
 
     @Override
@@ -154,28 +177,29 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                 Log.i(TAG, "Salir");
                 presentadorPrincipal.tratarConfiguracion(1);
                 break;
-//            case R.id.floatPrincipal:
-//                if(rol){
-//                    Toast.makeText(getApplicationContext(),"Editar fecha salida",Toast.LENGTH_SHORT).show();
-//                }else{
-//                    Toast.makeText(getApplicationContext(),"Cambiar destino",Toast.LENGTH_SHORT).show();
-//                }
-//                break;
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mostrarProgreso();
-
         SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
         rol = sharedPreferences.getBoolean("rol", false);
+        setUpViewPager(rol);
 
         String idUser = sharedPreferences.getString("idUser", null);
         presentadorPrincipal.iniciar(idUser);
+        viewPager = null;
+        adaptador = null;
+        tabLayout = null;
+    }
 
-        setUpViewPager(rol);
+    @Override
+    public void onStart(){
+        super.onStart();
+        viewPager = null;
+        adaptador = null;
+        tabLayout = null;
     }
 
     @Override

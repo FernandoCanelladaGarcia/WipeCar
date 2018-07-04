@@ -21,7 +21,7 @@
 
         <TextView
             android:id="@+id/NombreConductor"
-            android:layout_width="match_parent"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:text="Nombre Conductor"
@@ -31,14 +31,37 @@
 
         <TextView
             android:id="@+id/Fecha"
-            android:layout_width="match_parent"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/NombreConductor"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="2dp"
             android:text="Fecha/Hora"
             android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textColor="@color/texto_borde" />
+            android:textColor="@color/texto_borde"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/MarcaVehiculo"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/NombreConductor"
+            android:text="Marca"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/texto_borde"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/ModeloVehiculo"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="22dp"
+            android:layout_toEndOf="@+id/NombreConductor"
+            android:text="Modelo"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/texto_borde"
+            android:textSize="16sp" />
 
         <ImageButton
             android:id="@+id/opcionesItemConductor"
@@ -46,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="3dp"
             android:background="@null"
             android:src="@drawable/ic_more_vert_black_24dp" />
 

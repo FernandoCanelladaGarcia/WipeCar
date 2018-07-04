@@ -49,6 +49,8 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
         View v = layoutInflater.inflate(R.layout.layout_vista_otgpasajero,container,false);
+        mMap = null;
+        mapFragment = null;
         return v;
     }
 
@@ -58,11 +60,14 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         appMediador = AppMediador.getInstance();
         appMediador.setVistaOTGPasajero(this);
         presentadorOTGPasajero = appMediador.getPresentadorOTGPasajero();
+        mapFragment = null;
+        mMap = null;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view,savedInstanceState);
+        mMap = null;
         botonBuscar = (Button) view.findViewById(R.id.BuscarVehiculos);
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView);
         if(mapFragment != null){
@@ -126,18 +131,12 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         Double longitud = (Double) posicion[1];
         String titulo = (String) posicion[2];
         LatLng lugar = new LatLng(latitud,longitud);
-
-        if(titulo.equals("Mi posicion")){
-            if(miUbicacion != null){
-                miUbicacion.remove();
-            }
-            miUbicacion = mMap.addMarker(new MarkerOptions().position(lugar).title(titulo).
-                    icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_map)));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lugar,AppMediador.ZOOM));
-        }else{
-            mMap.addMarker(new MarkerOptions().position(lugar).title(titulo));
+        if (miUbicacion != null) {
+            miUbicacion.remove();
         }
-
+        miUbicacion = mMap.addMarker(new MarkerOptions().position(lugar).title(titulo).
+                icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_map)));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lugar, AppMediador.ZOOM));
     }
 
     @Override
