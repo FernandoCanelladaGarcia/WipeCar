@@ -885,10 +885,14 @@ public class BDAdaptadorUsuario {
     private void actualizarOrigenYDestino(String[] informacion) {
         usuarioActual = auth.getCurrentUser();
         final Object[] datos = new Object[2];
+        String origen = informacion[0];
+        String destino = informacion[1];
         DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(usuarioActual.getUid());
 
         Map<String, Object> taskMap = new HashMap<>();
-        taskMap.put("origen", informacion[0]);
+        if(!origen.equals("1")){
+            taskMap.put("origen", informacion[0]);
+        }
         taskMap.put("destino", informacion[1]);
         referenciaUsuario.updateChildren(taskMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

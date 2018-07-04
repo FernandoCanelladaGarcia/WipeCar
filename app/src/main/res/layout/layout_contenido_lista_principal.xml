@@ -25,7 +25,8 @@
         android:layout_alignBottom="@id/listaPrincipal"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
-        app:backgroundTint="@color/texto_borde"
-        android:src="@drawable/icon_edit_destino" />
+        android:onClick="onClick"
+        android:src="@drawable/icon_edit_destino"
+        app:backgroundTint="@color/texto_borde" />
 
 </RelativeLayout>

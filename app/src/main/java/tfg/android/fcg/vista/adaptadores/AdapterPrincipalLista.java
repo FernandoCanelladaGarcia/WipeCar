@@ -71,14 +71,6 @@ public class AdapterPrincipalLista extends BaseAdapter{
                 nombrePasajero.setText(pasajero.getNombre());
                 origenPasajero.setText(pasajero.getOrigen());
 
-                //EDITAR FECHA Y HORA SALIDA
-                floatPrincipal.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        appMediador.getVistaPrincipal().mostrarDialogo(1);
-                    }
-                });
-
             }else{
                 v = inflater.inflate(R.layout.item_lista_principal_conductor,null);
                 Usuario conductor = listaUsuarios.get(position);
@@ -92,14 +84,6 @@ public class AdapterPrincipalLista extends BaseAdapter{
                 fechaSalida.setText(conductor.getHora());
                 marcaCoche.setText(vehiculo.getMarca());
                 modeloCoche.setText(vehiculo.getModelo());
-
-                //EDITAR DESTINO
-                floatPrincipal.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        appMediador.getVistaPrincipal().mostrarDialogo(0);
-                    }
-                });
             }
 
         }

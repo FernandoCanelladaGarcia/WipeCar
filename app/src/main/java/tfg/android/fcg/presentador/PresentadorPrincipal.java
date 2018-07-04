@@ -119,6 +119,15 @@ public class PresentadorPrincipal implements IPresentadorPrincipal{
                     vistaPrincipal.mostrarUsuarios(respuesta);
                 }
             }
+            if(intent.getAction().equals(AppMediador.AVISO_ACTUALIZACION_USUARIO)){
+                Object[] datos = (Object[])intent.getSerializableExtra(AppMediador.CLAVE_ACTUALIZACION_USUARIO);
+                if((boolean)datos[0]){
+                    vistaPrincipal.cerrarProgreso();
+                    vistaPrincipal.recreate();
+                }else{
+                    vistaPrincipal.cerrarProgreso();
+                }
+            }
         }
     };
     @Override
@@ -161,7 +170,8 @@ public class PresentadorPrincipal implements IPresentadorPrincipal{
 
     @Override
     public void tratarConfiguracion(Object informacion) {
-        int tarea = (int)informacion;
+        Object[] datos = (Object[])informacion;
+        int tarea = (int)datos[0];
         switch (tarea){
             case 0:
                 appMediador.launchActivity(VistaPerfil.class, this, null);
@@ -172,6 +182,15 @@ public class PresentadorPrincipal implements IPresentadorPrincipal{
                 appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_DESLOGIN);
                 modelo.deslogearUsuario();
                 break;
+            case 2:
+                vistaPrincipal.mostrarProgreso();
+                vistaPrincipal.cerrarDialogo();
+                appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_ACTUALIZACION_USUARIO);
+                Object[] respuesta = new Object[13];
+                respuesta[0] = 1;
+                respuesta[5] = "1";
+                respuesta[6] = datos[1];
+                modelo.guardarPerfil(respuesta);
         }
 
     }

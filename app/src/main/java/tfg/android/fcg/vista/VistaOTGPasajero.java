@@ -40,6 +40,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     private AlertDialog dialogo;
     private AppMediador appMediador;
     private IPresentadorOTGPasajero presentadorOTGPasajero;
+    private AlertDialog.Builder dialogBuild;
     private Button botonBuscar;
     private int anchoPantalla, altoPantalla;
 
@@ -96,7 +97,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     @Override
     public void mostrarProgreso() {
         Log.i(TAG, " mostrar Progreso");
-        dialogoProgreso = new ProgressDialog(getContext());
+        dialogoProgreso = new ProgressDialog(getActivity());
         dialogoProgreso.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialogoProgreso.setIndeterminate(true);
         dialogoProgreso.setCancelable(false);
@@ -113,7 +114,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
 
     @Override
     public void mostrarDialogo(Object informacion) {
-        AlertDialog.Builder dialogBuild = new AlertDialog.Builder(appMediador.getApplicationContext());
+        dialogBuild = new AlertDialog.Builder(appMediador.getApplicationContext());
         dialogo = dialogBuild.create();
         dialogo.show();
     }
@@ -168,5 +169,10 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
             case R.id.BuscarVehiculos:
                 break;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

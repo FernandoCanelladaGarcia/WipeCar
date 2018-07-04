@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     private FloatingActionButton floatPrincipal;
     private static ViewPager viewPager;
     private static TabLayout tabLayout;
+    private AlertDialog.Builder dialogBuild;
 
     private boolean deshabilitoBack = true;
     private boolean rol;
@@ -60,10 +62,6 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         botonPerfil.setOnClickListener(this);
         botonSalir = (Button) findViewById(R.id.botonSalir);
         botonSalir.setOnClickListener(this);
-
-        viewPager = null;
-        adaptador = null;
-        tabLayout = null;
     }
 
     private void setUpViewPager(boolean rol) {
@@ -106,13 +104,15 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     @Override
     public void mostrarDialogo(Object informacion) {
         int tarea = (int)informacion;
-        AlertDialog.Builder dialogBuild = new AlertDialog.Builder(this);
-        dialogo = dialogBuild.create();
-        dialogo.show();
+        dialogBuild = new AlertDialog.Builder(this);
+        final View dialogoOrigenDestino = getLayoutInflater().inflate(R.layout.layout_destino,null);
         switch(tarea){
             case 0:
                 //Editar Destino
                 Toast.makeText(getApplicationContext(),"Editar destino",Toast.LENGTH_SHORT).show();
+                dialogBuild.setView(dialogoOrigenDestino);
+                dialogo = dialogBuild.create();
+                dialogo.show();
                 break;
             case 1:
                 //Editar Fecha y hora de salida
@@ -171,12 +171,34 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         switch (v.getId()) {
             case R.id.botonPerfil:
                 Log.i(TAG, "Perfil");
-                presentadorPrincipal.tratarConfiguracion(0);
+                Object[] informacion = new Object[]{0,""};
+                presentadorPrincipal.tratarConfiguracion(informacion);
                 break;
             case R.id.botonSalir:
                 Log.i(TAG, "Salir");
-                presentadorPrincipal.tratarConfiguracion(1);
+                Object[] datos = new Object[]{0,""};
+                presentadorPrincipal.tratarConfiguracion(datos);
                 break;
+            case R.id.floatPrincipal:
+                if(rol){
+                    //Editar fecha y hora
+                    mostrarDialogo(1);
+                }else{
+                    //Editar Destino
+                    mostrarDialogo(0);
+                }
+                break;
+            case R.id.botonGuardarDestino:
+                Spinner destinos = dialogo.findViewById(R.id.spinnerDestinoPrincipal);
+                if(destinos.getSelectedItem().toString().equals("Destinos")){
+                    Toast.makeText(getApplicationContext(),
+                            "Por favor, seleccione un destino", Toast.LENGTH_SHORT).show();
+                }else{
+                    String destino = destinos.getSelectedItem().toString();
+                    Object[] respuesta = new Object[]{2,destino};
+                    presentadorPrincipal.tratarConfiguracion(respuesta);
+
+                }
         }
     }
 
@@ -189,21 +211,18 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
         String idUser = sharedPreferences.getString("idUser", null);
         presentadorPrincipal.iniciar(idUser);
-        viewPager = null;
-        adaptador = null;
-        tabLayout = null;
     }
 
     @Override
     public void onStart(){
         super.onStart();
-        viewPager = null;
-        adaptador = null;
-        tabLayout = null;
     }
 
     @Override
     public void onDestroy() {
+        viewPager = null;
+        adaptador = null;
+        tabLayout = null;
         super.onDestroy();
         appMediador.removePresentadorPrincipal();
     }
