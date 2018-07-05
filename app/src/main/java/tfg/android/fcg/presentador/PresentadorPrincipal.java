@@ -122,8 +122,14 @@ public class PresentadorPrincipal implements IPresentadorPrincipal{
             if(intent.getAction().equals(AppMediador.AVISO_ACTUALIZACION_USUARIO)){
                 Object[] datos = (Object[])intent.getSerializableExtra(AppMediador.CLAVE_ACTUALIZACION_USUARIO);
                 if((boolean)datos[0]){
-                    vistaPrincipal.cerrarProgreso();
-                    vistaPrincipal.recreate();
+                    if(datos[1].toString().equals("origenydestino")){
+                        Log.i(TAG,"Actualizacion Destino");
+                        vistaPrincipal.cerrarProgreso();
+                        vistaPrincipal.recreate();
+                    }else if(datos[1].toString().equals("fechayhora")) {
+                        Log.i(TAG,"Set fecha y hora");
+                        vistaPrincipal.cerrarProgreso();
+                    }
                 }else{
                     vistaPrincipal.cerrarProgreso();
                 }
@@ -171,6 +177,7 @@ public class PresentadorPrincipal implements IPresentadorPrincipal{
     @Override
     public void tratarConfiguracion(Object informacion) {
         Object[] datos = (Object[])informacion;
+        Object[] respuesta = new Object[13];
         int tarea = (int)datos[0];
         switch (tarea){
             case 0:
@@ -186,10 +193,20 @@ public class PresentadorPrincipal implements IPresentadorPrincipal{
                 vistaPrincipal.mostrarProgreso();
                 vistaPrincipal.cerrarDialogo();
                 appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_ACTUALIZACION_USUARIO);
-                Object[] respuesta = new Object[13];
+
                 respuesta[0] = 1;
                 respuesta[5] = "1";
                 respuesta[6] = datos[1];
+                modelo.guardarPerfil(respuesta);
+                break;
+            case 3:
+                vistaPrincipal.mostrarProgreso();
+                vistaPrincipal.cerrarDialogo();
+                String[] fechaHora = (String[])datos[1];
+                appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_ACTUALIZACION_USUARIO);
+                respuesta[0] = 4;
+                respuesta[9] = fechaHora[0];
+                respuesta[10] = fechaHora[1];
                 modelo.guardarPerfil(respuesta);
         }
 

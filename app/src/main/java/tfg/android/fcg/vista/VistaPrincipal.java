@@ -1,6 +1,8 @@
 package tfg.android.fcg.vista;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,13 +16,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import tfg.android.fcg.AppMediador;
@@ -49,6 +56,22 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     private boolean deshabilitoBack = true;
     private boolean rol;
+
+    //Fecha y hora
+    private static final String CERO = "0";
+    private static final String BARRA = "/";
+    private static final String DOS_PUNTOS = ":";
+
+    public final Calendar c = Calendar.getInstance();
+
+    final int hora = c.get(Calendar.HOUR_OF_DAY);
+    final int minuto = c.get(Calendar.MINUTE);
+    final int mes = c.get(Calendar.MONTH);
+    final int dia = c.get(Calendar.DAY_OF_MONTH);
+    final int anio = c.get(Calendar.YEAR);
+
+    private ImageButton botonFecha, botonHora;
+    private EditText eFecha, eHora;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,17 +129,27 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         int tarea = (int)informacion;
         dialogBuild = new AlertDialog.Builder(this);
         final View dialogoOrigenDestino = getLayoutInflater().inflate(R.layout.layout_destino,null);
+        final View dialogoFechaHora = getLayoutInflater().inflate(R.layout.layout_fecha_hora,null);
         switch(tarea){
             case 0:
                 //Editar Destino
-                Toast.makeText(getApplicationContext(),"Editar destino",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"Editar destino",Toast.LENGTH_SHORT).show();
                 dialogBuild.setView(dialogoOrigenDestino);
                 dialogo = dialogBuild.create();
                 dialogo.show();
                 break;
             case 1:
                 //Editar Fecha y hora de salida
-                Toast.makeText(getApplicationContext(),"Editar Fecha y hora",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"Editar Fecha y hora",Toast.LENGTH_SHORT).show();
+                dialogBuild.setView(dialogoFechaHora);
+                dialogo =dialogBuild.create();
+                dialogo.show();
+                botonFecha = (ImageButton) dialogo.findViewById(R.id.obtener_fecha);
+                botonHora = (ImageButton) dialogo.findViewById(R.id.obtener_hora);
+                botonFecha.setOnClickListener(this);
+                botonHora.setOnClickListener(this);
+                eFecha = (EditText)dialogo.findViewById(R.id.et_mostrar_fecha_picker) ;
+                eHora = (EditText)dialogo.findViewById(R.id.et_mostrar_hora_picker);
                 break;
             case 3:
                 //Error a la hora de presentar lista
@@ -199,6 +232,56 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                     presentadorPrincipal.tratarConfiguracion(respuesta);
 
                 }
+            case R.id.obtener_hora:
+
+                TimePickerDialog recogerHora = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String horaformateada = (hourOfDay < 10)? String.valueOf(CERO + hourOfDay) : String.valueOf(hourOfDay);
+                        String minutoFormateado = (minute < 10)? String.valueOf(CERO + minute):String.valueOf(minute);
+                        String AM_PM;
+                        if(hourOfDay < 12) {
+                            AM_PM = "a.m.";
+                        } else {
+                            AM_PM = "p.m.";
+                        }
+                        eHora.setText(horaformateada + DOS_PUNTOS + minutoFormateado + " " + AM_PM);
+                    }
+                },hora,minuto,false);
+                recogerHora.show();
+                Log.i(TAG,"Muestra time picker");
+                break;
+
+            case R.id.obtener_fecha:
+
+                DatePickerDialog recogerFecha = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        final int mesActual = month+1;
+                        String diaFormateado = (dayOfMonth < 10)? CERO + String.valueOf(dayOfMonth):String.valueOf(dayOfMonth);
+                        String mesFormateado = (mesActual < 10)? CERO + String.valueOf(mesActual):String.valueOf(mesActual);
+                        eFecha.setText(diaFormateado + BARRA + mesFormateado + BARRA + year);
+                    }
+                },anio,mes,dia);
+                recogerFecha.show();
+                Log.i(TAG,"Muestra date picker");
+                break;
+
+            case R.id.guardarFechaHora:
+                if(eFecha.getText().toString().isEmpty()){
+
+                }else if(eHora.getText().toString().isEmpty()){
+
+                }else{
+                    Object[] config = new Object[2];
+                    config[0] = 3;
+                    Log.i(TAG,eFecha.getText().toString());
+                    Log.i(TAG,eHora.getText().toString());
+                    String[] fechaHora = {eFecha.getText().toString(), eHora.getText().toString()};
+                    config[1] = fechaHora;
+                    presentadorPrincipal.tratarConfiguracion(config);
+                }
+                break;
         }
     }
 
