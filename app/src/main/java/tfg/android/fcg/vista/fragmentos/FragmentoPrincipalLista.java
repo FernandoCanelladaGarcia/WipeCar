@@ -61,10 +61,10 @@ public class FragmentoPrincipalLista extends Fragment{
         if(!pausada){
             if(!rol){
                 vistaPrincipal.obtenerVehiculos();
-                floatPrincipal.setImageResource(R.drawable.icon_edit_salida);
+                floatPrincipal.setImageResource(R.drawable.icon_edit_destino);
             }else{
                 vistaPrincipal.obtenerUsuarios();
-                floatPrincipal.setImageResource(R.drawable.icon_edit_destino);
+                floatPrincipal.setImageResource(R.drawable.icon_edit_salida);
             }
         }
         return rootView;
@@ -81,7 +81,7 @@ public class FragmentoPrincipalLista extends Fragment{
         if(rootView != null){
             adapterPrincipalLista = new AdapterPrincipalLista(rootView.getContext(),listaPasajeros,appMediador);
             listView.setAdapter(adapterPrincipalLista);
-            if(listaPasajeros.isEmpty()){
+            if(listaPasajeros.isEmpty() || listaPasajeros == null){
                 rootView.findViewById(R.id.elementoListaPrincipalVacia).setVisibility(View.VISIBLE);
                     TextView mensajeListaVacia = (TextView) rootView.findViewById(R.id.mensajeListaPrincipalVacia);
                     mensajeListaVacia.setText("No existen pasajeros que le hayan escogido para ir a su destino");
@@ -99,7 +99,7 @@ public class FragmentoPrincipalLista extends Fragment{
         if(rootView != null){
             adapterPrincipalLista = new AdapterPrincipalLista(rootView.getContext(),listaConductores,appMediador,listaVehiculos);
             listView.setAdapter(adapterPrincipalLista);
-            if(listaConductores.isEmpty() || listaVehiculos.isEmpty()){
+            if(listaConductores.isEmpty() || listaVehiculos.isEmpty() || listaConductores == null || listaVehiculos == null){
                 rootView.findViewById(R.id.elementoListaPrincipalVacia).setVisibility(View.VISIBLE);
                 ImageView iconoListaVacia = (ImageView)rootView.findViewById(R.id.imagenListaVacia);
                 iconoListaVacia.setImageResource(R.drawable.icon_car_user);

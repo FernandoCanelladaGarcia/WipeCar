@@ -59,13 +59,11 @@ public class PresentadorPrincipal implements IPresentadorPrincipal{
                     vistaPrincipal.cerrarProgreso();
                     vistaPrincipal.mostrarDialogo(3);
                 }else{
-                    if(conductores.isEmpty()){
+                    if(conductores.isEmpty() || conductores == null){
                         //Elemento vacio
                         Log.i(TAG,"No Conductores");
-                        respuesta[0] = 0;
-                        respuesta[1] = conductores;
                         vistaPrincipal.cerrarProgreso();
-                        //vistaPrincipal.mostrarUsuarios(respuesta);
+                        vistaPrincipal.setConductores(conductores);
                     }else{
                         vistaPrincipal.setConductores(conductores);
                     }
@@ -80,8 +78,10 @@ public class PresentadorPrincipal implements IPresentadorPrincipal{
                     vistaPrincipal.cerrarProgreso();
                     vistaPrincipal.mostrarDialogo(0);
                 }else{
-                    if(pasajeros.isEmpty()){
+                    if(pasajeros.isEmpty() || pasajeros == null){
+                        Log.i(TAG,"No Pasajeros");
                         vistaPrincipal.cerrarProgreso();
+                        pasajeros = new ArrayList<>();
                         vistaPrincipal.setPasajeros(pasajeros);
                     }else{
                         //Mostrar Lista

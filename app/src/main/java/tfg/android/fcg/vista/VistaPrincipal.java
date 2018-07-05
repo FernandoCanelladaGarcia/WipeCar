@@ -211,7 +211,13 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     public void setConductores(Object informacion) {
         Log.i(TAG, "set conductores");
         listaUsuarios = (ArrayList<Usuario>) informacion;
-        presentadorPrincipal.obtenerVehiculos(listaUsuarios);
+        if(!listaUsuarios.isEmpty()){
+            presentadorPrincipal.obtenerVehiculos(listaUsuarios);
+        }else{
+            listaUsuarios = new ArrayList<>();
+            listaVehiculos = new ArrayList<>();
+            prepararTabs();
+        }
     }
 
     @Override
