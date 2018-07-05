@@ -107,16 +107,18 @@ public class BDAdaptadorUsuario {
      */
     public void obtenerListaConductores(final String destino) {
         //TODO comprobar rol
-        final ArrayList<Usuario> conductores = new ArrayList<>();
-        database.addListenerForSingleValueEvent(new ValueEventListener() {
+        database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<Usuario> conductores = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Usuario usuario = snapshot.getValue(Usuario.class);
                     if (usuario.getDestino().equals(destino) && usuario.isRol()) {
+                        Log.i(TAG,"Conductor");
                         conductores.add(usuario);
                     }
                 }
+                Log.i(TAG, String.valueOf(conductores.size()));
                 //Se ha creado la lista de conductores que van al destino
                 Bundle extras = new Bundle();
                 extras.putSerializable(AppMediador.CLAVE_LISTA_CONDUCTORES, conductores);
@@ -142,16 +144,18 @@ public class BDAdaptadorUsuario {
      */
     public void obtenerListaPasajeros(final String destino) {
         //TODO comprobar rol
-        final ArrayList<Usuario> pasajeros = new ArrayList<>();
-        database.addListenerForSingleValueEvent(new ValueEventListener() {
+        database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<Usuario> pasajeros = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Usuario usuario = snapshot.getValue(Usuario.class);
                     if (usuario.getDestino().equals(destino) && !usuario.isRol()) {
+                        Log.i(TAG,"Pasajero");
                         pasajeros.add(usuario);
                     }
                 }
+                Log.i(TAG, String.valueOf(pasajeros.size()));
                 //Se ha creado la lista de pasajeros que van al destino
                 Bundle extras = new Bundle();
                 extras.putSerializable(AppMediador.CLAVE_LISTA_PASAJEROS, pasajeros);

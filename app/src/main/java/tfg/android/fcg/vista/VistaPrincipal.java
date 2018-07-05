@@ -46,9 +46,11 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     private AppMediador appMediador;
     private IPresentadorPrincipal presentadorPrincipal;
     private AdapterPrincipalLista adaptador;
-    private List<Usuario> listaUsuarios;
-    private List<Vehiculo> listaVehiculos;
-    private final static String TAG = "depurador";
+    private FragmentoPrincipalLista fragmentoPrincipal;
+    private ArrayList<Usuario> listaUsuarios;
+    private Usuario user;
+    private ArrayList<Vehiculo> listaVehiculos;
+
     private FloatingActionButton floatPrincipal;
     private static ViewPager viewPager;
     private static TabLayout tabLayout;
@@ -56,6 +58,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     private boolean deshabilitoBack = true;
     private boolean rol;
+    private boolean tabsPreparadas;
 
     //Fecha y hora
     private static final String CERO = "0";
@@ -72,6 +75,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     private ImageButton botonFecha, botonHora;
     private EditText eFecha, eHora;
+    private final static String TAG = "depurador";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,25 +89,14 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         botonPerfil.setOnClickListener(this);
         botonSalir = (Button) findViewById(R.id.botonSalir);
         botonSalir.setOnClickListener(this);
-    }
 
-    private void setUpViewPager(boolean rol) {
-        viewPager = (ViewPager) findViewById(R.id.viewPagerPrincipal);
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        if (rol) {
-            adapter.addFragment(new FragmentoPrincipalLista(), "Pick Up Conductor");
-            adapter.addFragment(new VistaOTGConductor(), "On The Go Conductor");
-            //floatPrincipal.setImageResource(R.drawable.icon_edit_salida);
-            Log.i(TAG, "Vista principal - Modo conductor");
-        } else {
-            adapter.addFragment(new FragmentoPrincipalLista(), "Pick Up Pasajero");
-            adapter.addFragment(new VistaOTGPasajero(), "On The Go Pasajero");
-            //floatPrincipal.setImageResource(R.drawable.icon_edit_destino);
-            Log.i(TAG, "Vista principal - Modo pasajero");
-        }
-        viewPager.setAdapter(adapter);
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.setupWithViewPager(viewPager);
+        SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
+        rol = sharedPreferences.getBoolean("rol", false);
+        String idUser = sharedPreferences.getString("idUser", null);
+
+        tabsPreparadas = false;
+
+        presentadorPrincipal.iniciar(idUser);
     }
 
     @Override
@@ -165,28 +158,29 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     @Override
     public void mostrarUsuarios(Object informacion) {
-        ListView listView = (ListView) findViewById(R.id.listaPrincipal);
-        Object[] respuesta = (Object[]) informacion;
-        listaUsuarios = (ArrayList<Usuario>) respuesta[1];
-        if(respuesta.length > 2){
-            listaVehiculos = (ArrayList<Vehiculo>)respuesta[2];
-            adaptador = new AdapterPrincipalLista(VistaPrincipal.this, listaUsuarios, appMediador, listaVehiculos);
-        }else{
-            adaptador = new AdapterPrincipalLista(VistaPrincipal.this, listaUsuarios, appMediador);
-        }
-        listView.setAdapter(adaptador);
-        if ((int) respuesta[0] == 1) {
-            findViewById(R.id.elementoListaPrincipalVacia).setVisibility(View.GONE);
-        }if ((int) respuesta[0] == 0) {
-            findViewById(R.id.elementoListaPrincipalVacia).setVisibility(View.VISIBLE);
-            if(rol){
-                TextView mensajeListaVacia = (TextView) findViewById(R.id.mensajeListaPrincipalVacia);
-                mensajeListaVacia.setText("No existen pasajeros que le hayan escogido para ir a su destino");
-            }else{
-                ImageView iconoListaVacia = (ImageView)findViewById(R.id.imagenListaVacia);
-                iconoListaVacia.setImageResource(R.drawable.icon_car_user);
-            }
-        }
+//        ListView listView = (ListView) findViewById(R.id.listaPrincipal);
+//        Object[] respuesta = (Object[]) informacion;
+//        listaUsuarios = (ArrayList<Usuario>) respuesta[1];
+//        Log.i(TAG,"CONDUCTORES " + listaUsuarios.size());
+//        if(respuesta[2] != null){
+//            listaVehiculos = (ArrayList<Vehiculo>)respuesta[2];
+//            adaptador = new AdapterPrincipalLista(VistaPrincipal.this, listaUsuarios, appMediador, listaVehiculos);
+//        }else{
+//            adaptador = new AdapterPrincipalLista(VistaPrincipal.this, listaUsuarios, appMediador);
+//        }
+//        listView.setAdapter(adaptador);
+//        if ((int) respuesta[0] == 1) {
+//            findViewById(R.id.elementoListaPrincipalVacia).setVisibility(View.GONE);
+//        }if ((int) respuesta[0] == 0) {
+//            findViewById(R.id.elementoListaPrincipalVacia).setVisibility(View.VISIBLE);
+//            if(rol){
+//                TextView mensajeListaVacia = (TextView) findViewById(R.id.mensajeListaPrincipalVacia);
+//                mensajeListaVacia.setText("No existen pasajeros que le hayan escogido para ir a su destino");
+//            }else{
+//                ImageView iconoListaVacia = (ImageView)findViewById(R.id.imagenListaVacia);
+//                iconoListaVacia.setImageResource(R.drawable.icon_car_user);
+//            }
+//        }
     }
 
     @Override
@@ -200,6 +194,43 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     }
 
     @Override
+    public void setUsuario(Object informacion) {
+        Log.i(TAG, "set usuario");
+        user = (Usuario)informacion;
+
+        if(user.isRol()){
+            Log.i(TAG, "Usuario conductor");
+            presentadorPrincipal.obtenerPeticionesPasajeros(user.getIdUser());
+        }else{
+            Log.i(TAG, "Usuario pasajero");
+            presentadorPrincipal.obtenerConductores(user.getDestino());
+        }
+    }
+
+    @Override
+    public void setConductores(Object informacion) {
+        Log.i(TAG, "set conductores");
+        listaUsuarios = (ArrayList<Usuario>) informacion;
+        presentadorPrincipal.obtenerVehiculos(listaUsuarios);
+    }
+
+    @Override
+    public void setVehiculos(Object informacion) {
+        Log.i(TAG, "set vehiculos");
+        listaVehiculos = (ArrayList<Vehiculo>) informacion;
+        prepararTabs();
+
+    }
+
+    @Override
+    public void setPasajeros(Object informacion) {
+        Log.i(TAG, "set pasajeros");
+        listaUsuarios = (ArrayList<Usuario>) informacion;
+        prepararTabs();
+
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.botonPerfil:
@@ -209,7 +240,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                 break;
             case R.id.botonSalir:
                 Log.i(TAG, "Salir");
-                Object[] datos = new Object[]{0,""};
+                Object[] datos = new Object[]{1,""};
                 presentadorPrincipal.tratarConfiguracion(datos);
                 break;
             case R.id.floatPrincipal:
@@ -288,12 +319,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
-        rol = sharedPreferences.getBoolean("rol", false);
-        setUpViewPager(rol);
 
-        String idUser = sharedPreferences.getString("idUser", null);
-        presentadorPrincipal.iniciar(idUser);
     }
 
     @Override
@@ -317,6 +343,55 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         }else{
             super.onBackPressed();
         }
+    }
+
+    private void prepararTabs(){
+        if(!tabsPreparadas){
+            tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+            tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+            tabLayout.setTabMode(TabLayout.MODE_FIXED);
+
+            tabLayout.addTab(tabLayout.newTab());
+            tabLayout.addTab(tabLayout.newTab());
+
+            viewPager = (ViewPager) findViewById(R.id.viewPagerPrincipal);
+
+            ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+            fragmentoPrincipal = new FragmentoPrincipalLista();
+            if(rol){
+                adapter.addFragment(fragmentoPrincipal, "Pick Up Conductor");
+                adapter.addFragment(new VistaOTGConductor(), "On The Go Conductor");
+                //floatPrincipal.setImageResource(R.drawable.icon_edit_salida);
+                Log.i(TAG, "Vista principal - Modo conductor");
+
+            }else{
+                adapter.addFragment(fragmentoPrincipal, "Pick Up Pasajero");
+                adapter.addFragment(new VistaOTGPasajero(), "On The Go Pasajero");
+                //floatPrincipal.setImageResource(R.drawable.icon_edit_destino);
+                Log.i(TAG, "Vista principal - Modo pasajero");
+            }
+
+            viewPager.setAdapter(adapter);
+            tabLayout.setupWithViewPager(viewPager);
+            tabsPreparadas = true;
+            cerrarProgreso();
+
+        }else{
+            if(rol){
+                fragmentoPrincipal.setListaPasajeros(listaUsuarios);
+            }else{
+                fragmentoPrincipal.setListaConductores(listaUsuarios,listaVehiculos);
+            }
+
+        }
+    }
+
+    public void obtenerUsuarios(){
+        fragmentoPrincipal.setListaPasajeros(listaUsuarios);
+    }
+
+    public void obtenerVehiculos(){
+        fragmentoPrincipal.setListaConductores(listaUsuarios,listaVehiculos);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

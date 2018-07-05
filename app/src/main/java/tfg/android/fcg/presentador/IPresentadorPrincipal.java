@@ -59,4 +59,11 @@ public interface IPresentadorPrincipal {
      * @param informacion
      */
     public void tratarOnTheGo(Object informacion);
+
+    //TODO: NUEVOS, REDACCION
+    public void obtenerVehiculos(Object informacion);
+
+    public void obtenerConductores(Object informacion);
+
+    public void obtenerPeticionesPasajeros(Object informacion);
 }

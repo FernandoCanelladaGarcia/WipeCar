@@ -41,4 +41,12 @@ public interface IVistaPrincipal {
      */
     public void desmarcarUsuario(Object informacion);
 
+    public void setUsuario(Object informacion);
+
+    public void setConductores(Object informacion);
+
+    public void setVehiculos(Object informacion);
+
+    public void setPasajeros(Object informacion);
+
 }

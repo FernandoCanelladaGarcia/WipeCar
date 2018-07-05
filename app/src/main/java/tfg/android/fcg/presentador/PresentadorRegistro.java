@@ -31,6 +31,7 @@ public class PresentadorRegistro implements IPresentadorRegistro {
                     vistaRegistro.cerrarProgreso();
                     vistaRegistro.mostrarDialogo(2);
                     appMediador.launchActivity(VistaMapaOrigen.class,this,null);
+                    vistaRegistro.finish();
                 }else if (intent.getStringExtra(AppMediador.CLAVE_RESULTADO_REGISTRO_USUARIO).equals("Usuario ya existente")){
                     vistaRegistro.cerrarProgreso();
                     vistaRegistro.mostrarDialogo(3);

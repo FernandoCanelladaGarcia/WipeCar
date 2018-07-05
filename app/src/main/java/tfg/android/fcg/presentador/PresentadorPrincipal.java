@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import tfg.android.fcg.AppMediador;
@@ -23,14 +24,15 @@ public class PresentadorPrincipal implements IPresentadorPrincipal{
     private AppMediador appMediador;
     private VistaPrincipal vistaPrincipal;
     private Usuario usuario;
-    private List<Usuario> conductores;
-    private List<Vehiculo> vehiculos;
+    private ArrayList<Usuario> conductores;
+    private ArrayList<Vehiculo> vehiculos;
     private final static String TAG = "depurador";
 
     public PresentadorPrincipal(){
         appMediador = AppMediador.getInstance();
         modelo = Modelo.getInstance();
         vistaPrincipal = (VistaPrincipal) appMediador.getVistaPrincipal();
+        vehiculos = new ArrayList<>();
     }
 
     private BroadcastReceiver receptorDeAvisos = new BroadcastReceiver() {
@@ -45,78 +47,56 @@ public class PresentadorPrincipal implements IPresentadorPrincipal{
             if(intent.getAction().equals(AppMediador.AVISO_OBTENER_USUARIO)){
                 appMediador.unRegisterReceiver(this);
                 usuario = (Usuario) intent.getSerializableExtra(AppMediador.CLAVE_OBTENER_USUARIO);
+                vistaPrincipal.setUsuario(usuario);
                 Log.i(TAG,usuario.getNombre());
-                if(usuario.isRol()){
-                    //MODO - CONDUCTOR
-                    appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_LISTA_PASAJEROS_VINCULO);
-                    modelo.obtenerPeticionesDePasajeros(usuario.getIdUser());
-                }else{
-                    //MODO - PASAJERO
-                    appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_LISTA_CONDUCTORES);
-                    Object[] datos = new Object[]{1,usuario.getDestino()};
-                    modelo.obtenerUsuariosPickUp(datos);
-                }
             }
             if(intent.getAction().equals(AppMediador.AVISO_LISTA_CONDUCTORES)){
                 appMediador.unRegisterReceiver(this);
-                Object[] respuesta = new Object[2];
-                conductores = (List<Usuario>) intent.getSerializableExtra(AppMediador.CLAVE_LISTA_CONDUCTORES);
-                if(conductores != null){
-                    if(!conductores.isEmpty()){
-                        //Mostrar Lista
-                        Log.i(TAG,"Existen Confuctores");
-                        for (Usuario conductor: conductores) {
-                            appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_OBTENER_VEHICULO);
-                            modelo.obtenerVehiculoUsuario(conductor.getDatoVehiculo());
-                        }
-                    }else{
-                        //Elemento vacio
-                        respuesta[0] = 0;
-                        respuesta[1] = conductores;
-                        vistaPrincipal.cerrarProgreso();
-                        vistaPrincipal.mostrarUsuarios(respuesta);
-                    }
-                }else{
+                Object[] respuesta = new Object[3];
+                conductores = (ArrayList<Usuario>) intent.getSerializableExtra(AppMediador.CLAVE_LISTA_CONDUCTORES);
+                if(conductores == null){
                     //Error
                     vistaPrincipal.cerrarProgreso();
                     vistaPrincipal.mostrarDialogo(3);
+                }else{
+                    if(conductores.isEmpty()){
+                        //Elemento vacio
+                        Log.i(TAG,"No Conductores");
+                        respuesta[0] = 0;
+                        respuesta[1] = conductores;
+                        vistaPrincipal.cerrarProgreso();
+                        //vistaPrincipal.mostrarUsuarios(respuesta);
+                    }else{
+                        vistaPrincipal.setConductores(conductores);
+                    }
                 }
             }
             if(intent.getAction().equals(AppMediador.AVISO_LISTA_PASAJEROS_VINCULO)){
                 appMediador.unRegisterReceiver(this);
-                Object[] respuesta = new Object[2];
-                List<Usuario> pasajeros = (List<Usuario>) intent.getSerializableExtra(AppMediador.CLAVE_LISTA_PASAJEROS_VINCULO);
-                if(pasajeros != null){
-                    if(!pasajeros.isEmpty()){
-                        //Mostrar Lista
-                        respuesta[0] = 1;
-                        respuesta[1] = pasajeros;
-                        vistaPrincipal.cerrarProgreso();
-                        vistaPrincipal.mostrarUsuarios(respuesta);
-                    }else{
-                        //Mostrar elemento vacio
-                        respuesta[0] = 0;
-                        respuesta[1] = pasajeros;
-                        vistaPrincipal.cerrarProgreso();
-                        vistaPrincipal.mostrarUsuarios(respuesta);
-                    }
-                }else{
+                Object[] respuesta = new Object[3];
+                ArrayList<Usuario> pasajeros = (ArrayList<Usuario>)  intent.getSerializableExtra(AppMediador.CLAVE_LISTA_PASAJEROS_VINCULO);
+                if(pasajeros == null){
                     //ERROR
                     vistaPrincipal.cerrarProgreso();
                     vistaPrincipal.mostrarDialogo(0);
+                }else{
+                    if(pasajeros.isEmpty()){
+                        vistaPrincipal.cerrarProgreso();
+                        vistaPrincipal.setPasajeros(pasajeros);
+                    }else{
+                        //Mostrar Lista
+                        vistaPrincipal.cerrarProgreso();
+                        vistaPrincipal.setPasajeros(pasajeros);
+                    }
                 }
             }
             if(intent.getAction().equals(AppMediador.AVISO_OBTENER_VEHICULO)){
-                Object[] respuesta = new Object[3];
                 Vehiculo vehiculo = (Vehiculo)intent.getSerializableExtra(AppMediador.CLAVE_OBTENER_VEHICULO);
                 vehiculos.add(vehiculo);
                 if(vehiculos.size() == conductores.size()){
                     appMediador.unRegisterReceiver(this);
-                    respuesta[0] = 1;
-                    respuesta[1] = conductores;
-                    respuesta[2] = vehiculos;
-                    vistaPrincipal.cerrarProgreso();
-                    vistaPrincipal.mostrarUsuarios(respuesta);
+                    Log.i(TAG,"vehiculos total = " + vehiculos.size());
+                    vistaPrincipal.setVehiculos(vehiculos);
                 }
             }
             if(intent.getAction().equals(AppMediador.AVISO_ACTUALIZACION_USUARIO)){
@@ -215,5 +195,29 @@ public class PresentadorPrincipal implements IPresentadorPrincipal{
     @Override
     public void tratarOnTheGo(Object informacion) {
 
+    }
+
+    @Override
+    public void obtenerVehiculos(Object informacion) {
+        ArrayList<Usuario> conduc = (ArrayList<Usuario>) informacion;
+        Log.i(TAG,"Existen Conductores " + conduc.size());
+        for (Usuario conductor: conduc) {
+            appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_OBTENER_VEHICULO);
+            modelo.obtenerVehiculoUsuario(conductor.getDatoVehiculo());
+        }
+    }
+
+    @Override
+    public void obtenerConductores(Object informacion) {
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_LISTA_CONDUCTORES);
+        Object[] datos = new Object[]{1, (String) informacion};
+        Log.i(TAG,"Usuario Pasajero "+ usuario.getDestino());
+        modelo.obtenerUsuariosPickUp(datos);
+    }
+
+    @Override
+    public void obtenerPeticionesPasajeros(Object informacion) {
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_LISTA_PASAJEROS_VINCULO);
+        modelo.obtenerPeticionesDePasajeros((String) informacion);
     }
 }

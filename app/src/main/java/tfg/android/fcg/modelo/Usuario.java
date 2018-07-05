@@ -120,7 +120,7 @@ public class Usuario implements Serializable {
         this.hora = hora;
     }
 
-    public Object getDatoVehiculo() {
+    public String getDatoVehiculo() {
         return datoVehiculo;
     }
 
