@@ -234,6 +234,11 @@ public class Modelo implements IModelo{
     }
 
     @Override
+    public void cambiarRol(Object informacion){
+        adaptadorUsuario.cambiarRol((boolean)informacion);
+    }
+
+    @Override
     public void obtenerPosicionUsuario(Object informacion){
         adaptadorPosicion.obtenerPosicion(informacion);
     }

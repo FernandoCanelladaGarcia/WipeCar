@@ -114,12 +114,14 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
                     modoConductor.setChecked(isChecked);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean("rol", isChecked);
-                    editor.apply();
                     if (isChecked) {
                         Toast.makeText(getApplicationContext(), "MODO CONDUCTOR", Toast.LENGTH_SHORT).show();
+                        presentadorPerfil.tratarConductor(isChecked);
                     } else {
                         Toast.makeText(getApplicationContext(), "MODO PASAJERO", Toast.LENGTH_SHORT).show();
+                        presentadorPerfil.tratarConductor(isChecked);
                     }
+                    editor.apply();
                 } else if (!botonEditar.isEnabled()) {
                     if (isChecked) {
                         Toast.makeText(getApplicationContext(), "MODO CONDUCTOR", Toast.LENGTH_SHORT).show();
@@ -386,7 +388,6 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
     @Override
     public void onBackPressed(){
         super.onBackPressed();
-        appMediador.launchActivity(VistaPrincipal.class,this,null);
         finish();
     }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.modelo.IModelo;
@@ -88,6 +89,15 @@ public class PresentadorPerfil implements IPresentadorPerfil {
                 Log.i(TAG, "Limpiado de Shared Preferences");
                 appMediador.launchActivity(VistaLogin.class,this,null);
                 vistaPerfil.finish();
+            }
+            if(intent.getAction().equals(AppMediador.AVISO_CAMBIO_ROL)){
+                appMediador.unRegisterReceiver(this);
+                boolean rol = (boolean)intent.getBooleanExtra(AppMediador.CLAVE_CAMBIO_ROL,false);
+                if(rol){
+                    Log.i(TAG,"Cambio de Modo");
+                }else{
+                    Log.i(TAG,"No se ha podido cambiar de Modo");
+                }
             }
         }
     };
@@ -180,9 +190,9 @@ public class PresentadorPerfil implements IPresentadorPerfil {
         modelo.eliminarPerfil((Object[])informacion);
     }
 
-    //TODO: NO SE USA, REDACCION
     @Override
     public void tratarConductor(Object informacion) {
-
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_CAMBIO_ROL);
+        modelo.cambiarRol(informacion);
     }
 }

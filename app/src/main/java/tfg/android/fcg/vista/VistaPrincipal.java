@@ -49,6 +49,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     private FragmentoPrincipalLista fragmentoPrincipal;
     private ArrayList<Usuario> listaUsuarios;
     private Usuario user;
+    private String idUser;
     private ArrayList<Vehiculo> listaVehiculos;
 
     private FloatingActionButton floatPrincipal;
@@ -58,7 +59,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     private boolean deshabilitoBack = true;
     private boolean rol;
-    private boolean tabsPreparadas;
+    private boolean pausada;
 
     //Fecha y hora
     private static final String CERO = "0";
@@ -92,9 +93,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
         SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
         rol = sharedPreferences.getBoolean("rol", false);
-        String idUser = sharedPreferences.getString("idUser", null);
-
-        tabsPreparadas = false;
+        idUser = sharedPreferences.getString("idUser", null);
 
         presentadorPrincipal.iniciar(idUser);
     }
@@ -119,11 +118,11 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     @Override
     public void mostrarDialogo(Object informacion) {
-        int tarea = (int)informacion;
+        int tarea = (int) informacion;
         dialogBuild = new AlertDialog.Builder(this);
-        final View dialogoOrigenDestino = getLayoutInflater().inflate(R.layout.layout_destino,null);
-        final View dialogoFechaHora = getLayoutInflater().inflate(R.layout.layout_fecha_hora,null);
-        switch(tarea){
+        final View dialogoOrigenDestino = getLayoutInflater().inflate(R.layout.layout_destino, null);
+        final View dialogoFechaHora = getLayoutInflater().inflate(R.layout.layout_fecha_hora, null);
+        switch (tarea) {
             case 0:
                 //Editar Destino
                 //Toast.makeText(getApplicationContext(),"Editar destino",Toast.LENGTH_SHORT).show();
@@ -135,14 +134,14 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                 //Editar Fecha y hora de salida
                 //Toast.makeText(getApplicationContext(),"Editar Fecha y hora",Toast.LENGTH_SHORT).show();
                 dialogBuild.setView(dialogoFechaHora);
-                dialogo =dialogBuild.create();
+                dialogo = dialogBuild.create();
                 dialogo.show();
                 botonFecha = (ImageButton) dialogo.findViewById(R.id.obtener_fecha);
                 botonHora = (ImageButton) dialogo.findViewById(R.id.obtener_hora);
                 botonFecha.setOnClickListener(this);
                 botonHora.setOnClickListener(this);
-                eFecha = (EditText)dialogo.findViewById(R.id.et_mostrar_fecha_picker) ;
-                eHora = (EditText)dialogo.findViewById(R.id.et_mostrar_hora_picker);
+                eFecha = (EditText) dialogo.findViewById(R.id.et_mostrar_fecha_picker);
+                eHora = (EditText) dialogo.findViewById(R.id.et_mostrar_hora_picker);
                 break;
             case 3:
                 //Error a la hora de presentar lista
@@ -196,12 +195,12 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     @Override
     public void setUsuario(Object informacion) {
         Log.i(TAG, "set usuario");
-        user = (Usuario)informacion;
+        user = (Usuario) informacion;
 
-        if(user.isRol()){
+        if (user.isRol()) {
             Log.i(TAG, "Usuario conductor");
             presentadorPrincipal.obtenerPeticionesPasajeros(user.getIdUser());
-        }else{
+        } else {
             Log.i(TAG, "Usuario pasajero");
             presentadorPrincipal.obtenerConductores(user.getDestino());
         }
@@ -211,9 +210,9 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     public void setConductores(Object informacion) {
         Log.i(TAG, "set conductores");
         listaUsuarios = (ArrayList<Usuario>) informacion;
-        if(!listaUsuarios.isEmpty()){
+        if (!listaUsuarios.isEmpty()) {
             presentadorPrincipal.obtenerVehiculos(listaUsuarios);
-        }else{
+        } else {
             listaUsuarios = new ArrayList<>();
             listaVehiculos = new ArrayList<>();
             prepararTabs();
@@ -241,31 +240,31 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         switch (v.getId()) {
             case R.id.botonPerfil:
                 Log.i(TAG, "Perfil");
-                Object[] informacion = new Object[]{0,""};
+                Object[] informacion = new Object[]{0, ""};
                 presentadorPrincipal.tratarConfiguracion(informacion);
                 break;
             case R.id.botonSalir:
                 Log.i(TAG, "Salir");
-                Object[] datos = new Object[]{1,""};
+                Object[] datos = new Object[]{1, ""};
                 presentadorPrincipal.tratarConfiguracion(datos);
                 break;
             case R.id.floatPrincipal:
-                if(rol){
+                if (rol) {
                     //Editar fecha y hora
                     mostrarDialogo(1);
-                }else{
+                } else {
                     //Editar Destino
                     mostrarDialogo(0);
                 }
                 break;
             case R.id.botonGuardarDestino:
                 Spinner destinos = dialogo.findViewById(R.id.spinnerDestinoPrincipal);
-                if(destinos.getSelectedItem().toString().equals("Destinos")){
+                if (destinos.getSelectedItem().toString().equals("Destinos")) {
                     Toast.makeText(getApplicationContext(),
                             "Por favor, seleccione un destino", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     String destino = destinos.getSelectedItem().toString();
-                    Object[] respuesta = new Object[]{2,destino};
+                    Object[] respuesta = new Object[]{2, destino};
                     presentadorPrincipal.tratarConfiguracion(respuesta);
 
                 }
@@ -274,19 +273,19 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                 TimePickerDialog recogerHora = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String horaformateada = (hourOfDay < 10)? String.valueOf(CERO + hourOfDay) : String.valueOf(hourOfDay);
-                        String minutoFormateado = (minute < 10)? String.valueOf(CERO + minute):String.valueOf(minute);
+                        String horaformateada = (hourOfDay < 10) ? String.valueOf(CERO + hourOfDay) : String.valueOf(hourOfDay);
+                        String minutoFormateado = (minute < 10) ? String.valueOf(CERO + minute) : String.valueOf(minute);
                         String AM_PM;
-                        if(hourOfDay < 12) {
+                        if (hourOfDay < 12) {
                             AM_PM = "a.m.";
                         } else {
                             AM_PM = "p.m.";
                         }
                         eHora.setText(horaformateada + DOS_PUNTOS + minutoFormateado + " " + AM_PM);
                     }
-                },hora,minuto,false);
+                }, hora, minuto, false);
                 recogerHora.show();
-                Log.i(TAG,"Muestra time picker");
+                Log.i(TAG, "Muestra time picker");
                 break;
 
             case R.id.obtener_fecha:
@@ -294,26 +293,26 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                 DatePickerDialog recogerFecha = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        final int mesActual = month+1;
-                        String diaFormateado = (dayOfMonth < 10)? CERO + String.valueOf(dayOfMonth):String.valueOf(dayOfMonth);
-                        String mesFormateado = (mesActual < 10)? CERO + String.valueOf(mesActual):String.valueOf(mesActual);
+                        final int mesActual = month + 1;
+                        String diaFormateado = (dayOfMonth < 10) ? CERO + String.valueOf(dayOfMonth) : String.valueOf(dayOfMonth);
+                        String mesFormateado = (mesActual < 10) ? CERO + String.valueOf(mesActual) : String.valueOf(mesActual);
                         eFecha.setText(diaFormateado + BARRA + mesFormateado + BARRA + year);
                     }
-                },anio,mes,dia);
+                }, anio, mes, dia);
                 recogerFecha.show();
-                Log.i(TAG,"Muestra date picker");
+                Log.i(TAG, "Muestra date picker");
                 break;
 
             case R.id.guardarFechaHora:
-                if(eFecha.getText().toString().isEmpty()){
+                if (eFecha.getText().toString().isEmpty()) {
 
-                }else if(eHora.getText().toString().isEmpty()){
+                } else if (eHora.getText().toString().isEmpty()) {
 
-                }else{
+                } else {
                     Object[] config = new Object[2];
                     config[0] = 3;
-                    Log.i(TAG,eFecha.getText().toString());
-                    Log.i(TAG,eHora.getText().toString());
+                    Log.i(TAG, eFecha.getText().toString());
+                    Log.i(TAG, eHora.getText().toString());
                     String[] fechaHora = {eFecha.getText().toString(), eHora.getText().toString()};
                     config[1] = fechaHora;
                     presentadorPrincipal.tratarConfiguracion(config);
@@ -323,14 +322,24 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
+        if (pausada) {
+            presentadorPrincipal.iniciar(idUser);
+        }
+        pausada = false;
 
     }
 
     @Override
-    public void onStart(){
+    protected void onStart() {
         super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        pausada = true;
     }
 
     @Override
@@ -343,61 +352,52 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     }
 
     @Override
-    public void onBackPressed(){
-        if(deshabilitoBack){
+    public void onBackPressed() {
+        if (deshabilitoBack) {
 
-        }else{
+        } else {
             super.onBackPressed();
         }
     }
 
-    private void prepararTabs(){
-        if(!tabsPreparadas){
-            tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-            tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-            tabLayout.setTabMode(TabLayout.MODE_FIXED);
+    private void prepararTabs() {
 
-            tabLayout.addTab(tabLayout.newTab());
-            tabLayout.addTab(tabLayout.newTab());
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
 
-            viewPager = (ViewPager) findViewById(R.id.viewPagerPrincipal);
+        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.addTab(tabLayout.newTab());
 
-            ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-            fragmentoPrincipal = new FragmentoPrincipalLista();
-            if(rol){
-                adapter.addFragment(fragmentoPrincipal, "Pick Up Conductor");
-                adapter.addFragment(new VistaOTGConductor(), "On The Go Conductor");
-                //floatPrincipal.setImageResource(R.drawable.icon_edit_salida);
-                Log.i(TAG, "Vista principal - Modo conductor");
+        viewPager = (ViewPager) findViewById(R.id.viewPagerPrincipal);
 
-            }else{
-                adapter.addFragment(fragmentoPrincipal, "Pick Up Pasajero");
-                adapter.addFragment(new VistaOTGPasajero(), "On The Go Pasajero");
-                //floatPrincipal.setImageResource(R.drawable.icon_edit_destino);
-                Log.i(TAG, "Vista principal - Modo pasajero");
-            }
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        fragmentoPrincipal = new FragmentoPrincipalLista();
+        if (rol) {
+            adapter.addFragment(fragmentoPrincipal, "Pick Up Conductor");
+            adapter.addFragment(new VistaOTGConductor(), "On The Go Conductor");
+            //floatPrincipal.setImageResource(R.drawable.icon_edit_salida);
+            Log.i(TAG, "Vista principal - Modo conductor");
 
-            viewPager.setAdapter(adapter);
-            tabLayout.setupWithViewPager(viewPager);
-            tabsPreparadas = true;
-            cerrarProgreso();
-
-        }else{
-            if(rol){
-                fragmentoPrincipal.setListaPasajeros(listaUsuarios);
-            }else{
-                fragmentoPrincipal.setListaConductores(listaUsuarios,listaVehiculos);
-            }
-
+        } else {
+            adapter.addFragment(fragmentoPrincipal, "Pick Up Pasajero");
+            adapter.addFragment(new VistaOTGPasajero(), "On The Go Pasajero");
+            //floatPrincipal.setImageResource(R.drawable.icon_edit_destino);
+            Log.i(TAG, "Vista principal - Modo pasajero");
         }
+
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
+        cerrarProgreso();
+
     }
 
-    public void obtenerUsuarios(){
+    public void obtenerUsuarios() {
         fragmentoPrincipal.setListaPasajeros(listaUsuarios);
     }
 
-    public void obtenerVehiculos(){
-        fragmentoPrincipal.setListaConductores(listaUsuarios,listaVehiculos);
+    public void obtenerVehiculos() {
+        fragmentoPrincipal.setListaConductores(listaUsuarios, listaVehiculos);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

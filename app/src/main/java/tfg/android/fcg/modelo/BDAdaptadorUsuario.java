@@ -617,6 +617,29 @@ public class BDAdaptadorUsuario {
         });
     }
 
+    public void cambiarRol(boolean rol){
+        Map<String, Object> taskMap = new HashMap<>();
+        taskMap.put("rol",rol);
+
+        DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(usuarioActual.getUid());
+        referenciaUsuario.updateChildren(taskMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Log.i(TAG, "Actualizacion Rol");
+                    Bundle extras = new Bundle();
+                    extras.putBoolean(AppMediador.CLAVE_CAMBIO_ROL,true);
+                    appMediador.sendBroadcast(AppMediador.AVISO_CAMBIO_ROL,extras);
+                }else{
+                    Log.i(TAG, "Error actualizacion Rol");
+                    Bundle extras = new Bundle();
+                    extras.putBoolean(AppMediador.CLAVE_CAMBIO_ROL,false);
+                    appMediador.sendBroadcast(AppMediador.AVISO_CAMBIO_ROL,extras);
+                }
+            }
+        });
+    }
+
 
     //**********METODOS PRIVADOS**************//
 

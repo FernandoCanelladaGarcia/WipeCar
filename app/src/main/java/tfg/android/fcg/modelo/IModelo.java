@@ -180,4 +180,7 @@ public interface IModelo {
      * la aplicacion en dicho momento.
      */
     public void deslogearUsuario();
+
+    //TODO: NUEVO, REDACCION
+    public void cambiarRol(Object informacion);
 }
