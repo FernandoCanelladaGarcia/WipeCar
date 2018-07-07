@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                 appMediador.unRegisterReceiver(this);
                 Usuario user = (Usuario) intent.getSerializableExtra(AppMediador.CLAVE_OBTENER_USUARIO);
                 if (user == null) {
-
+                    vistaPrincipal.cerrarProgreso();
                 } else {
                     usuario = user;
                     vistaPrincipal.setUsuario(usuario);
@@ -63,9 +64,12 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                 if (conduct.isEmpty() || conduct == null) {
                     //Elemento vacio
                     Log.i(TAG, "No Conductores");
-                    vistaPrincipal.cerrarProgreso();
+//                    vistaPrincipal.cerrarProgreso();
+                    conductores = null;
+                    conductores = conduct;
                     vistaPrincipal.setConductores(conductores);
                 } else {
+                    conductores = null;
                     conductores = conduct;
                     vistaPrincipal.setConductores(conductores);
                 }
@@ -76,12 +80,15 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                 ArrayList<Usuario> pasajer = (ArrayList<Usuario>) intent.getSerializableExtra(AppMediador.CLAVE_LISTA_PASAJEROS_VINCULO);
                 if (pasajer.isEmpty() || pasajer == null) {
                     Log.i(TAG, "No Pasajeros");
-                    vistaPrincipal.cerrarProgreso();
+//                    vistaPrincipal.cerrarProgreso();
+                    pasajeros = null;
+                    pasajeros = pasajer;
                     vistaPrincipal.setPasajeros(pasajeros);
                 } else {
                     //Mostrar Lista
+                    pasajeros = null;
                     pasajeros = pasajer;
-                    vistaPrincipal.cerrarProgreso();
+//                    vistaPrincipal.cerrarProgreso();
                     vistaPrincipal.setPasajeros(pasajeros);
                 }
 
@@ -93,6 +100,7 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                     appMediador.unRegisterReceiver(this);
                     Log.i(TAG, "vehiculos total = " + vehiculos.size());
                     vistaPrincipal.setVehiculos(vehiculos);
+                    vehiculos = new ArrayList<>();
                 }
             }
             if (intent.getAction().equals(AppMediador.AVISO_ACTUALIZACION_USUARIO)) {

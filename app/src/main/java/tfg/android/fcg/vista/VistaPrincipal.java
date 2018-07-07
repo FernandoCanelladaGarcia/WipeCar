@@ -199,9 +199,16 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     @Override
     public void setUsuario(Object informacion) {
-        Log.i(TAG, "set usuario");
-        user = (Usuario) informacion;
 
+        Usuario getUser = (Usuario) informacion;
+        if(user == null){
+            Log.i(TAG, "set usuario new");
+            user = getUser;
+        }else{
+            Log.i(TAG, "set usuario refresh");
+            user = null;
+            user = getUser;
+        }
         if (user.isRol()) {
             rol = user.isRol();
             Log.i(TAG, "Usuario conductor " + user.getIdUser());
@@ -215,9 +222,19 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     @Override
     public void setConductores(Object informacion) {
-        Log.i(TAG, "set conductores");
-        listaUsuarios = (ArrayList<Usuario>) informacion;
-        if (!listaUsuarios.isEmpty()) {
+
+        ArrayList<Usuario> getConduct = (ArrayList<Usuario>) informacion;
+
+        if(listaUsuarios == null){
+            Log.i(TAG, "set conductores new");
+            listaUsuarios = getConduct;
+        }else{
+            Log.i(TAG, "set conductores refresh");
+            listaUsuarios = null;
+            listaUsuarios = getConduct;
+        }
+
+        if (!getConduct.isEmpty()) {
             appMediador.getPresentadorPrincipal().obtenerVehiculos(listaUsuarios);
         } else {
             listaUsuarios = new ArrayList<>();
@@ -228,16 +245,33 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     @Override
     public void setVehiculos(Object informacion) {
-        Log.i(TAG, "set vehiculos");
-        listaVehiculos = (ArrayList<Vehiculo>) informacion;
+        ArrayList<Vehiculo> getVehic = (ArrayList<Vehiculo>) informacion;
+
+        if(listaVehiculos == null){
+            Log.i(TAG, "set vehiculos new");
+            listaVehiculos = getVehic;
+        }else{
+            Log.i(TAG, "set vehiculos refresh");
+            listaVehiculos = null;
+            listaVehiculos = getVehic;
+        }
         prepararTabs();
 
     }
 
     @Override
     public void setPasajeros(Object informacion) {
-        Log.i(TAG, "set pasajeros");
-        listaUsuarios = (ArrayList<Usuario>) informacion;
+
+
+        ArrayList<Usuario> getPasaj = (ArrayList<Usuario>) informacion;
+        if(listaUsuarios == null){
+            Log.i(TAG, "set pasajeros new");
+            listaUsuarios = getPasaj;
+        }else{
+            Log.i(TAG, "set pasajeros refresh");
+            listaUsuarios = null;
+            listaUsuarios = getPasaj;
+        }
         prepararTabs();
 
     }
@@ -271,6 +305,9 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                 if (destinos.getSelectedItem().toString().equals("Destinos")) {
                     Toast.makeText(getApplicationContext(),
                             "Por favor, seleccione un destino", Toast.LENGTH_SHORT).show();
+                }else if(destinos.getSelectedItem().toString().equals(user.getDestino())){
+                    Toast.makeText(getApplicationContext(),
+                            "Ha seleccionado el mismo destino", Toast.LENGTH_SHORT).show();
                 } else {
                     String destino = destinos.getSelectedItem().toString();
                     Object[] respuesta = new Object[]{2, destino};
@@ -390,7 +427,17 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         Log.i(TAG, "TABS");
-        fragmentoPrincipal = new FragmentoPrincipalLista();
+        if(fragmentoPrincipal == null){
+            fragmentoPrincipal = new FragmentoPrincipalLista();
+        }else{
+            if(rol){
+                Log.i(TAG, "refresh fragment conductor");
+                fragmentoPrincipal.setListaPasajeros(listaUsuarios);
+            }else if (!rol){
+                Log.i(TAG, "refresh fragment pasajero");
+                fragmentoPrincipal.setListaConductores(listaUsuarios, listaVehiculos);
+            }
+        }
         setAdaptador(adapter);
 
         viewPager.setAdapter(adapter);

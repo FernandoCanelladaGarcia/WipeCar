@@ -77,8 +77,13 @@ public class FragmentoPrincipalLista extends Fragment{
     }
 
     public void setListaPasajeros(ArrayList<Usuario> pasajeros){
-        this.listaPasajeros = pasajeros;
+        if(listaPasajeros == null){
+            this.listaPasajeros = pasajeros;
+        }else{
+            listaPasajeros = null;
 
+            listaPasajeros = pasajeros;
+        }
         if(rootView != null){
             adapterPrincipalLista = new AdapterPrincipalLista(rootView.getContext(),listaPasajeros,appMediador);
             listView.setAdapter(adapterPrincipalLista);
@@ -94,8 +99,18 @@ public class FragmentoPrincipalLista extends Fragment{
     }
 
     public void setListaConductores(ArrayList<Usuario> conductores, ArrayList<Vehiculo> vehiculos){
-        this.listaConductores = conductores;
-        this.listaVehiculos = vehiculos;
+
+        if(listaConductores == null){
+            this.listaConductores = conductores;
+            this.listaVehiculos = vehiculos;
+        }else{
+            this.listaConductores = null;
+            this.listaVehiculos = null;
+
+            this.listaConductores = conductores;
+            this.listaVehiculos = vehiculos;
+        }
+
         if(rootView != null){
             adapterPrincipalLista = new AdapterPrincipalLista(rootView.getContext(),listaConductores,appMediador,listaVehiculos);
             listView.setAdapter(adapterPrincipalLista);
