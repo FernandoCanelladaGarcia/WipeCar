@@ -388,6 +388,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
     @Override
     public void onBackPressed(){
         super.onBackPressed();
+        appMediador.launchActivity(VistaPrincipal.class,this,null);
         finish();
     }
 

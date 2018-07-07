@@ -114,7 +114,6 @@ public class BDAdaptadorUsuario {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Usuario usuario = snapshot.getValue(Usuario.class);
                     if (usuario.getDestino().equals(destino) && usuario.isRol()) {
-                        Log.i(TAG,"Conductor");
                         conductores.add(usuario);
                     }
                 }

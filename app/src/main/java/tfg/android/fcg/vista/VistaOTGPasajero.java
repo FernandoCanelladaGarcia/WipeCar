@@ -131,7 +131,9 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         Double latitud = (Double) posicion[0];
         Double longitud = (Double) posicion[1];
         String titulo = (String) posicion[2];
+
         LatLng lugar = new LatLng(latitud,longitud);
+
         if (miUbicacion != null) {
             miUbicacion.remove();
         }
@@ -173,6 +175,10 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
 
     @Override
     public void onDestroy() {
+        mMap = null;
+        mapFragment = null;
+        miUbicacion = null;
         super.onDestroy();
+        appMediador.removePresentadorOTGPasajero();
     }
 }

@@ -311,10 +311,10 @@ public class BDAdaptadorVinculo {
      * @param idConductor contendra:
      */
     public void obtenerListaPasajeros(final String idConductor) {
-        final ArrayList<Usuario> pasajeros = new ArrayList<>();
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                final ArrayList<Usuario> pasajeros = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Vinculo vinculo = snapshot.getValue(Vinculo.class);
                     if (vinculo.getIdConductor().equals(idConductor)) {
@@ -347,16 +347,17 @@ public class BDAdaptadorVinculo {
                 if (!pasajeros.isEmpty()) {
                     //Se han agregado a la lista todos los usuarios pasajeros del conductor referencia.
                     Bundle extras = new Bundle();
+                    Log.i(TAG,String.valueOf(pasajeros.size()));
                     extras.putSerializable(AppMediador.CLAVE_LISTA_PASAJEROS_VINCULO, pasajeros);
                     appMediador.sendBroadcast(AppMediador.AVISO_LISTA_PASAJEROS_VINCULO, extras);
                     reference.removeEventListener(this);
                 } else {
                     //No hay peticiones ni pasajeros con vinculo.
                     Bundle extras = new Bundle();
-                    extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, null);
+                    extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, pasajeros);
                     appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras);
 
-                    extras.putSerializable(AppMediador.CLAVE_LISTA_PASAJEROS_VINCULO, null);
+                    extras.putSerializable(AppMediador.CLAVE_LISTA_PASAJEROS_VINCULO, pasajeros);
                     appMediador.sendBroadcast(AppMediador.AVISO_LISTA_PASAJEROS_VINCULO, extras);
                     reference.removeEventListener(this);
                 }

@@ -35,8 +35,9 @@ public class FragmentoPrincipalLista extends Fragment{
     private boolean pausada = false;
     private final static String TAG = "depurador";
     private boolean rol;
+
     public FragmentoPrincipalLista(){
-        setRetainInstance(true);
+
     }
 
     @Override
@@ -81,11 +82,10 @@ public class FragmentoPrincipalLista extends Fragment{
         if(rootView != null){
             adapterPrincipalLista = new AdapterPrincipalLista(rootView.getContext(),listaPasajeros,appMediador);
             listView.setAdapter(adapterPrincipalLista);
-            if(listaPasajeros.isEmpty() || listaPasajeros == null){
+            if(listaPasajeros.isEmpty()){
                 rootView.findViewById(R.id.elementoListaPrincipalVacia).setVisibility(View.VISIBLE);
                     TextView mensajeListaVacia = (TextView) rootView.findViewById(R.id.mensajeListaPrincipalVacia);
                     mensajeListaVacia.setText("No existen pasajeros que le hayan escogido para ir a su destino");
-
             }else{
                 rootView.findViewById(R.id.elementoListaPrincipalVacia).setVisibility(View.GONE);
             }
@@ -99,7 +99,7 @@ public class FragmentoPrincipalLista extends Fragment{
         if(rootView != null){
             adapterPrincipalLista = new AdapterPrincipalLista(rootView.getContext(),listaConductores,appMediador,listaVehiculos);
             listView.setAdapter(adapterPrincipalLista);
-            if(listaConductores.isEmpty() || listaVehiculos.isEmpty() || listaConductores == null || listaVehiculos == null){
+            if(listaConductores.isEmpty() || listaVehiculos.isEmpty()){
                 rootView.findViewById(R.id.elementoListaPrincipalVacia).setVisibility(View.VISIBLE);
                 ImageView iconoListaVacia = (ImageView)rootView.findViewById(R.id.imagenListaVacia);
                 iconoListaVacia.setImageResource(R.drawable.icon_car_user);
@@ -108,5 +108,12 @@ public class FragmentoPrincipalLista extends Fragment{
             }
         }
         Log.i(TAG, "FragmentoPrincipal - MODO PASAJERO");
+    }
+
+    @Override
+    public void onDestroy() {
+        rootView = null;
+        listView = null;
+        super.onDestroy();
     }
 }

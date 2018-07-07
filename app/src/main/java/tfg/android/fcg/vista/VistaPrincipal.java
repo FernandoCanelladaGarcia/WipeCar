@@ -60,6 +60,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     private boolean deshabilitoBack = true;
     private boolean rol;
     private boolean pausada;
+    private boolean tabsPreparadas;
 
     //Fecha y hora
     private static final String CERO = "0";
@@ -84,7 +85,8 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         setContentView(R.layout.layout_vista_principal);
         appMediador = (AppMediador) this.getApplication();
         appMediador.setVistaPrincipal(this);
-        presentadorPrincipal = appMediador.getPresentadorPrincipal();
+
+        tabsPreparadas = false;
 
         botonPerfil = (Button) findViewById(R.id.botonPerfil);
         botonPerfil.setOnClickListener(this);
@@ -92,10 +94,9 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         botonSalir.setOnClickListener(this);
 
         SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
-        rol = sharedPreferences.getBoolean("rol", false);
         idUser = sharedPreferences.getString("idUser", null);
 
-        presentadorPrincipal.iniciar(idUser);
+        appMediador.getPresentadorPrincipal().iniciar(idUser);
     }
 
     @Override
@@ -198,11 +199,13 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         user = (Usuario) informacion;
 
         if (user.isRol()) {
-            Log.i(TAG, "Usuario conductor");
-            presentadorPrincipal.obtenerPeticionesPasajeros(user.getIdUser());
+            rol = user.isRol();
+            Log.i(TAG, "Usuario conductor " + user.getIdUser());
+            appMediador.getPresentadorPrincipal().obtenerPeticionesPasajeros(user.getIdUser());
         } else {
+            rol = user.isRol();
             Log.i(TAG, "Usuario pasajero");
-            presentadorPrincipal.obtenerConductores(user.getDestino());
+            appMediador.getPresentadorPrincipal().obtenerConductores(user.getDestino());
         }
     }
 
@@ -211,7 +214,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         Log.i(TAG, "set conductores");
         listaUsuarios = (ArrayList<Usuario>) informacion;
         if (!listaUsuarios.isEmpty()) {
-            presentadorPrincipal.obtenerVehiculos(listaUsuarios);
+            appMediador.getPresentadorPrincipal().obtenerVehiculos(listaUsuarios);
         } else {
             listaUsuarios = new ArrayList<>();
             listaVehiculos = new ArrayList<>();
@@ -241,12 +244,12 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
             case R.id.botonPerfil:
                 Log.i(TAG, "Perfil");
                 Object[] informacion = new Object[]{0, ""};
-                presentadorPrincipal.tratarConfiguracion(informacion);
+                appMediador.getPresentadorPrincipal().tratarConfiguracion(informacion);
                 break;
             case R.id.botonSalir:
                 Log.i(TAG, "Salir");
                 Object[] datos = new Object[]{1, ""};
-                presentadorPrincipal.tratarConfiguracion(datos);
+                appMediador.getPresentadorPrincipal().tratarConfiguracion(datos);
                 break;
             case R.id.floatPrincipal:
                 if (rol) {
@@ -265,7 +268,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                 } else {
                     String destino = destinos.getSelectedItem().toString();
                     Object[] respuesta = new Object[]{2, destino};
-                    presentadorPrincipal.tratarConfiguracion(respuesta);
+                    appMediador.getPresentadorPrincipal().tratarConfiguracion(respuesta);
 
                 }
             case R.id.obtener_hora:
@@ -315,7 +318,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                     Log.i(TAG, eHora.getText().toString());
                     String[] fechaHora = {eFecha.getText().toString(), eHora.getText().toString()};
                     config[1] = fechaHora;
-                    presentadorPrincipal.tratarConfiguracion(config);
+                    appMediador.getPresentadorPrincipal().tratarConfiguracion(config);
                 }
                 break;
         }
@@ -325,7 +328,11 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     protected void onResume() {
         super.onResume();
         if (pausada) {
-            presentadorPrincipal.iniciar(idUser);
+            fragmentoPrincipal = null;
+            tabLayout = null;
+            viewPager = null;
+            Log.i(TAG, "On resume " + idUser);
+            appMediador.getPresentadorPrincipal().iniciar(idUser);
         }
         pausada = false;
 
@@ -363,6 +370,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     private void prepararTabs() {
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
 
@@ -372,23 +380,28 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         viewPager = (ViewPager) findViewById(R.id.viewPagerPrincipal);
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        fragmentoPrincipal = new FragmentoPrincipalLista();
-        if (rol) {
-            adapter.addFragment(fragmentoPrincipal, "Pick Up Conductor");
-            adapter.addFragment(new VistaOTGConductor(), "On The Go Conductor");
-            //floatPrincipal.setImageResource(R.drawable.icon_edit_salida);
-            Log.i(TAG, "Vista principal - Modo conductor");
 
-        } else {
-            adapter.addFragment(fragmentoPrincipal, "Pick Up Pasajero");
-            adapter.addFragment(new VistaOTGPasajero(), "On The Go Pasajero");
-            //floatPrincipal.setImageResource(R.drawable.icon_edit_destino);
-            Log.i(TAG, "Vista principal - Modo pasajero");
-        }
+        Log.i(TAG, "TABS");
+        fragmentoPrincipal = new FragmentoPrincipalLista();
+        setAdaptador(adapter);
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         cerrarProgreso();
+    }
+
+    private void setAdaptador(ViewPagerAdapter adaptador){
+
+        if (rol) {
+            adaptador.addFragment(fragmentoPrincipal, "Pick Up Conductor");
+            adaptador.addFragment(new VistaOTGConductor(), "On The Go Conductor");
+            Log.i(TAG, "Vista principal - Modo conductor");
+
+        } else {
+            adaptador.addFragment(fragmentoPrincipal, "Pick Up Pasajero");
+            adaptador.addFragment(new VistaOTGPasajero(), "On The Go Pasajero");
+            Log.i(TAG, "Vista principal - Modo pasajero");
+        }
 
     }
 

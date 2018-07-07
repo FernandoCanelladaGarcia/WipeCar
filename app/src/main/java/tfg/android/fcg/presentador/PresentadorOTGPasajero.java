@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.Marker;
 
@@ -43,9 +44,10 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
                 appMediador.unRegisterReceiver(this);
                 appMediador.stopService(ServicioLocalizacion.class);
                 Object[] posicion = new Object[3];
-                posicion[0] = intent.getSerializableExtra(AppMediador.CLAVE_LATITUD);
-                posicion[1] = intent.getSerializableExtra(AppMediador.CLAVE_LONGITUD);
+                posicion[0] = intent.getDoubleExtra(AppMediador.CLAVE_LATITUD,0);
+                posicion[1] = intent.getDoubleExtra(AppMediador.CLAVE_LONGITUD,0);
                 posicion[2] = "Mi posicion";
+                Log.i(TAG,posicion[0].toString() + " " + posicion[1].toString());
                 vistaOTGPasajero.mostrarMapaConPosicion(posicion);
             }
         }
