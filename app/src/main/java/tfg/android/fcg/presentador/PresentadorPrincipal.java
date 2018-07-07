@@ -101,7 +101,7 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                     if (datos[1].toString().equals("origenydestino")) {
                         Log.i(TAG, "Actualizacion Destino");
                         vistaPrincipal.cerrarProgreso();
-                        vistaPrincipal.recreate();
+                        iniciar(usuario.getIdUser());
                     } else if (datos[1].toString().equals("fechayhora")) {
                         Log.i(TAG, "Set fecha y hora");
                         vistaPrincipal.cerrarProgreso();

@@ -125,24 +125,28 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         final View dialogoFechaHora = getLayoutInflater().inflate(R.layout.layout_fecha_hora, null);
         switch (tarea) {
             case 0:
+                if(!rol){
                 //Editar Destino
                 //Toast.makeText(getApplicationContext(),"Editar destino",Toast.LENGTH_SHORT).show();
                 dialogBuild.setView(dialogoOrigenDestino);
                 dialogo = dialogBuild.create();
                 dialogo.show();
+                }
                 break;
             case 1:
-                //Editar Fecha y hora de salida
-                //Toast.makeText(getApplicationContext(),"Editar Fecha y hora",Toast.LENGTH_SHORT).show();
-                dialogBuild.setView(dialogoFechaHora);
-                dialogo = dialogBuild.create();
-                dialogo.show();
-                botonFecha = (ImageButton) dialogo.findViewById(R.id.obtener_fecha);
-                botonHora = (ImageButton) dialogo.findViewById(R.id.obtener_hora);
-                botonFecha.setOnClickListener(this);
-                botonHora.setOnClickListener(this);
-                eFecha = (EditText) dialogo.findViewById(R.id.et_mostrar_fecha_picker);
-                eHora = (EditText) dialogo.findViewById(R.id.et_mostrar_hora_picker);
+                if(rol) {
+                    //Editar Fecha y hora de salida
+                    //Toast.makeText(getApplicationContext(),"Editar Fecha y hora",Toast.LENGTH_SHORT).show();
+                    dialogBuild.setView(dialogoFechaHora);
+                    dialogo = dialogBuild.create();
+                    dialogo.show();
+                    botonFecha = (ImageButton) dialogo.findViewById(R.id.obtener_fecha);
+                    botonHora = (ImageButton) dialogo.findViewById(R.id.obtener_hora);
+                    botonFecha.setOnClickListener(this);
+                    botonHora.setOnClickListener(this);
+                    eFecha = (EditText) dialogo.findViewById(R.id.et_mostrar_fecha_picker);
+                    eHora = (EditText) dialogo.findViewById(R.id.et_mostrar_hora_picker);
+                }
                 break;
             case 3:
                 //Error a la hora de presentar lista
@@ -254,9 +258,11 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
             case R.id.floatPrincipal:
                 if (rol) {
                     //Editar fecha y hora
+                    Log.i(TAG, "Fecha y hora");
                     mostrarDialogo(1);
-                } else {
+                } else if(!rol) {
                     //Editar Destino
+                    Log.i(TAG, "Destino");
                     mostrarDialogo(0);
                 }
                 break;
@@ -272,38 +278,40 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
                 }
             case R.id.obtener_hora:
-
-                TimePickerDialog recogerHora = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String horaformateada = (hourOfDay < 10) ? String.valueOf(CERO + hourOfDay) : String.valueOf(hourOfDay);
-                        String minutoFormateado = (minute < 10) ? String.valueOf(CERO + minute) : String.valueOf(minute);
-                        String AM_PM;
-                        if (hourOfDay < 12) {
-                            AM_PM = "a.m.";
-                        } else {
-                            AM_PM = "p.m.";
+                if(rol) {
+                    TimePickerDialog recogerHora = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                            String horaformateada = (hourOfDay < 10) ? String.valueOf(CERO + hourOfDay) : String.valueOf(hourOfDay);
+                            String minutoFormateado = (minute < 10) ? String.valueOf(CERO + minute) : String.valueOf(minute);
+                            String AM_PM;
+                            if (hourOfDay < 12) {
+                                AM_PM = "a.m.";
+                            } else {
+                                AM_PM = "p.m.";
+                            }
+                            eHora.setText(horaformateada + DOS_PUNTOS + minutoFormateado + " " + AM_PM);
                         }
-                        eHora.setText(horaformateada + DOS_PUNTOS + minutoFormateado + " " + AM_PM);
-                    }
-                }, hora, minuto, false);
-                recogerHora.show();
-                Log.i(TAG, "Muestra time picker");
+                    }, hora, minuto, false);
+                    recogerHora.show();
+                    Log.i(TAG, "Muestra time picker");
+                }
                 break;
 
             case R.id.obtener_fecha:
-
-                DatePickerDialog recogerFecha = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        final int mesActual = month + 1;
-                        String diaFormateado = (dayOfMonth < 10) ? CERO + String.valueOf(dayOfMonth) : String.valueOf(dayOfMonth);
-                        String mesFormateado = (mesActual < 10) ? CERO + String.valueOf(mesActual) : String.valueOf(mesActual);
-                        eFecha.setText(diaFormateado + BARRA + mesFormateado + BARRA + year);
-                    }
-                }, anio, mes, dia);
-                recogerFecha.show();
-                Log.i(TAG, "Muestra date picker");
+                if(rol) {
+                    DatePickerDialog recogerFecha = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            final int mesActual = month + 1;
+                            String diaFormateado = (dayOfMonth < 10) ? CERO + String.valueOf(dayOfMonth) : String.valueOf(dayOfMonth);
+                            String mesFormateado = (mesActual < 10) ? CERO + String.valueOf(mesActual) : String.valueOf(mesActual);
+                            eFecha.setText(diaFormateado + BARRA + mesFormateado + BARRA + year);
+                        }
+                    }, anio, mes, dia);
+                    recogerFecha.show();
+                    Log.i(TAG, "Muestra date picker");
+                }
                 break;
 
             case R.id.guardarFechaHora:
