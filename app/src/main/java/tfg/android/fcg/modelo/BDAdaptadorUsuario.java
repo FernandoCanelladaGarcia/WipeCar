@@ -616,7 +616,7 @@ public class BDAdaptadorUsuario {
         });
     }
 
-    public void cambiarRol(boolean rol){
+    public void cambiarRol(final boolean rol){
         Map<String, Object> taskMap = new HashMap<>();
         taskMap.put("rol",rol);
 
@@ -626,6 +626,12 @@ public class BDAdaptadorUsuario {
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     Log.i(TAG, "Actualizacion Rol");
+
+                    SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("rol",rol);
+                    editor.apply();
+
                     Bundle extras = new Bundle();
                     extras.putBoolean(AppMediador.CLAVE_CAMBIO_ROL,true);
                     appMediador.sendBroadcast(AppMediador.AVISO_CAMBIO_ROL,extras);

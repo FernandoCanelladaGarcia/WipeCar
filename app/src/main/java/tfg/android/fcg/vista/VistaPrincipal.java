@@ -19,15 +19,15 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import tfg.android.fcg.AppMediador;
@@ -125,18 +125,16 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         final View dialogoFechaHora = getLayoutInflater().inflate(R.layout.layout_fecha_hora, null);
         switch (tarea) {
             case 0:
-                if(!rol){
-                //Editar Destino
-                //Toast.makeText(getApplicationContext(),"Editar destino",Toast.LENGTH_SHORT).show();
-                dialogBuild.setView(dialogoOrigenDestino);
-                dialogo = dialogBuild.create();
-                dialogo.show();
+                if (!rol) {
+                    //Editar Destino
+                    dialogBuild.setView(dialogoOrigenDestino);
+                    dialogo = dialogBuild.create();
+                    dialogo.show();
                 }
                 break;
             case 1:
-                if(rol) {
+                if (rol) {
                     //Editar Fecha y hora de salida
-                    //Toast.makeText(getApplicationContext(),"Editar Fecha y hora",Toast.LENGTH_SHORT).show();
                     dialogBuild.setView(dialogoFechaHora);
                     dialogo = dialogBuild.create();
                     dialogo.show();
@@ -160,6 +158,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         dialogo.cancel();
     }
 
+    //TODO: NO USADO, REDACCION
     @Override
     public void mostrarUsuarios(Object informacion) {
 //        ListView listView = (ListView) findViewById(R.id.listaPrincipal);
@@ -201,10 +200,10 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     public void setUsuario(Object informacion) {
 
         Usuario getUser = (Usuario) informacion;
-        if(user == null){
+        if (user == null) {
             Log.i(TAG, "set usuario new");
             user = getUser;
-        }else{
+        } else {
             Log.i(TAG, "set usuario refresh");
             user = null;
             user = getUser;
@@ -225,10 +224,10 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
         ArrayList<Usuario> getConduct = (ArrayList<Usuario>) informacion;
 
-        if(listaUsuarios == null){
+        if (listaUsuarios == null) {
             Log.i(TAG, "set conductores new");
             listaUsuarios = getConduct;
-        }else{
+        } else {
             Log.i(TAG, "set conductores refresh");
             listaUsuarios = null;
             listaUsuarios = getConduct;
@@ -247,10 +246,10 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     public void setVehiculos(Object informacion) {
         ArrayList<Vehiculo> getVehic = (ArrayList<Vehiculo>) informacion;
 
-        if(listaVehiculos == null){
+        if (listaVehiculos == null) {
             Log.i(TAG, "set vehiculos new");
             listaVehiculos = getVehic;
-        }else{
+        } else {
             Log.i(TAG, "set vehiculos refresh");
             listaVehiculos = null;
             listaVehiculos = getVehic;
@@ -264,10 +263,10 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
 
         ArrayList<Usuario> getPasaj = (ArrayList<Usuario>) informacion;
-        if(listaUsuarios == null){
+        if (listaUsuarios == null) {
             Log.i(TAG, "set pasajeros new");
             listaUsuarios = getPasaj;
-        }else{
+        } else {
             Log.i(TAG, "set pasajeros refresh");
             listaUsuarios = null;
             listaUsuarios = getPasaj;
@@ -294,7 +293,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                     //Editar fecha y hora
                     Log.i(TAG, "Fecha y hora");
                     mostrarDialogo(1);
-                } else if(!rol) {
+                } else if (!rol) {
                     //Editar Destino
                     Log.i(TAG, "Destino");
                     mostrarDialogo(0);
@@ -305,7 +304,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                 if (destinos.getSelectedItem().toString().equals("Destinos")) {
                     Toast.makeText(getApplicationContext(),
                             "Por favor, seleccione un destino", Toast.LENGTH_SHORT).show();
-                }else if(destinos.getSelectedItem().toString().equals(user.getDestino())){
+                } else if (destinos.getSelectedItem().toString().equals(user.getDestino())) {
                     Toast.makeText(getApplicationContext(),
                             "Ha seleccionado el mismo destino", Toast.LENGTH_SHORT).show();
                 } else {
@@ -315,7 +314,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
                 }
             case R.id.obtener_hora:
-                if(rol) {
+                if (rol) {
                     TimePickerDialog recogerHora = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -336,7 +335,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                 break;
 
             case R.id.obtener_fecha:
-                if(rol) {
+                if (rol) {
                     DatePickerDialog recogerFecha = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -353,9 +352,14 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
             case R.id.guardarFechaHora:
                 if (eFecha.getText().toString().isEmpty()) {
-
+                    Toast.makeText(getApplicationContext(),
+                            "Por favor, seleccione una fecha", Toast.LENGTH_SHORT).show();
                 } else if (eHora.getText().toString().isEmpty()) {
-
+                    Toast.makeText(getApplicationContext(),
+                            "Por favor, seleccione una hora", Toast.LENGTH_SHORT).show();
+                } else if(!compararFechas()) {
+                    Toast.makeText(getApplicationContext(),
+                            "Seleccione una fecha y una hora posteriores a la actual.", Toast.LENGTH_SHORT).show();
                 } else {
                     Object[] config = new Object[2];
                     config[0] = 3;
@@ -367,6 +371,25 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                 }
                 break;
         }
+    }
+
+    private boolean compararFechas(){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            Date fechaCogida = sdf.parse(eFecha.getText().toString());
+            Log.i(TAG, "Fecha cogida: "+fechaCogida.toString());
+            Date actual = c.getTime();
+            Log.i(TAG, "Fecha sistema: "+ actual);
+
+            if(actual.after(fechaCogida) || actual.equals(fechaCogida)){
+                return false;
+            }else{
+                return true;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override
@@ -427,13 +450,13 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         Log.i(TAG, "TABS");
-        if(fragmentoPrincipal == null){
+        if (fragmentoPrincipal == null) {
             fragmentoPrincipal = new FragmentoPrincipalLista();
-        }else{
-            if(rol){
+        } else {
+            if (rol) {
                 Log.i(TAG, "refresh fragment conductor");
                 fragmentoPrincipal.setListaPasajeros(listaUsuarios);
-            }else if (!rol){
+            } else if (!rol) {
                 Log.i(TAG, "refresh fragment pasajero");
                 fragmentoPrincipal.setListaConductores(listaUsuarios, listaVehiculos);
             }
@@ -445,7 +468,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         cerrarProgreso();
     }
 
-    private void setAdaptador(ViewPagerAdapter adaptador){
+    private void setAdaptador(ViewPagerAdapter adaptador) {
 
         if (rol) {
             adaptador.addFragment(fragmentoPrincipal, "Pick Up Conductor");

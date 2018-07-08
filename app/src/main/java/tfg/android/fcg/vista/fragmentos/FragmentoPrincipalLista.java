@@ -77,6 +77,7 @@ public class FragmentoPrincipalLista extends Fragment{
     }
 
     public void setListaPasajeros(ArrayList<Usuario> pasajeros){
+
         if(listaPasajeros == null){
             this.listaPasajeros = pasajeros;
         }else{
@@ -104,6 +105,7 @@ public class FragmentoPrincipalLista extends Fragment{
             this.listaConductores = conductores;
             this.listaVehiculos = vehiculos;
         }else{
+
             this.listaConductores = null;
             this.listaVehiculos = null;
 
