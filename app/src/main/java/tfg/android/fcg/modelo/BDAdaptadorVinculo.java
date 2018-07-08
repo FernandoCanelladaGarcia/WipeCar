@@ -72,6 +72,7 @@ public class BDAdaptadorVinculo {
                     }
                 });
                 break;
+            //OTG
             case 1:
                 vinculo = new Vinculo(idPasajero, idConductor, false, fecha, hora, origen, destino);
 

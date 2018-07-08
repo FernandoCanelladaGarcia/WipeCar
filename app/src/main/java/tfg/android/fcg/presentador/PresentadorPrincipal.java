@@ -104,6 +104,7 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                 }
             }
             if (intent.getAction().equals(AppMediador.AVISO_ACTUALIZACION_USUARIO)) {
+                appMediador.unRegisterReceiver(this);
                 Object[] datos = (Object[]) intent.getSerializableExtra(AppMediador.CLAVE_ACTUALIZACION_USUARIO);
                 if ((boolean) datos[0]) {
                     if (datos[1].toString().equals("origenydestino")) {
@@ -118,6 +119,15 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                     vistaPrincipal.cerrarProgreso();
                 }
             }
+            if(intent.getAction().equals(AppMediador.AVISO_CREACION_VINCULO)){
+                appMediador.unRegisterReceiver(this);
+                boolean respuesta = intent.getBooleanExtra(AppMediador.CLAVE_CREACION_VINCULO,false);
+                if(respuesta){
+                    vistaPrincipal.cerrarProgreso();
+                }else{
+
+                }
+            }
         }
     };
 
@@ -130,7 +140,9 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
 
     @Override
     public void tratarSeleccion(Object informacion) {
-
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_CREACION_VINCULO);
+        vistaPrincipal.mostrarProgreso();
+        modelo.guardarUsuarioPickup((Object[])informacion);
     }
 
 

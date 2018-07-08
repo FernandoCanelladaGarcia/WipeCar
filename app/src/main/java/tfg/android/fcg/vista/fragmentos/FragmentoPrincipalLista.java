@@ -4,12 +4,17 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -35,6 +40,8 @@ public class FragmentoPrincipalLista extends Fragment{
     private boolean pausada = false;
     private final static String TAG = "depurador";
     private boolean rol;
+
+    private SwipeRefreshLayout srl;
 
     public FragmentoPrincipalLista(){
 
@@ -68,6 +75,15 @@ public class FragmentoPrincipalLista extends Fragment{
                 floatPrincipal.setImageResource(R.drawable.icon_edit_salida);
             }
         }
+
+        srl = (SwipeRefreshLayout) listView.getParent();
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                vistaPrincipal.refrescarContenido();
+            }
+        });
+
         return rootView;
     }
 

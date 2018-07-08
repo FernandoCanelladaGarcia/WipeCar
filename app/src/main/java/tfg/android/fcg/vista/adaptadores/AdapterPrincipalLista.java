@@ -63,7 +63,7 @@ public class AdapterPrincipalLista extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         View v = convertView;
 
@@ -120,14 +120,15 @@ public class AdapterPrincipalLista extends BaseAdapter{
                 options.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        PopupMenu menu = new PopupMenu(contexto,v);
+                        final PopupMenu menu = new PopupMenu(contexto,v);
                         menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             @Override
                             public boolean onMenuItemClick(MenuItem item) {
                                 int id = item.getItemId();
                                 switch(id){
                                     case R.id.seleccionarConductor:
-                                        Toast.makeText(contexto,"Seleccionado conductor" + conductor.getNombre(), Toast.LENGTH_SHORT).show();
+                                        Object[] informacion = new Object[]{3,conductor,menu};
+                                        appMediador.getVistaPrincipal().mostrarDialogo(informacion);
                                         break;
                                     case R.id.chatConductor:
                                         break;

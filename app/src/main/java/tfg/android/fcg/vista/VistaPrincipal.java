@@ -3,6 +3,7 @@ package tfg.android.fcg.vista;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -119,7 +120,8 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     @Override
     public void mostrarDialogo(Object informacion) {
-        int tarea = (int) informacion;
+        final Object[] datos = (Object[]) informacion;
+        int tarea = (int) datos[0];
         dialogBuild = new AlertDialog.Builder(this);
         final View dialogoOrigenDestino = getLayoutInflater().inflate(R.layout.layout_destino, null);
         final View dialogoFechaHora = getLayoutInflater().inflate(R.layout.layout_fecha_hora, null);
@@ -147,7 +149,33 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                 }
                 break;
             case 3:
-                //Error a la hora de presentar lista
+                //Seleccionar conductor
+                dialogBuild.setTitle("Seleccionar Conductor");
+                dialogBuild.setMessage("¿Esta seguro de su elección?");
+                dialogBuild.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Informacion: 0 = idUserPasajero, 1 = idUserConductor, 2 fecha, 3 hora, 4 origen 5 destino, 6 tarea
+                        Usuario conductor = (Usuario)datos[1];
+                        Object[] informacion = new Object[7];
+                        informacion[6] = 0;
+                        informacion[0] = user.getIdUser();
+                        informacion[1] = conductor.getIdUser();
+                        informacion[2] = conductor.getFecha();
+                        informacion[3] = conductor.getHora();
+                        informacion[4] = user.getOrigen();
+                        informacion[5] = user.getDestino();
+                        appMediador.getPresentadorPrincipal().tratarSeleccion(informacion);
+                    }
+                });
+                dialogBuild.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cerrarDialogo();
+                    }
+                });
+                dialogo = dialogBuild.create();
+                dialogo.show();
                 break;
         }
     }
@@ -275,6 +303,11 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     }
 
+    @Override
+    public void refrescarContenido() {
+        appMediador.getPresentadorPrincipal().iniciar(idUser);
+    }
+
     public void obtenerUsuarios() {
         fragmentoPrincipal.setListaPasajeros(listaUsuarios);
     }
@@ -283,30 +316,38 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         fragmentoPrincipal.setListaConductores(listaUsuarios, listaVehiculos);
     }
 
+    //HASTA AQUI
     @Override
     public void onClick(View v) {
+        Object[] informacion;
         switch (v.getId()) {
+
             case R.id.botonPerfil:
                 Log.i(TAG, "Perfil");
-                Object[] informacion = new Object[]{0, ""};
+                informacion = new Object[]{0, ""};
                 appMediador.getPresentadorPrincipal().tratarConfiguracion(informacion);
                 break;
+
             case R.id.botonSalir:
                 Log.i(TAG, "Salir");
-                Object[] datos = new Object[]{1, ""};
-                appMediador.getPresentadorPrincipal().tratarConfiguracion(datos);
+                informacion = new Object[]{1, ""};
+                appMediador.getPresentadorPrincipal().tratarConfiguracion(informacion);
                 break;
+
             case R.id.floatPrincipal:
                 if (rol) {
                     //Editar fecha y hora
                     Log.i(TAG, "Fecha y hora");
-                    mostrarDialogo(1);
+                    informacion = new Object[]{1,""};
+                    mostrarDialogo(informacion);
                 } else if (!rol) {
                     //Editar Destino
                     Log.i(TAG, "Destino");
-                    mostrarDialogo(0);
+                    informacion = new Object[]{0,""};
+                    mostrarDialogo(informacion);
                 }
                 break;
+
             case R.id.botonGuardarDestino:
                 Spinner destinos = dialogo.findViewById(R.id.spinnerDestinoPrincipal);
                 if (destinos.getSelectedItem().toString().equals("DESTINOS")) {
@@ -317,10 +358,11 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                             "Ha seleccionado el mismo destino", Toast.LENGTH_SHORT).show();
                 } else {
                     String destino = destinos.getSelectedItem().toString();
-                    Object[] respuesta = new Object[]{2, destino};
-                    appMediador.getPresentadorPrincipal().tratarConfiguracion(respuesta);
-
+                    informacion = new Object[]{2, destino};
+                    appMediador.getPresentadorPrincipal().tratarConfiguracion(informacion);
                 }
+                break;
+
             case R.id.obtener_hora:
                 if (rol) {
                     TimePickerDialog recogerHora = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {

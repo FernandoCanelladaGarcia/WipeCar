@@ -49,4 +49,5 @@ public interface IVistaPrincipal {
 
     public void setPasajeros(Object informacion);
 
+    public void refrescarContenido();
 }

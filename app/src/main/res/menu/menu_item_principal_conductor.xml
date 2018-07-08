@@ -10,4 +10,9 @@
         android:title="Chat"
         android:visible="false"
         />
+    <item
+        android:id="@+id/eliminarConductor"
+        android:title="Eliminar conductor"
+        android:visible="false"
+        />
 </menu>
