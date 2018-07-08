@@ -11,7 +11,8 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="60dp" />
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10.0sp"/>
     <include
         layout="@layout/layout_lista_historial_vacia"
         android:id="@+id/elementoListaHistorialVacia"

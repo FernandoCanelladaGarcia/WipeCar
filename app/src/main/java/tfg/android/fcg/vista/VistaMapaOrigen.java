@@ -178,7 +178,7 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
                             "Por favor, seleccione un origen", Toast.LENGTH_SHORT).show();
                 } else {
                     Spinner destinos = dialogo.findViewById(R.id.spinnerDestino);
-                    if (destinos.getSelectedItem().toString().equals("Destinos")) {
+                    if (destinos.getSelectedItem().toString().equals("DESTINOS")) {
                         Toast.makeText(getApplicationContext(),
                                 "Por favor, seleccione un destino", Toast.LENGTH_SHORT).show();
                     } else if(!porDefecto){

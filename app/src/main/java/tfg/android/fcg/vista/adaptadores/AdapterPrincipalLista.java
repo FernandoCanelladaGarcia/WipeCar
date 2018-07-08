@@ -5,10 +5,14 @@ import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,9 +78,34 @@ public class AdapterPrincipalLista extends BaseAdapter{
                 nombrePasajero.setText(pasajero.getNombre());
                 origenPasajero.setText(pasajero.getOrigen());
 
+                ImageButton options = (ImageButton)v.findViewById(R.id.opcionesItemPasajero);
+                options.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PopupMenu menu = new PopupMenu(contexto,v);
+                        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                int id = item.getItemId();
+                                switch (id){
+                                    case R.id.aceptarPasajero:
+                                        break;
+                                    case R.id.rechazarPasajero:
+                                        break;
+                                    case R.id.chatPasajero:
+                                            break;
+                                }
+                                return true;
+                            }
+                        });
+                        menu.inflate(R.menu.menu_item_principal_pasajero);
+                        menu.show();
+                    }
+                });
+
             }else{
                 v = inflater.inflate(R.layout.item_lista_principal_conductor,null);
-                Usuario conductor = listaUsuarios.get(position);
+                final Usuario conductor = listaUsuarios.get(position);
                 Vehiculo vehiculo = listaVehiculos.get(position);
                 TextView nombreConductor = (TextView) v.findViewById(R.id.NombreConductor);
                 TextView fechaSalida = (TextView) v.findViewById(R.id.Fecha);
@@ -86,6 +115,30 @@ public class AdapterPrincipalLista extends BaseAdapter{
                 fechaSalida.setText(conductor.getFecha() + "-" +conductor.getHora());
                 marcaCoche.setText(vehiculo.getMarca());
                 modeloCoche.setText(vehiculo.getModelo());
+
+                ImageButton options = (ImageButton)v.findViewById(R.id.opcionesItemConductor);
+                options.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PopupMenu menu = new PopupMenu(contexto,v);
+                        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                int id = item.getItemId();
+                                switch(id){
+                                    case R.id.seleccionarConductor:
+                                        Toast.makeText(contexto,"Seleccionado conductor" + conductor.getNombre(), Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case R.id.chatConductor:
+                                        break;
+                                }
+                                return true;
+                            }
+                        });
+                        menu.inflate(R.menu.menu_item_principal_conductor);
+                        menu.show();
+                    }
+                });
             }
         }
         return v;

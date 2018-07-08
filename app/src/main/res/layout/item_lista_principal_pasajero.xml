@@ -9,21 +9,22 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:background="@color/background2">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="14dp"
             android:layout_marginLeft="2dp"
             android:src="@drawable/icon_user"/>
 
         <TextView
             android:id="@+id/NombrePasajero"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
+            android:layout_marginTop="8dp"
             android:text="Nombre Pasajero"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/texto_borde"
@@ -46,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="11dp"
             android:background="@null"
             android:src="@drawable/ic_more_vert_black_24dp" />
     </RelativeLayout>

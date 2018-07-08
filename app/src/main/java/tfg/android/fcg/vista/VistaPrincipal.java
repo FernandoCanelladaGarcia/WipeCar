@@ -275,6 +275,14 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     }
 
+    public void obtenerUsuarios() {
+        fragmentoPrincipal.setListaPasajeros(listaUsuarios);
+    }
+
+    public void obtenerVehiculos() {
+        fragmentoPrincipal.setListaConductores(listaUsuarios, listaVehiculos);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -301,7 +309,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                 break;
             case R.id.botonGuardarDestino:
                 Spinner destinos = dialogo.findViewById(R.id.spinnerDestinoPrincipal);
-                if (destinos.getSelectedItem().toString().equals("Destinos")) {
+                if (destinos.getSelectedItem().toString().equals("DESTINOS")) {
                     Toast.makeText(getApplicationContext(),
                             "Por favor, seleccione un destino", Toast.LENGTH_SHORT).show();
                 } else if (destinos.getSelectedItem().toString().equals(user.getDestino())) {
@@ -357,7 +365,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                 } else if (eHora.getText().toString().isEmpty()) {
                     Toast.makeText(getApplicationContext(),
                             "Por favor, seleccione una hora", Toast.LENGTH_SHORT).show();
-                } else if(!compararFechas()) {
+                } else if (!compararFechas()) {
                     Toast.makeText(getApplicationContext(),
                             "Seleccione una fecha y una hora posteriores a la actual.", Toast.LENGTH_SHORT).show();
                 } else {
@@ -373,24 +381,6 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         }
     }
 
-    private boolean compararFechas(){
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        try {
-            Date fechaCogida = sdf.parse(eFecha.getText().toString());
-            Log.i(TAG, "Fecha cogida: "+fechaCogida.toString());
-            Date actual = c.getTime();
-            Log.i(TAG, "Fecha sistema: "+ actual);
-
-            if(actual.after(fechaCogida) || actual.equals(fechaCogida)){
-                return false;
-            }else{
-                return true;
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
     @Override
     protected void onResume() {
@@ -433,6 +423,25 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         } else {
             super.onBackPressed();
         }
+    }
+
+    private boolean compararFechas() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            Date fechaCogida = sdf.parse(eFecha.getText().toString());
+            Log.i(TAG, "Fecha cogida: " + fechaCogida.toString());
+            Date actual = c.getTime();
+            Log.i(TAG, "Fecha sistema: " + actual);
+
+            if (actual.after(fechaCogida) || actual.equals(fechaCogida)) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private void prepararTabs() {
@@ -481,14 +490,6 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
             Log.i(TAG, "Vista principal - Modo pasajero");
         }
 
-    }
-
-    public void obtenerUsuarios() {
-        fragmentoPrincipal.setListaPasajeros(listaUsuarios);
-    }
-
-    public void obtenerVehiculos() {
-        fragmentoPrincipal.setListaConductores(listaUsuarios, listaVehiculos);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
