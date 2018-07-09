@@ -14,6 +14,10 @@ public class Vinculo implements Serializable {
     private String destino;
 
     //Constructor
+    public Vinculo(){
+
+    }
+
     public Vinculo(String idPasajero, String idConductor, boolean vinculo,
                    String fecha, String hora, String origen, String destino) {
         this.idPasajero = idPasajero;

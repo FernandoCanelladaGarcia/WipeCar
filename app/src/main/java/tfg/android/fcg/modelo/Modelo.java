@@ -1,17 +1,10 @@
 package tfg.android.fcg.modelo;
 
 import android.content.SharedPreferences;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -20,12 +13,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.EmailAuthProvider;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.List;
 
 import tfg.android.fcg.AppMediador;
 
@@ -360,7 +347,7 @@ public class Modelo implements IModelo{
 
     @Override
     public void obtenerPeticionesDePasajeros(Object informacion) {
-        adaptadorVinculo.obtenerListaPasajeros((String)informacion);
+        adaptadorVinculo.obtenerListaVinculos((String)informacion);
     }
 
     @Override

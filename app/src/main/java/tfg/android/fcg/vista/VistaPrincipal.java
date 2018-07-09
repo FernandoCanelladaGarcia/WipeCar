@@ -35,9 +35,11 @@ import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
 import tfg.android.fcg.modelo.Usuario;
 import tfg.android.fcg.modelo.Vehiculo;
+import tfg.android.fcg.modelo.Vinculo;
 import tfg.android.fcg.presentador.IPresentadorPrincipal;
 import tfg.android.fcg.vista.adaptadores.AdapterPrincipalLista;
 import tfg.android.fcg.vista.fragmentos.FragmentoPrincipalLista;
+import tfg.android.fcg.vista.fragmentos.FragmentoPrincipalVinculos;
 
 public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal, View.OnClickListener {
 
@@ -48,10 +50,14 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     private IPresentadorPrincipal presentadorPrincipal;
     private AdapterPrincipalLista adaptador;
     private FragmentoPrincipalLista fragmentoPrincipal;
+    private FragmentoPrincipalVinculos fragmentoPrincipalVinculos;
     private ArrayList<Usuario> listaUsuarios;
+    private ArrayList<Usuario> listaVinculos;
+    private ArrayList<Vehiculo> listaVehiculos;
+    private ArrayList<Vehiculo> listaVehiculosVinculo;
     private Usuario user;
     private String idUser;
-    private ArrayList<Vehiculo> listaVehiculos;
+
 
     private FloatingActionButton floatPrincipal;
     private static ViewPager viewPager;
@@ -62,6 +68,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     private boolean rol;
     private boolean pausada;
     private boolean tabsPreparadas;
+    private boolean vinculosPasajeros = false;
 
     //Fecha y hora
     private static final String CERO = "0";
@@ -228,6 +235,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     public void setUsuario(Object informacion) {
 
         Usuario getUser = (Usuario) informacion;
+
         if (user == null) {
             Log.i(TAG, "set usuario new");
             user = getUser;
@@ -236,9 +244,10 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
             user = null;
             user = getUser;
         }
+
         if (user.isRol()) {
+            Log.i(TAG, "Usuario conductor");
             rol = user.isRol();
-            Log.i(TAG, "Usuario conductor " + user.getIdUser());
             appMediador.getPresentadorPrincipal().obtenerPeticionesPasajeros(user.getIdUser());
         } else {
             rol = user.isRol();
@@ -248,20 +257,34 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     }
 
     @Override
+    public void setPasajeros(Object informacion) {
+        ArrayList<Usuario> getPasaj = (ArrayList<Usuario>) informacion;
+
+        if (listaUsuarios == null) {
+            Log.i(TAG, "set pasajeros new");
+            listaUsuarios = getPasaj;
+        } else {
+            Log.i(TAG, "set pasajeros refresh");
+            listaUsuarios = null;
+            listaUsuarios = getPasaj;
+        }
+        prepararTabs();
+    }
+
+    @Override
     public void setConductores(Object informacion) {
 
         ArrayList<Usuario> getConduct = (ArrayList<Usuario>) informacion;
 
-        if (listaUsuarios == null) {
-            Log.i(TAG, "set conductores new");
-            listaUsuarios = getConduct;
-        } else {
-            Log.i(TAG, "set conductores refresh");
-            listaUsuarios = null;
-            listaUsuarios = getConduct;
-        }
-
         if (!getConduct.isEmpty()) {
+            if (listaUsuarios == null) {
+                Log.i(TAG, "set conductores new");
+                listaUsuarios = getConduct;
+            } else {
+                Log.i(TAG, "set conductores refresh");
+                listaUsuarios = null;
+                listaUsuarios = getConduct;
+            }
             appMediador.getPresentadorPrincipal().obtenerVehiculos(listaUsuarios);
         } else {
             listaUsuarios = new ArrayList<>();
@@ -272,8 +295,8 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     @Override
     public void setVehiculos(Object informacion) {
-        ArrayList<Vehiculo> getVehic = (ArrayList<Vehiculo>) informacion;
 
+        ArrayList<Vehiculo> getVehic = (ArrayList<Vehiculo>) informacion;
         if (listaVehiculos == null) {
             Log.i(TAG, "set vehiculos new");
             listaVehiculos = getVehic;
@@ -282,30 +305,141 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
             listaVehiculos = null;
             listaVehiculos = getVehic;
         }
-        prepararTabs();
+        appMediador.getPresentadorPrincipal().obtenerVinculosPasajero(user.getIdUser());
+        //prepararTabs();
 
     }
 
     @Override
-    public void setPasajeros(Object informacion) {
+    public void setVinculos(Object informacion) {
+        ArrayList<Usuario> getVinculos = (ArrayList<Usuario>) informacion;
 
-
-        ArrayList<Usuario> getPasaj = (ArrayList<Usuario>) informacion;
-        if (listaUsuarios == null) {
-            Log.i(TAG, "set pasajeros new");
-            listaUsuarios = getPasaj;
+        if (!getVinculos.isEmpty()) {
+            vinculosPasajeros = true;
+            if (listaVinculos == null) {
+                Log.i(TAG, "set vinculo new");
+                listaVinculos = getVinculos;
+            } else {
+                Log.i(TAG, "set vinculo refresh");
+                listaVinculos = null;
+                listaVinculos = getVinculos;
+            }
+            appMediador.getPresentadorPrincipal().obtenerVehiculosVinculo(listaVinculos);
         } else {
-            Log.i(TAG, "set pasajeros refresh");
-            listaUsuarios = null;
-            listaUsuarios = getPasaj;
+            //NO HAY VINCULOS
+            listaVinculos = new ArrayList<>();
+            listaVehiculosVinculo = new ArrayList<>();
+            prepararTabs();
+        }
+    }
+
+    @Override
+    public void setVehiculosVinculo(Object informacion){
+        ArrayList<Vehiculo> getVehic = (ArrayList<Vehiculo>) informacion;
+
+        if (listaVehiculosVinculo == null) {
+            Log.i(TAG, "set vehiculos vinculo new");
+            listaVehiculosVinculo = getVehic;
+        } else {
+            Log.i(TAG, "set vehiculos vinculo refresh");
+            listaVehiculosVinculo = null;
+            listaVehiculosVinculo = getVehic;
         }
         prepararTabs();
+    }
 
+    private void prepararTabs() {
+
+        checkView();
+
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+
+        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.addTab(tabLayout.newTab());
+        if(!rol){
+            tabLayout.addTab(tabLayout.newTab());
+        }
+
+        viewPager = (ViewPager) findViewById(R.id.viewPagerPrincipal);
+
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        Log.i(TAG, "TABS");
+
+        if (fragmentoPrincipal == null) {
+            fragmentoPrincipal = new FragmentoPrincipalLista();
+        }if (fragmentoPrincipalVinculos == null) {
+//            Log.i(TAG, "Fragment pasajero CON VINCULOS");
+            fragmentoPrincipalVinculos = new FragmentoPrincipalVinculos();
+
+        } else {
+            if (rol) {
+                Log.i(TAG, "refresh fragment conductor");
+                fragmentoPrincipal.setListaPasajeros(listaUsuarios);
+            } else if (!rol) {
+                Log.i(TAG, "refresh fragment pasajero");
+                fragmentoPrincipal.setListaConductores(listaUsuarios, listaVehiculos);
+                //fragmentoPrincipalVinculos.setListaVinculos(listaVinculos, listaVehiculosVinculo);
+            }
+        }
+//        if(vinculosPasajeros) {
+//            tabLayout.addTab(tabLayout.newTab());
+//            if (fragmentoPrincipalVinculos == null) {
+//                Log.i(TAG, "Fragment pasajero CON VINCULOS");
+//                fragmentoPrincipalVinculos = new FragmentoPrincipalVinculos();
+//            }else {
+//                Log.i(TAG, "refresh fragment pasajero CON VINCULOS");
+//                fragmentoPrincipalVinculos.setListaVinculos(listaVinculos, listaVehiculosVinculo);
+//            }
+//        }
+        setAdaptador(adapter);
+    }
+
+    private void checkView(){
+        Log.i(TAG,"checkView");
+        if(tabLayout != null){
+            Log.i(TAG,"tablayout != null");
+            tabLayout = null;
+        }else if(viewPager != null){
+            Log.i(TAG,"viewPager != null");
+            viewPager = null;
+        }
+    }
+
+    private void setAdaptador(ViewPagerAdapter adaptador) {
+        if (rol) {
+            adaptador.addFragment(fragmentoPrincipal, "Pick Up Conductor");
+            adaptador.addFragment(new VistaOTGConductor(), "On The Go Conductor");
+            Log.i(TAG, "Vista principal - Modo conductor");
+
+        } else if(!rol){
+            //if(vinculosPasajeros){
+            adaptador.addFragment(fragmentoPrincipal, "Pick Up Pasajero");
+            adaptador.addFragment(fragmentoPrincipalVinculos, "Vinculos Pick Up Pasajero");
+            adaptador.addFragment(new VistaOTGPasajero(), "On The Go Pasajero");
+            Log.i(TAG, "Vista principal - Modo pasajero - CON VINCULOS");
+//            }else if (!vinculosPasajeros){
+//                adaptador.addFragment(fragmentoPrincipal, "Pick Up Pasajero");
+//                adaptador.addFragment(new VistaOTGPasajero(), "On The Go Pasajero");
+//                Log.i(TAG, "Vista principal - Modo pasajero - SIN VINCULOS");
+//            }
+        }
+        viewPager.setAdapter(adaptador);
+        tabLayout.setupWithViewPager(viewPager);
+
+        cerrarProgreso();
     }
 
     @Override
     public void refrescarContenido() {
         appMediador.getPresentadorPrincipal().iniciar(idUser);
+        viewPager = null;
+        adaptador = null;
+        tabLayout = null;
+
     }
 
     public void obtenerUsuarios() {
@@ -314,6 +448,10 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     public void obtenerVehiculos() {
         fragmentoPrincipal.setListaConductores(listaUsuarios, listaVehiculos);
+    }
+
+    public void obtenerListaVinculos(){
+        fragmentoPrincipalVinculos.setListaVinculos(listaVinculos,listaVehiculosVinculo);
     }
 
     //HASTA AQUI
@@ -484,54 +622,6 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
             e.printStackTrace();
         }
         return false;
-    }
-
-    private void prepararTabs() {
-
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        tabLayout.setTabMode(TabLayout.MODE_FIXED);
-
-        tabLayout.addTab(tabLayout.newTab());
-        tabLayout.addTab(tabLayout.newTab());
-
-        viewPager = (ViewPager) findViewById(R.id.viewPagerPrincipal);
-
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-
-        Log.i(TAG, "TABS");
-        if (fragmentoPrincipal == null) {
-            fragmentoPrincipal = new FragmentoPrincipalLista();
-        } else {
-            if (rol) {
-                Log.i(TAG, "refresh fragment conductor");
-                fragmentoPrincipal.setListaPasajeros(listaUsuarios);
-            } else if (!rol) {
-                Log.i(TAG, "refresh fragment pasajero");
-                fragmentoPrincipal.setListaConductores(listaUsuarios, listaVehiculos);
-            }
-        }
-        setAdaptador(adapter);
-
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
-        cerrarProgreso();
-    }
-
-    private void setAdaptador(ViewPagerAdapter adaptador) {
-
-        if (rol) {
-            adaptador.addFragment(fragmentoPrincipal, "Pick Up Conductor");
-            adaptador.addFragment(new VistaOTGConductor(), "On The Go Conductor");
-            Log.i(TAG, "Vista principal - Modo conductor");
-
-        } else {
-            adaptador.addFragment(fragmentoPrincipal, "Pick Up Pasajero");
-            adaptador.addFragment(new VistaOTGPasajero(), "On The Go Pasajero");
-            Log.i(TAG, "Vista principal - Modo pasajero");
-        }
-
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

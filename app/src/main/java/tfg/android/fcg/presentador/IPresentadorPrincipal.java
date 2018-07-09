@@ -66,4 +66,8 @@ public interface IPresentadorPrincipal {
     public void obtenerConductores(Object informacion);
 
     public void obtenerPeticionesPasajeros(Object informacion);
+
+    public void obtenerVinculosPasajero(Object informacion);
+
+    public void obtenerVehiculosVinculo(Object informacion);
 }

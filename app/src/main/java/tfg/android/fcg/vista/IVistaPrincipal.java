@@ -49,5 +49,9 @@ public interface IVistaPrincipal {
 
     public void setPasajeros(Object informacion);
 
+    public void setVinculos(Object informacion);
+
+    public void setVehiculosVinculo(Object informacion);
+
     public void refrescarContenido();
 }

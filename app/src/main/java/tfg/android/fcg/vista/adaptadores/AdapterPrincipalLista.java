@@ -127,7 +127,7 @@ public class AdapterPrincipalLista extends BaseAdapter{
                                 int id = item.getItemId();
                                 switch(id){
                                     case R.id.seleccionarConductor:
-                                        Object[] informacion = new Object[]{3,conductor,menu};
+                                        Object[] informacion = new Object[]{3,conductor};
                                         appMediador.getVistaPrincipal().mostrarDialogo(informacion);
                                         break;
                                     case R.id.chatConductor:

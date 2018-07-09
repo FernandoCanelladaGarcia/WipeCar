@@ -7,7 +7,7 @@
     android:background="@color/background">
 
     <include
-        layout="@layout/layout_contenido_lista_principal"
+        layout="@layout/layout_contenido_lista_vinculos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/layout_lista"
