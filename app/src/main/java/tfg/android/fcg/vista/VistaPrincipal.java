@@ -351,7 +351,6 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     private void prepararTabs() {
 
         checkView();
-
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -360,6 +359,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         tabLayout.addTab(tabLayout.newTab());
         tabLayout.addTab(tabLayout.newTab());
         if(!rol){
+            compararListas();
             tabLayout.addTab(tabLayout.newTab());
         }
 
@@ -372,9 +372,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         if (fragmentoPrincipal == null) {
             fragmentoPrincipal = new FragmentoPrincipalLista();
         }if (fragmentoPrincipalVinculos == null) {
-//            Log.i(TAG, "Fragment pasajero CON VINCULOS");
             fragmentoPrincipalVinculos = new FragmentoPrincipalVinculos();
-
         } else {
             if (rol) {
                 Log.i(TAG, "refresh fragment conductor");
@@ -382,19 +380,9 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
             } else if (!rol) {
                 Log.i(TAG, "refresh fragment pasajero");
                 fragmentoPrincipal.setListaConductores(listaUsuarios, listaVehiculos);
-                //fragmentoPrincipalVinculos.setListaVinculos(listaVinculos, listaVehiculosVinculo);
+                fragmentoPrincipalVinculos.setListaVinculos(listaVinculos, listaVehiculosVinculo);
             }
         }
-//        if(vinculosPasajeros) {
-//            tabLayout.addTab(tabLayout.newTab());
-//            if (fragmentoPrincipalVinculos == null) {
-//                Log.i(TAG, "Fragment pasajero CON VINCULOS");
-//                fragmentoPrincipalVinculos = new FragmentoPrincipalVinculos();
-//            }else {
-//                Log.i(TAG, "refresh fragment pasajero CON VINCULOS");
-//                fragmentoPrincipalVinculos.setListaVinculos(listaVinculos, listaVehiculosVinculo);
-//            }
-//        }
         setAdaptador(adapter);
     }
 
@@ -409,6 +397,31 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         }
     }
 
+    private void compararListas(){
+        if(!listaVinculos.isEmpty() || listaVinculos != null) {
+            ArrayList<Usuario> tempUsuario = new ArrayList<>();
+            for (Usuario userVinculo : listaVinculos) {
+                for (Usuario user : listaUsuarios) {
+                    if (user.getIdUser().equals(userVinculo.getIdUser())) {
+                        tempUsuario.add(user);
+                    }
+                }
+            }
+            listaUsuarios.removeAll(tempUsuario);
+
+            ArrayList<Vehiculo> temVehiculo = new ArrayList<>();
+            for (Vehiculo vehiculoVinculo : listaVehiculosVinculo) {
+                for (Vehiculo vehiculo : listaVehiculos) {
+                    if (vehiculo.getDatoVehiculo().equals(vehiculoVinculo.getDatoVehiculo())) {
+                        temVehiculo.add(vehiculo);
+                    }
+                }
+            }
+            listaVehiculos.removeAll(temVehiculo);
+        }
+        //prepararTabs();
+    }
+
     private void setAdaptador(ViewPagerAdapter adaptador) {
         if (rol) {
             adaptador.addFragment(fragmentoPrincipal, "Pick Up Conductor");
@@ -421,11 +434,6 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
             adaptador.addFragment(fragmentoPrincipalVinculos, "Vinculos Pick Up Pasajero");
             adaptador.addFragment(new VistaOTGPasajero(), "On The Go Pasajero");
             Log.i(TAG, "Vista principal - Modo pasajero - CON VINCULOS");
-//            }else if (!vinculosPasajeros){
-//                adaptador.addFragment(fragmentoPrincipal, "Pick Up Pasajero");
-//                adaptador.addFragment(new VistaOTGPasajero(), "On The Go Pasajero");
-//                Log.i(TAG, "Vista principal - Modo pasajero - SIN VINCULOS");
-//            }
         }
         viewPager.setAdapter(adaptador);
         tabLayout.setupWithViewPager(viewPager);
