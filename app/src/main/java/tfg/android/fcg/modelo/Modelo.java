@@ -347,7 +347,16 @@ public class Modelo implements IModelo{
 
     @Override
     public void obtenerPeticionesDePasajeros(Object informacion) {
-        adaptadorVinculo.obtenerListaVinculos((String)informacion);
+        Object[] datos = (Object[])informacion;
+        int tarea = (int)datos[0];
+        switch(tarea){
+            case 0:
+                adaptadorVinculo.obtenerListaVinculos((String)datos[1]);
+                break;
+            case 1:
+                adaptadorVinculo.obtenerListaVinculosConductores((String)datos[1]);
+                break;
+        }
     }
 
     @Override
