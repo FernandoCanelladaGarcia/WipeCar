@@ -61,11 +61,14 @@ public class AdapterPrincipalVinculos extends BaseAdapter{
             TextView fechaSalida = (TextView) v.findViewById(R.id.Fecha);
             TextView marcaCoche = (TextView)v.findViewById(R.id.MarcaVehiculo);
             TextView modeloCoche = (TextView)v.findViewById(R.id.ModeloVehiculo);
+            TextView destinovehiculo = (TextView)v.findViewById(R.id.DestinoVehiculo);
+            TextView valoracionVehiculo = (TextView)v.findViewById(R.id.valoracionConductor);
             nombreConductor.setText(conductor.getNombre());
             fechaSalida.setText(conductor.getFecha() + "-" +conductor.getHora());
             marcaCoche.setText(vehiculo.getMarca());
             modeloCoche.setText(vehiculo.getModelo());
-
+            destinovehiculo.setText(conductor.getDestino());
+            valoracionVehiculo.setText(conductor.getValoracion());
             ImageButton options = (ImageButton)v.findViewById(R.id.opcionesItemConductor);
             options.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -85,6 +88,9 @@ public class AdapterPrincipalVinculos extends BaseAdapter{
                         }
                     });
                     menu.inflate(R.menu.menu_item_principal_conductor);
+                    menu.getMenu().getItem(2).setVisible(true);
+                    menu.getMenu().getItem(1).setVisible(true);
+                    menu.getMenu().getItem(0).setVisible(false);
                     menu.show();
                 }
             });

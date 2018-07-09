@@ -14,6 +14,8 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,9 +77,10 @@ public class AdapterPrincipalLista extends BaseAdapter{
                 Usuario pasajero = listaUsuarios.get(position);
                 TextView nombrePasajero = (TextView) v.findViewById(R.id.NombrePasajero);
                 TextView origenPasajero = (TextView) v.findViewById(R.id.DireccionPasajero);
+                TextView valoracionPasajero = (TextView) v.findViewById(R.id.valoracionPasajero);
                 nombrePasajero.setText(pasajero.getNombre());
                 origenPasajero.setText(pasajero.getOrigen());
-
+                valoracionPasajero.setText(pasajero.getValoracion());
                 ImageButton options = (ImageButton)v.findViewById(R.id.opcionesItemPasajero);
                 options.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -111,11 +114,14 @@ public class AdapterPrincipalLista extends BaseAdapter{
                 TextView fechaSalida = (TextView) v.findViewById(R.id.Fecha);
                 TextView marcaCoche = (TextView)v.findViewById(R.id.MarcaVehiculo);
                 TextView modeloCoche = (TextView)v.findViewById(R.id.ModeloVehiculo);
+                TextView destinovehiculo = (TextView)v.findViewById(R.id.DestinoVehiculo);
+                TextView valoracionCond = (TextView)v.findViewById(R.id.valoracionConductor);
                 nombreConductor.setText(conductor.getNombre());
                 fechaSalida.setText(conductor.getFecha() + "-" +conductor.getHora());
                 marcaCoche.setText(vehiculo.getMarca());
                 modeloCoche.setText(vehiculo.getModelo());
-
+                destinovehiculo.setText(conductor.getDestino());
+                valoracionCond.setText(conductor.getValoracion());
                 ImageButton options = (ImageButton)v.findViewById(R.id.opcionesItemConductor);
                 options.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -129,8 +135,6 @@ public class AdapterPrincipalLista extends BaseAdapter{
                                     case R.id.seleccionarConductor:
                                         Object[] informacion = new Object[]{3,conductor};
                                         appMediador.getVistaPrincipal().mostrarDialogo(informacion);
-                                        break;
-                                    case R.id.chatConductor:
                                         break;
                                 }
                                 return true;

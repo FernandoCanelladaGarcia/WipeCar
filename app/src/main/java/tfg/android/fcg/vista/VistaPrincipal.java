@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -109,7 +110,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     @Override
     public void mostrarProgreso() {
-        Log.i(TAG, " mostrar Progreso");
+        Log.i(TAG, "mostrar Progreso");
         dialogoProgreso = new ProgressDialog(this);
         dialogoProgreso.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialogoProgreso.setIndeterminate(true);
@@ -289,7 +290,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         } else {
             listaUsuarios = new ArrayList<>();
             listaVehiculos = new ArrayList<>();
-            prepararTabs();
+            appMediador.getPresentadorPrincipal().obtenerVinculosPasajero(user.getIdUser());
         }
     }
 
@@ -398,28 +399,31 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     }
 
     private void compararListas(){
-        if(!listaVinculos.isEmpty() || listaVinculos != null) {
-            ArrayList<Usuario> tempUsuario = new ArrayList<>();
-            for (Usuario userVinculo : listaVinculos) {
-                for (Usuario user : listaUsuarios) {
-                    if (user.getIdUser().equals(userVinculo.getIdUser())) {
-                        tempUsuario.add(user);
+        if(!listaUsuarios.isEmpty() && !listaVehiculos.isEmpty()) {
+            //Hay usuarios y vehiculos usuario
+            if (!listaVinculos.isEmpty() && !listaVehiculosVinculo.isEmpty()) {
+                //Hay Vinculos y vehiculos de vinculo
+                ArrayList<Usuario> tempUsuario = new ArrayList<>();
+                for (Usuario userVinculo : listaVinculos) {
+                    for (Usuario user : listaUsuarios) {
+                        if (user.getIdUser().equals(userVinculo.getIdUser())) {
+                            tempUsuario.add(user);
+                        }
                     }
                 }
-            }
-            listaUsuarios.removeAll(tempUsuario);
+                listaUsuarios.removeAll(tempUsuario);
 
-            ArrayList<Vehiculo> temVehiculo = new ArrayList<>();
-            for (Vehiculo vehiculoVinculo : listaVehiculosVinculo) {
-                for (Vehiculo vehiculo : listaVehiculos) {
-                    if (vehiculo.getDatoVehiculo().equals(vehiculoVinculo.getDatoVehiculo())) {
-                        temVehiculo.add(vehiculo);
+                ArrayList<Vehiculo> temVehiculo = new ArrayList<>();
+                for (Vehiculo vehiculoVinculo : listaVehiculosVinculo) {
+                    for (Vehiculo vehiculo : listaVehiculos) {
+                        if (vehiculo.getDatoVehiculo().equals(vehiculoVinculo.getDatoVehiculo())) {
+                            temVehiculo.add(vehiculo);
+                        }
                     }
                 }
+                listaVehiculos.removeAll(temVehiculo);
             }
-            listaVehiculos.removeAll(temVehiculo);
         }
-        //prepararTabs();
     }
 
     private void setAdaptador(ViewPagerAdapter adaptador) {
@@ -443,11 +447,8 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     @Override
     public void refrescarContenido() {
+        vinculosPasajeros = false;
         appMediador.getPresentadorPrincipal().iniciar(idUser);
-        viewPager = null;
-        adaptador = null;
-        tabLayout = null;
-
     }
 
     public void obtenerUsuarios() {

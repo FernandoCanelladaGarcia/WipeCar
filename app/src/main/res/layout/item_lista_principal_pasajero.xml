@@ -15,9 +15,9 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
             android:layout_marginLeft="2dp"
-            android:src="@drawable/icon_user"/>
+            android:layout_marginTop="14dp"
+            android:src="@drawable/icon_user" />
 
         <TextView
             android:id="@+id/NombrePasajero"
@@ -35,11 +35,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/NombrePasajero"
-            android:textColor="@color/texto_borde"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="2dp"
             android:text="Dirección"
-            android:textAppearance="@style/TextAppearance.AppCompat" />
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/texto_borde" />
+
+        <TextView
+            android:id="@+id/valoracionPasajero"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="70dp"
+            android:text="Valoracion"
+            android:visibility="gone"/>
 
         <ImageButton
             android:id="@+id/opcionesItemPasajero"

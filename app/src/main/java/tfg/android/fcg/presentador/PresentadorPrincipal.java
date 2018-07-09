@@ -56,6 +56,7 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                         usuario = user;
                         vistaPrincipal.setUsuario(usuario);
                     }
+
                 }else if(vinculosPasajero){
                     Usuario usuarioVinculo = (Usuario)intent.getSerializableExtra(AppMediador.CLAVE_OBTENER_USUARIO);
                     usuariosVinculo.add(usuarioVinculo);
@@ -139,9 +140,6 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                     vinculosPasajero = true;
                     vinculos = null;
                     vinculos = vinculosConductores;
-//                    usuariosVinculo = null;
-//                    usuariosVinculo = vinculosConductores;
-//                    vistaPrincipal.setVinculos(usuariosVinculo);
                     obtenerConductoresVinculo(vinculosConductores);
                 }
             }
@@ -158,8 +156,11 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                 if ((boolean) datos[0]) {
                     if (datos[1].toString().equals("origenydestino")) {
                         Log.i(TAG, "Actualizacion Destino");
+                        vinculosPasajero = false;
+                        usuariosVinculo = new ArrayList<>();
                         vistaPrincipal.cerrarProgreso();
-                        iniciar(usuario.getIdUser());
+                        refrescarListas();
+                        vistaPrincipal.refrescarContenido();
                     } else if (datos[1].toString().equals("fechayhora")) {
                         Log.i(TAG, "Set fecha y hora");
                         vistaPrincipal.cerrarProgreso();
@@ -309,5 +310,13 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
     @Override
     public void tratarOnTheGo(Object informacion) {
 
+    }
+
+    private void refrescarListas(){
+        vehiculos = new ArrayList<>();
+        conductores = new ArrayList<>();
+        usuariosVinculo = new ArrayList<>();
+        vinculos = new ArrayList<>();
+        vehiculosVinculo = new ArrayList<>();
     }
 }
