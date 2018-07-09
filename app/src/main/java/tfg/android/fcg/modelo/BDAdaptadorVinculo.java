@@ -321,63 +321,22 @@ public class BDAdaptadorVinculo {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i(TAG, "Count " + dataSnapshot.getChildrenCount());
                 ArrayList<Vinculo> vinculos = new ArrayList();
-                final ArrayList<Usuario> pasajeros = new ArrayList<>();
 
                 for (DataSnapshot vinculo : dataSnapshot.getChildren()) {
-                    vinculos.add(vinculo.getValue(Vinculo.class));
-                    Log.i(TAG, vinculo.getValue(Vinculo.class).getIdPasajero());
-                }
-
-                for (Vinculo vinculo : vinculos) {
-                    if (vinculo.getIdConductor().equals(idUser)) {
-                        Log.i(TAG, "VINCULOS - CONDUCTOR");
-                        //Se envia a OTGConductor
+                    Vinculo v = vinculo.getValue(Vinculo.class);
+                    if(v.getIdConductor().equals(idUser)) {
+                        vinculos.add(v);
                         Bundle extras = new Bundle();
-                        extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, vinculo);
+                        extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, v);
                         appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras);
-
-                        final DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios");
-                        referenciaUsuario.child(vinculo.getIdPasajero()).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Usuario pasajero = dataSnapshot.getValue(Usuario.class);
-                                pasajeros.add(pasajero);
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                //Error recibiendo referencias de la tabla usuario
-                                Bundle extras = new Bundle();
-                                extras.putSerializable(AppMediador.CLAVE_LISTA_PASAJEROS_VINCULO, null);
-                                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_PASAJEROS_VINCULO, extras);
-                                referenciaUsuario.removeEventListener(this);
-                            }
-                        });
-                        referenciaUsuario.removeEventListener(this);
                     }
                 }
-                if (!pasajeros.isEmpty()) {
-                    //Se han agregado a la lista todos los usuarios pasajeros del conductor referencia.
-                    Bundle extras = new Bundle();
-                    Log.i(TAG, String.valueOf(pasajeros.size()));
-                    extras.putSerializable(AppMediador.CLAVE_LISTA_PASAJEROS_VINCULO, pasajeros);
-                    appMediador.sendBroadcast(AppMediador.AVISO_LISTA_PASAJEROS_VINCULO, extras);
-                    reference.removeEventListener(this);
-
-                } else {
-                    //No hay peticiones ni pasajeros con vinculo.
-                    Bundle extras = new Bundle();
-                    extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, vinculo);
-                    appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras);
-
-                    Bundle extras2 = new Bundle();
-                    extras2.putSerializable(AppMediador.CLAVE_LISTA_PASAJEROS_VINCULO, pasajeros);
-                    appMediador.sendBroadcast(AppMediador.AVISO_LISTA_PASAJEROS_VINCULO, extras2);
-                    reference.removeEventListener(this);
-                }
+                Bundle extras = new Bundle();
+                Log.i(TAG, String.valueOf(vinculos.size()));
+                extras.putSerializable(AppMediador.CLAVE_LISTA_PASAJEROS_VINCULO, vinculos);
+                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_PASAJEROS_VINCULO, extras);
+                reference.removeEventListener(this);
             }
 
             @Override
@@ -387,8 +346,9 @@ public class BDAdaptadorVinculo {
                 extras.putSerializable(AppMediador.CLAVE_LISTA_PASAJEROS_VINCULO, null);
                 appMediador.sendBroadcast(AppMediador.AVISO_LISTA_PASAJEROS_VINCULO, extras);
 
-                extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, null);
-                appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras);
+                Bundle extras2 = new Bundle();
+                extras2.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, null);
+                appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras2);
 
                 reference.removeEventListener(this);
             }
@@ -400,58 +360,15 @@ public class BDAdaptadorVinculo {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i(TAG, "Count " + dataSnapshot.getChildrenCount());
                 ArrayList<Vinculo> vinculos = new ArrayList();
 
                 for (DataSnapshot vinculo : dataSnapshot.getChildren()) {
-                    vinculos.add(vinculo.getValue(Vinculo.class));
+                    if(vinculo.getValue(Vinculo.class).getIdPasajero().equals(idUser)) {
+                        vinculos.add(vinculo.getValue(Vinculo.class));
+                    }
                     Log.i(TAG, vinculo.getValue(Vinculo.class).getIdPasajero());
                 }
-//                final ArrayList<Usuario> conductores = new ArrayList<>();
-//                for (Vinculo vinculo : vinculos) {
-//
-//                    if (vinculo.getIdPasajero().equals(idUser)) {
-//                        Log.i(TAG, "VINCULOS - PASAJERO");
-//                        final DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios");
-//                        referenciaUsuario.child(vinculo.getIdConductor()).addListenerForSingleValueEvent(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(DataSnapshot dataSnapshot) {
-//                                Usuario conductor = dataSnapshot.getValue(Usuario.class);
-//                                conductores.add(conductor);
-//                                Log.i(TAG, "Conductor con vinculo " + conductor.getIdUser());
-//                                referenciaUsuario.removeEventListener(this);
-//                            }
-//
-//
-//                            @Override
-//                            public void onCancelled(DatabaseError databaseError) {
-//                                //Error recibiendo referencias de la tabla usuario
-//                                Bundle extras = new Bundle();
-//                                extras.putSerializable(AppMediador.CLAVE_LISTA_CONDUCTORES_VINCULO, null);
-//                                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_CONDUCTORES_VINCULO, extras);
-//                            }
-//                        });
-//                    }
-//                }if (!conductores.isEmpty()) {
-//                    //Se han agregado a la lista todos los usuarios conductores del pasajero referencia.
-//                    Bundle extras = new Bundle();
-//                    Log.i(TAG, String.valueOf(conductores.size()));
-//                    extras.putSerializable(AppMediador.CLAVE_LISTA_CONDUCTORES_VINCULO, conductores);
-//                    appMediador.sendBroadcast(AppMediador.AVISO_LISTA_CONDUCTORES_VINCULO, extras);
-//                    reference.removeEventListener(this);
-//                }
-//                else {
-//                //No hay peticiones ni pasajeros con vinculo.
-//                Bundle extras = new Bundle();
-//                extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, vinculo);
-//                appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras);
-//
-//                Bundle extras2 = new Bundle();
-//                extras2.putSerializable(AppMediador.CLAVE_LISTA_CONDUCTORES_VINCULO, conductores);
-//                appMediador.sendBroadcast(AppMediador.AVISO_LISTA_CONDUCTORES_VINCULO, extras2);
-//                reference.removeEventListener(this);
-//                }
-                //Se han agregado a la lista todos los usuarios conductores del pasajero referencia.
+
                 Bundle extras = new Bundle();
                 Log.i(TAG, String.valueOf(vinculos.size()));
                 extras.putSerializable(AppMediador.CLAVE_LISTA_CONDUCTORES_VINCULO, vinculos);
@@ -459,19 +376,12 @@ public class BDAdaptadorVinculo {
                 reference.removeEventListener(this);
             }
 
-            //}
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 //Error recibiendo la referencia de la tabla vinculo y error para Peticiones
                 Bundle extras = new Bundle();
                 extras.putSerializable(AppMediador.CLAVE_LISTA_CONDUCTORES_VINCULO, null);
                 appMediador.sendBroadcast(AppMediador.AVISO_LISTA_CONDUCTORES_VINCULO, extras);
-
-//                Bundle extras2 = new Bundle();
-//                extras2.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, null);
-//                appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras2);
-
                 reference.removeEventListener(this);
             }
         });

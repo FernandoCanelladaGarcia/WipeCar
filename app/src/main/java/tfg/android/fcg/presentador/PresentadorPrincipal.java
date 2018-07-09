@@ -28,8 +28,10 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
     private ArrayList<Vehiculo> vehiculos;
     private ArrayList<Vehiculo> vehiculosVinculo;
     private ArrayList<Vinculo> vinculos;
+    private ArrayList<Vinculo> vinculosConductor;
     private final static String TAG = "depurador";
     private boolean vinculosPasajero = false;
+    private boolean vinculoConductor = false;
 
     public PresentadorPrincipal() {
         appMediador = AppMediador.getInstance();
@@ -40,6 +42,7 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
         usuariosVinculo = new ArrayList<>();
         vinculos = new ArrayList<>();
         vehiculosVinculo = new ArrayList<>();
+        vinculosConductor = new ArrayList<>();
     }
 
     private BroadcastReceiver receptorDeAvisos = new BroadcastReceiver() {
@@ -47,7 +50,7 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
         public void onReceive(Context context, Intent intent) {
 
             if (intent.getAction().equals(AppMediador.AVISO_OBTENER_USUARIO)) {
-                if(!vinculosPasajero) {
+                if(!vinculosPasajero && !vinculoConductor) {
                     appMediador.unRegisterReceiver(this);
                     Usuario user = (Usuario) intent.getSerializableExtra(AppMediador.CLAVE_OBTENER_USUARIO);
                     if (user == null) {
@@ -65,26 +68,15 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                         Log.i(TAG, "vinculos total = " + usuariosVinculo.size());
                         vistaPrincipal.setVinculos(usuariosVinculo);
                     }
-                }
-            }
 
-            if (intent.getAction().equals(AppMediador.AVISO_LISTA_PASAJEROS_VINCULO)) {
-                appMediador.unRegisterReceiver(this);
-
-                ArrayList<Usuario> vinculos = (ArrayList<Usuario>) intent.getSerializableExtra(AppMediador.CLAVE_LISTA_PASAJEROS_VINCULO);
-
-                //Conductor
-                if (vinculos.isEmpty() || vinculos == null) {
-                    Log.i(TAG, "No Pasajeros con vinculo con el usuario actual");
-                    usuariosVinculo = null;
-                    usuariosVinculo = vinculos;
-                    vistaPrincipal.setPasajeros(usuariosVinculo);
-                } else {
-                    //Mostrar Lista
-                    Log.i(TAG, "Hay Pasajeros con vinculo para el usuario actual = " + vinculos.size());
-                    usuariosVinculo = null;
-                    usuariosVinculo = vinculos;
-                    vistaPrincipal.setPasajeros(usuariosVinculo);
+                }else if(vinculoConductor){
+                    Usuario usuarioVinculo = (Usuario)intent.getSerializableExtra(AppMediador.CLAVE_OBTENER_USUARIO);
+                    usuariosVinculo.add(usuarioVinculo);
+                    if(vinculosConductor.size() == usuariosVinculo.size()){
+                        appMediador.unRegisterReceiver(this);
+                        Log.i(TAG, "vinculos conductor total = " + usuariosVinculo.size());
+                        vistaPrincipal.setPasajeros(usuariosVinculo);
+                    }
                 }
             }
 
@@ -136,11 +128,29 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                     usuariosVinculo = new ArrayList<>();
                     vistaPrincipal.setVinculos(usuariosVinculo);
                 }else{
-                    Log.i(TAG, "Existen vinculos pasajero");
+                    Log.i(TAG, "Existen vinculos pasajero " + vinculosConductores.size());
                     vinculosPasajero = true;
                     vinculos = null;
                     vinculos = vinculosConductores;
                     obtenerConductoresVinculo(vinculosConductores);
+                }
+            }
+
+            if (intent.getAction().equals(AppMediador.AVISO_LISTA_PASAJEROS_VINCULO)) {
+                appMediador.unRegisterReceiver(this);
+                ArrayList<Vinculo> vinculos = (ArrayList<Vinculo>) intent.getSerializableExtra(AppMediador.CLAVE_LISTA_PASAJEROS_VINCULO);
+                //Conductor
+                if (vinculos.isEmpty() || vinculos == null) {
+                    Log.i(TAG, "No Pasajeros con vinculo con el usuario actual");
+                    usuariosVinculo = new ArrayList<>();
+                    vistaPrincipal.setPasajeros(usuariosVinculo);
+                } else {
+                    //Mostrar Lista
+                    Log.i(TAG, "Hay Pasajeros con vinculo para el usuario actual = " + vinculos.size());
+                    vinculoConductor = true;
+                    vinculosConductor = null;
+                    vinculosConductor = vinculos;
+                    obtenerPasajerosVinculo(vinculosConductor);
                 }
             }
 
@@ -157,13 +167,15 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                     if (datos[1].toString().equals("origenydestino")) {
                         Log.i(TAG, "Actualizacion Destino");
                         vinculosPasajero = false;
-                        usuariosVinculo = new ArrayList<>();
                         vistaPrincipal.cerrarProgreso();
                         refrescarListas();
                         vistaPrincipal.refrescarContenido();
                     } else if (datos[1].toString().equals("fechayhora")) {
                         Log.i(TAG, "Set fecha y hora");
+                        vinculoConductor = false;
                         vistaPrincipal.cerrarProgreso();
+                        refrescarListas();
+                        vistaPrincipal.refrescarContenido();
                     }
                 } else {
                     vistaPrincipal.cerrarProgreso();
@@ -174,6 +186,8 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                 boolean respuesta = intent.getBooleanExtra(AppMediador.CLAVE_CREACION_VINCULO,false);
                 if(respuesta){
                     vistaPrincipal.cerrarProgreso();
+                    refrescarListas();
+                    vistaPrincipal.refrescarContenido();
                 }else{
                     vistaPrincipal.cerrarProgreso();
                 }
@@ -224,6 +238,14 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
         ArrayList<Vinculo> vinculos = (ArrayList<Vinculo>) informacion;
         for(Vinculo vinculo : vinculos){
             modelo.obtenerUsuario(vinculo.getIdConductor());
+        }
+    }
+
+    public void obtenerPasajerosVinculo(Object informacion){
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_OBTENER_USUARIO);
+        ArrayList<Vinculo> vinculos = (ArrayList<Vinculo>) informacion;
+        for(Vinculo vinculo : vinculos){
+            modelo.obtenerUsuario(vinculo.getIdPasajero());
         }
     }
 
@@ -318,5 +340,6 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
         usuariosVinculo = new ArrayList<>();
         vinculos = new ArrayList<>();
         vehiculosVinculo = new ArrayList<>();
+        vinculosConductor = new ArrayList<>();
     }
 }

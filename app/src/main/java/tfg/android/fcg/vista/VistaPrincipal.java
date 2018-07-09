@@ -260,14 +260,17 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     @Override
     public void setPasajeros(Object informacion) {
         ArrayList<Usuario> getPasaj = (ArrayList<Usuario>) informacion;
-
-        if (listaUsuarios == null) {
-            Log.i(TAG, "set pasajeros new");
-            listaUsuarios = getPasaj;
-        } else {
-            Log.i(TAG, "set pasajeros refresh");
-            listaUsuarios = null;
-            listaUsuarios = getPasaj;
+        if (!getPasaj.isEmpty()) {
+            if (listaUsuarios == null) {
+                Log.i(TAG, "set pasajeros new");
+                listaUsuarios = getPasaj;
+            } else {
+                Log.i(TAG, "set pasajeros refresh");
+                listaUsuarios = null;
+                listaUsuarios = getPasaj;
+            }
+        }else{
+            listaUsuarios = new ArrayList<>();
         }
         prepararTabs();
     }
