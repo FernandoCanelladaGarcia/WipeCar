@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -167,7 +168,6 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                 vistaPrincipal.cerrarProgreso();
                 appMediador.launchActivity(VistaLogin.class, this, null);
             }
-
             if (intent.getAction().equals(AppMediador.AVISO_ACTUALIZACION_USUARIO)) {
                 appMediador.unRegisterReceiver(this);
                 Object[] datos = (Object[]) intent.getSerializableExtra(AppMediador.CLAVE_ACTUALIZACION_USUARIO);
@@ -195,6 +195,18 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                 if(respuesta){
                     vistaPrincipal.cerrarProgreso();
                     refrescarListas();
+                    vistaPrincipal.refrescarContenido();
+                }else{
+                    vistaPrincipal.cerrarProgreso();
+                }
+            }
+            if(intent.getAction().equals(AppMediador.AVISO_ELIMINAR_VINCULO)){
+                appMediador.unRegisterReceiver(this);
+                boolean respuesta = intent.getBooleanExtra(AppMediador.CLAVE_ELIMINAR_VINCULO,false);
+                if(respuesta){
+                    vistaPrincipal.cerrarProgreso();
+                    refrescarListas();
+                    Toast.makeText(appMediador.getApplicationContext(),"Ha eliminado el vinculo correctamente",Toast.LENGTH_SHORT).show();
                     vistaPrincipal.refrescarContenido();
                 }else{
                     vistaPrincipal.cerrarProgreso();
@@ -273,6 +285,27 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
         modelo.guardarUsuarioPickup((Object[])informacion);
     }
 
+    @Override
+    public void tratarBorrarSeleccion(Object informacion) {
+        Object[] datos = (Object[])informacion;
+        int tarea = (int)datos[0];
+        switch (tarea){
+            case 0:
+                //Eliminar seleccion de conductor
+                appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_ELIMINAR_VINCULO);
+                vistaPrincipal.mostrarProgreso();
+                Vinculo vinculoEliminar = (Vinculo) datos[1];
+                Object[] eliminar = new Object[3];
+                eliminar[0] = 0;
+                eliminar[1] = vinculoEliminar.getIdPasajero();
+                eliminar[2] = vinculoEliminar.getIdConductor();
+                modelo.eliminarUsuarioPickup(eliminar);
+                break;
+            case 1:
+                //Eliminar pasajero
+                break;
+        }
+    }
 
     @Override
     public void tratarOk(Object informacion) {
@@ -291,11 +324,6 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
 
     @Override
     public void tratarMapa(Object informacion) {
-
-    }
-
-    @Override
-    public void tratarBorrarSeleccion(Object informacion) {
 
     }
 
@@ -343,6 +371,8 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
     }
 
     private void refrescarListas(){
+        vinculosPasajero = false;
+        vinculoConductor = false;
         vehiculos = new ArrayList<>();
         conductores = new ArrayList<>();
         usuariosVinculo = new ArrayList<>();

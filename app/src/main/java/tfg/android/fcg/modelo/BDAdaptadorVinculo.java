@@ -214,11 +214,12 @@ public class BDAdaptadorVinculo {
         //INT INFORMACION 0 = 0=> PICK UP, 0 = 1 => OTG.
         int tarea = (int) informacion[0];
 
-        final String idPasajero = (String) informacion[0];
-        final String idConductor = (String) informacion[1];
+        final String idPasajero = (String) informacion[1];
+        final String idConductor = (String) informacion[2];
         switch (tarea) {
             case 0:
-                reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                //PickUp
+                reference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -231,13 +232,11 @@ public class BDAdaptadorVinculo {
                                         if (task.isSuccessful()) {
                                             //Se ha completado la eliminacion
                                             Bundle extras = new Bundle();
-
                                             extras.putBoolean(AppMediador.CLAVE_ELIMINAR_VINCULO, true);
                                             appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_VINCULO, extras);
                                         } else {
                                             //No ha eliminado el vinculo
                                             Bundle extras = new Bundle();
-
                                             extras.putBoolean(AppMediador.CLAVE_ELIMINAR_VINCULO, false);
                                             appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_VINCULO, extras);
                                         }
@@ -261,7 +260,8 @@ public class BDAdaptadorVinculo {
                 });
                 break;
             case 1:
-                reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                //OTG
+                reference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {

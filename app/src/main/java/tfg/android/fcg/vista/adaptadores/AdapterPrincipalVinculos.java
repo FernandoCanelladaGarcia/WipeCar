@@ -61,7 +61,7 @@ public class AdapterPrincipalVinculos extends BaseAdapter{
             v = inflater.inflate(R.layout.item_lista_principal_conductor,null);
             Usuario conductor = listaVinculos.get(position);
             Vehiculo vehiculo = listaVehiculos.get(position);
-            Vinculo vinculo = vinculos.get(position);
+            final Vinculo vinculo = vinculos.get(position);
             Log.i(TAG,"Detino del vinculo " + vinculo.getDestino());
             TextView nombreConductor = (TextView) v.findViewById(R.id.NombreConductor);
             TextView fechaSalida = (TextView) v.findViewById(R.id.Fecha);
@@ -86,8 +86,19 @@ public class AdapterPrincipalVinculos extends BaseAdapter{
                             int id = item.getItemId();
                             switch(id){
                                 case R.id.chatConductor:
+                                    if(vinculo.isVinculo()){
+                                        //HACER MUESTRA DIALOGO DE CHAT
+                                    }else{
+                                        //Vinculo no confirmado Toast de no confirmado
+                                    }
                                     break;
                                 case R.id.eliminarConductor:
+                                    //Deshacer vinculo
+                                    Object[] informacion = new Object[2];
+                                    informacion[0] = 6;
+                                    informacion[1] = vinculo;
+                                    appMediador.getVistaPrincipal().mostrarDialogo(informacion);
+                                    //Push a conductor
                                     break;
                             }
                             return true;

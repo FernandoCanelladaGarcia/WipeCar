@@ -128,7 +128,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     }
 
     @Override
-    public void mostrarDialogo(Object informacion) {
+    public void mostrarDialogo(final Object informacion) {
         final Object[] datos = (Object[]) informacion;
         int tarea = (int) datos[0];
         dialogBuild = new AlertDialog.Builder(this);
@@ -175,6 +175,36 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                         informacion[4] = user.getOrigen();
                         informacion[5] = user.getDestino();
                         appMediador.getPresentadorPrincipal().tratarSeleccion(informacion);
+                    }
+                });
+                dialogBuild.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cerrarDialogo();
+                    }
+                });
+                dialogo = dialogBuild.create();
+                dialogo.show();
+                break;
+            case 4:
+                //Eliminar Pasajero
+                break;
+            case 5:
+                //Aceptar Pasajero
+                break;
+            case 6:
+                //Eliminar Conductor
+                dialogBuild.setTitle("Eliminar vinculo con Conductor");
+                dialogBuild.setMessage("¿Esta seguro?");
+                dialogBuild.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //INT INFORMACION 0 = 0=> PICK UP, 0 = 1 => OTG.
+                        Vinculo vinculo = (Vinculo) datos[1];
+                        Object[] informacion = new Object[2];
+                        informacion[0] = 0;
+                        informacion[1] = vinculo;
+                        appMediador.getPresentadorPrincipal().tratarBorrarSeleccion(informacion);
                     }
                 });
                 dialogBuild.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -471,6 +501,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
 
     @Override
     public void refrescarContenido() {
+        Log.i(TAG, "refrescarContenido");
         vinculosPasajeros = false;
         appMediador.getPresentadorPrincipal().iniciar(idUser);
     }
