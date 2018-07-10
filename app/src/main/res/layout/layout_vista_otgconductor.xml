@@ -2,7 +2,6 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,6 +12,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        android:background="@color/botones"
+        android:fontFamily="@font/ubuntu_medium"
+        android:textColor="@color/texto_borde"
         android:text="Iniciar Ruta"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,8 +25,10 @@
         android:layout_width="136dp"
         android:layout_height="89dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="124dp"
+        android:background="#01DF3A"
+        android:fontFamily="@font/ubuntu_medium"
         android:text="Aceptar"
         app:layout_constraintEnd_toStartOf="@+id/botonRechazarPasajero"
         app:layout_constraintHorizontal_bias="0.24"
@@ -37,7 +41,10 @@
         android:layout_height="89dp"
         android:layout_marginEnd="40dp"
         android:layout_marginTop="124dp"
+        android:background="#DF0101"
+        android:fontFamily="@font/ubuntu_medium"
         android:text="Rechazar"
+        android:textColor="@color/texto_borde"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/botonIniciarRuta" />
 
@@ -45,15 +52,15 @@
         android:id="@+id/botonFinalizarRuta"
         android:layout_width="181dp"
         android:layout_height="99dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="32dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="140dp"
+        android:background="@color/botones"
+        android:fontFamily="@font/ubuntu_medium"
+        android:textColor="@color/texto_borde"
         android:text="Finalizar Ruta"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/botonRechazarPasajero"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>
