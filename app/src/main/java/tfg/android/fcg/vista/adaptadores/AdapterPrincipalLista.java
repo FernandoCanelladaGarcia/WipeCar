@@ -102,6 +102,10 @@ public class AdapterPrincipalLista extends BaseAdapter{
                                         break;
                                     case R.id.rechazarPasajero:
                                         //Eliminar vinculo
+                                        Object[] informacion = new Object[2];
+                                        informacion[0] = 4;
+                                        informacion[1] = vinculo;
+                                        appMediador.getVistaPrincipal().mostrarDialogo(informacion);
                                         //Enviar push OK
                                         break;
                                     case R.id.chatPasajero:
@@ -109,8 +113,9 @@ public class AdapterPrincipalLista extends BaseAdapter{
                                             //HACER MUESTRA DIALOGO DE CHAT
                                         }else{
                                             //Vinculo no confirmado Toast de no confirmado
+                                            Toast.makeText(appMediador.getApplicationContext(),"No ha aceptado al pasajero como acompañante",Toast.LENGTH_SHORT).show();
                                         }
-                                            break;
+                                        break;
                                 }
                                 return true;
                             }

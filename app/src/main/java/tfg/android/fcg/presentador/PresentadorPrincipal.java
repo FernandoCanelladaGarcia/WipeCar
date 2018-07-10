@@ -294,15 +294,23 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                 //Eliminar seleccion de conductor
                 appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_ELIMINAR_VINCULO);
                 vistaPrincipal.mostrarProgreso();
-                Vinculo vinculoEliminar = (Vinculo) datos[1];
-                Object[] eliminar = new Object[3];
-                eliminar[0] = 0;
-                eliminar[1] = vinculoEliminar.getIdPasajero();
-                eliminar[2] = vinculoEliminar.getIdConductor();
-                modelo.eliminarUsuarioPickup(eliminar);
+                Vinculo vinculoConductor = (Vinculo) datos[1];
+                Object[] eliminarConductor = new Object[3];
+                eliminarConductor[0] = 0;
+                eliminarConductor[1] = vinculoConductor.getIdPasajero();
+                eliminarConductor[2] = vinculoConductor.getIdConductor();
+                modelo.eliminarUsuarioPickup(eliminarConductor);
                 break;
             case 1:
                 //Eliminar pasajero
+                appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_ELIMINAR_VINCULO);
+                vistaPrincipal.mostrarProgreso();
+                Vinculo vinculoPasajero = (Vinculo) datos[1];
+                Object[] eliminarPasajero = new Object[3];
+                eliminarPasajero[0] = 0;
+                eliminarPasajero[1] = vinculoPasajero.getIdPasajero();
+                eliminarPasajero[2] = vinculoPasajero.getIdConductor();
+                modelo.eliminarUsuarioPickup(eliminarPasajero);
                 break;
         }
     }

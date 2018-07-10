@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -90,6 +91,7 @@ public class AdapterPrincipalVinculos extends BaseAdapter{
                                         //HACER MUESTRA DIALOGO DE CHAT
                                     }else{
                                         //Vinculo no confirmado Toast de no confirmado
+                                        Toast.makeText(appMediador.getApplicationContext(),"No ha sido aceptado por el conductor",Toast.LENGTH_SHORT).show();
                                     }
                                     break;
                                 case R.id.eliminarConductor:
