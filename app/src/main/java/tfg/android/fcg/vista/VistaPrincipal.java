@@ -56,6 +56,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     private ArrayList<Usuario> listaVinculos;
     private ArrayList<Vehiculo> listaVehiculos;
     private ArrayList<Vehiculo> listaVehiculosVinculo;
+    private ArrayList<Vinculo> vinculos;
     private Usuario user;
     private String idUser;
 
@@ -276,6 +277,23 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     }
 
     @Override
+    public void setListaVinculos(Object informacion){
+        ArrayList<Vinculo> getVincu = (ArrayList<Vinculo>) informacion;
+        if(!getVincu.isEmpty()){
+            if(vinculos == null){
+                Log.i(TAG,"lista vinculos new");
+                vinculos = getVincu;
+            }else{
+                Log.i(TAG,"lista vinculos refresh");
+                vinculos = null;
+                vinculos = getVincu;
+            }
+        }else{
+            vinculos = new ArrayList<>();
+        }
+    }
+
+    @Override
     public void setConductores(Object informacion) {
 
         ArrayList<Usuario> getConduct = (ArrayList<Usuario>) informacion;
@@ -290,6 +308,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                 listaUsuarios = getConduct;
             }
             appMediador.getPresentadorPrincipal().obtenerVehiculos(listaUsuarios);
+
         } else {
             listaUsuarios = new ArrayList<>();
             listaVehiculos = new ArrayList<>();
@@ -301,17 +320,20 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     public void setVehiculos(Object informacion) {
 
         ArrayList<Vehiculo> getVehic = (ArrayList<Vehiculo>) informacion;
-        if (listaVehiculos == null) {
-            Log.i(TAG, "set vehiculos new");
-            listaVehiculos = getVehic;
-        } else {
-            Log.i(TAG, "set vehiculos refresh");
-            listaVehiculos = null;
-            listaVehiculos = getVehic;
+        if (!getVehic.isEmpty()){
+            if (listaVehiculos == null) {
+                Log.i(TAG, "set vehiculos new");
+                listaVehiculos = getVehic;
+            } else {
+                Log.i(TAG, "set vehiculos refresh");
+                listaVehiculos = null;
+                listaVehiculos = getVehic;
+            }
+        }else{
+            listaUsuarios = new ArrayList<>();
+            listaVehiculos = new ArrayList<>();
         }
         appMediador.getPresentadorPrincipal().obtenerVinculosPasajero(user.getIdUser());
-        //prepararTabs();
-
     }
 
     @Override
@@ -330,7 +352,6 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
             }
             appMediador.getPresentadorPrincipal().obtenerVehiculosVinculo(listaVinculos);
         } else {
-            //NO HAY VINCULOS
             listaVinculos = new ArrayList<>();
             listaVehiculosVinculo = new ArrayList<>();
             prepararTabs();
@@ -380,11 +401,11 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         } else {
             if (rol) {
                 Log.i(TAG, "refresh fragment conductor");
-                fragmentoPrincipal.setListaPasajeros(listaUsuarios);
+                fragmentoPrincipal.setListaPasajeros(listaUsuarios,vinculos);
             } else if (!rol) {
                 Log.i(TAG, "refresh fragment pasajero");
                 fragmentoPrincipal.setListaConductores(listaUsuarios, listaVehiculos);
-                fragmentoPrincipalVinculos.setListaVinculos(listaVinculos, listaVehiculosVinculo);
+                fragmentoPrincipalVinculos.setListaVinculos(listaVinculos, listaVehiculosVinculo,vinculos);
             }
         }
         setAdaptador(adapter);
@@ -455,7 +476,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     }
 
     public void obtenerUsuarios() {
-        fragmentoPrincipal.setListaPasajeros(listaUsuarios);
+        fragmentoPrincipal.setListaPasajeros(listaUsuarios,vinculos);
     }
 
     public void obtenerVehiculos() {
@@ -463,7 +484,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     }
 
     public void obtenerListaVinculos(){
-        fragmentoPrincipalVinculos.setListaVinculos(listaVinculos,listaVehiculosVinculo);
+        fragmentoPrincipalVinculos.setListaVinculos(listaVinculos,listaVehiculosVinculo,vinculos);
     }
 
     //HASTA AQUI

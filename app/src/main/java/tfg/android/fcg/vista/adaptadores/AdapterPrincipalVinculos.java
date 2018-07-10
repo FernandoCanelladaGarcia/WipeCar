@@ -1,6 +1,7 @@
 package tfg.android.fcg.vista.adaptadores;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,18 +17,21 @@ import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
 import tfg.android.fcg.modelo.Usuario;
 import tfg.android.fcg.modelo.Vehiculo;
+import tfg.android.fcg.modelo.Vinculo;
 
 public class AdapterPrincipalVinculos extends BaseAdapter{
 
     private ArrayList<Usuario> listaVinculos;
     private ArrayList<Vehiculo> listaVehiculos;
+    private ArrayList<Vinculo> vinculos;
     private Context context;
     private AppMediador appMediador;
     private final static String TAG = "depurador";
 
-    public AdapterPrincipalVinculos(Context context, ArrayList<Usuario> vinculos, AppMediador appMediador, ArrayList<Vehiculo> vehiculosVinculo){
+    public AdapterPrincipalVinculos(Context context, ArrayList<Usuario> vinculos, AppMediador appMediador, ArrayList<Vehiculo> vehiculosVinculo, ArrayList<Vinculo> listaVinculos){
         this.listaVinculos = vinculos;
         this.listaVehiculos = vehiculosVinculo;
+        this.vinculos = listaVinculos;
         this.appMediador = appMediador;
         this.context = context;
     }
@@ -57,6 +61,8 @@ public class AdapterPrincipalVinculos extends BaseAdapter{
             v = inflater.inflate(R.layout.item_lista_principal_conductor,null);
             Usuario conductor = listaVinculos.get(position);
             Vehiculo vehiculo = listaVehiculos.get(position);
+            Vinculo vinculo = vinculos.get(position);
+            Log.i(TAG,"Detino del vinculo " + vinculo.getDestino());
             TextView nombreConductor = (TextView) v.findViewById(R.id.NombreConductor);
             TextView fechaSalida = (TextView) v.findViewById(R.id.Fecha);
             TextView marcaCoche = (TextView)v.findViewById(R.id.MarcaVehiculo);

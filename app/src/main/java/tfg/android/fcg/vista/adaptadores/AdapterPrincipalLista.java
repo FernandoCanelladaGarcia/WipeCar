@@ -23,18 +23,21 @@ import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
 import tfg.android.fcg.modelo.Usuario;
 import tfg.android.fcg.modelo.Vehiculo;
+import tfg.android.fcg.modelo.Vinculo;
 
 public class AdapterPrincipalLista extends BaseAdapter{
 
     private ArrayList<Usuario> listaUsuarios;
     private ArrayList<Vehiculo> listaVehiculos = new ArrayList<>();
+    private ArrayList<Vinculo> listaVinculos;
     private Context contexto;
     private AppMediador appMediador;
     private boolean rol;
     private final static String TAG = "depurador";
 
-    public AdapterPrincipalLista(Context contexto, ArrayList<Usuario> listaUsuarios, AppMediador appMediador){
+    public AdapterPrincipalLista(Context contexto, ArrayList<Usuario> listaUsuarios, ArrayList<Vinculo> vinculos, AppMediador appMediador){
         this.listaUsuarios = listaUsuarios;
+        this.listaVinculos = vinculos;
         this.contexto = contexto;
         this.appMediador = appMediador;
         SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login", 0);
@@ -75,6 +78,8 @@ public class AdapterPrincipalLista extends BaseAdapter{
             if(rol){
                 v = inflater.inflate(R.layout.item_lista_principal_pasajero,null);
                 Usuario pasajero = listaUsuarios.get(position);
+                Vinculo vinculo = listaVinculos.get(position);
+                Log.i(TAG,"Detino del vinculo " + vinculo.getDestino());
                 TextView nombrePasajero = (TextView) v.findViewById(R.id.NombrePasajero);
                 TextView origenPasajero = (TextView) v.findViewById(R.id.DireccionPasajero);
                 TextView valoracionPasajero = (TextView) v.findViewById(R.id.valoracionPasajero);

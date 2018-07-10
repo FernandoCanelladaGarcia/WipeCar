@@ -51,6 +51,8 @@ public interface IVistaPrincipal {
 
     public void setVinculos(Object informacion);
 
+    public void setListaVinculos(Object informacion);
+
     public void setVehiculosVinculo(Object informacion);
 
     public void refrescarContenido();

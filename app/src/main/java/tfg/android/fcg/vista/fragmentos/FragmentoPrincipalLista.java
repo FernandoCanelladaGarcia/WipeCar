@@ -18,6 +18,7 @@ import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
 import tfg.android.fcg.modelo.Usuario;
 import tfg.android.fcg.modelo.Vehiculo;
+import tfg.android.fcg.modelo.Vinculo;
 import tfg.android.fcg.vista.VistaPrincipal;
 import tfg.android.fcg.vista.adaptadores.AdapterPrincipalLista;
 
@@ -31,6 +32,7 @@ public class FragmentoPrincipalLista extends Fragment{
     private ArrayList<Usuario> listaPasajeros;
     private ArrayList<Usuario> listaConductores;
     private ArrayList<Vehiculo> listaVehiculos;
+    private ArrayList<Vinculo> listaVinculos;
     private AdapterPrincipalLista adapterPrincipalLista;
     private boolean pausada = false;
     private final static String TAG = "depurador";
@@ -75,16 +77,20 @@ public class FragmentoPrincipalLista extends Fragment{
         super.onActivityCreated(savedInstaceState);
     }
 
-    public void setListaPasajeros(ArrayList<Usuario> pasajeros){
+    public void setListaPasajeros(ArrayList<Usuario> pasajeros, ArrayList<Vinculo> vinculos){
 
         if(listaPasajeros == null){
             this.listaPasajeros = pasajeros;
+            this.listaVinculos = vinculos;
         }else{
             this.listaPasajeros = null;
+            this.listaVinculos = null;
+
             this.listaPasajeros = pasajeros;
+            this.listaVinculos = vinculos;
         }
         if(rootView != null){
-            adapterPrincipalLista = new AdapterPrincipalLista(rootView.getContext(),listaPasajeros,appMediador);
+            adapterPrincipalLista = new AdapterPrincipalLista(rootView.getContext(),listaPasajeros,listaVinculos,appMediador);
             listView.setAdapter(adapterPrincipalLista);
             if(listaPasajeros.isEmpty()){
                 rootView.findViewById(R.id.elementoListaPrincipalVacia).setVisibility(View.VISIBLE);

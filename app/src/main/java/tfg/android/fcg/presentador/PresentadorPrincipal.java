@@ -126,30 +126,38 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                 if (vinculosConductores.isEmpty() || vinculosConductores == null) {
                     Log.i(TAG, "No vinculos pasajero");
                     usuariosVinculo = new ArrayList<>();
+                    vinculos = new ArrayList<>();
+                    vistaPrincipal.setListaVinculos(vinculos);
                     vistaPrincipal.setVinculos(usuariosVinculo);
                 }else{
                     Log.i(TAG, "Existen vinculos pasajero " + vinculosConductores.size());
                     vinculosPasajero = true;
                     vinculos = null;
                     vinculos = vinculosConductores;
-                    obtenerConductoresVinculo(vinculosConductores);
+                    vistaPrincipal.setListaVinculos(vinculos);
+                    obtenerConductoresVinculo(vinculos);
                 }
             }
 
             if (intent.getAction().equals(AppMediador.AVISO_LISTA_PASAJEROS_VINCULO)) {
                 appMediador.unRegisterReceiver(this);
-                ArrayList<Vinculo> vinculos = (ArrayList<Vinculo>) intent.getSerializableExtra(AppMediador.CLAVE_LISTA_PASAJEROS_VINCULO);
+                ArrayList<Vinculo> vinculosList = (ArrayList<Vinculo>) intent.getSerializableExtra(AppMediador.CLAVE_LISTA_PASAJEROS_VINCULO);
                 //Conductor
-                if (vinculos.isEmpty() || vinculos == null) {
+                if (vinculosList.isEmpty() || vinculosList == null) {
                     Log.i(TAG, "No Pasajeros con vinculo con el usuario actual");
                     usuariosVinculo = new ArrayList<>();
+                    vinculos = new ArrayList<>();
+                    vistaPrincipal.setListaVinculos(vinculos);
                     vistaPrincipal.setPasajeros(usuariosVinculo);
                 } else {
                     //Mostrar Lista
                     Log.i(TAG, "Hay Pasajeros con vinculo para el usuario actual = " + vinculos.size());
                     vinculoConductor = true;
                     vinculosConductor = null;
+                    vinculos = null;
                     vinculosConductor = vinculos;
+                    vinculos = vinculosList;
+                    vistaPrincipal.setListaVinculos(vinculos);
                     obtenerPasajerosVinculo(vinculosConductor);
                 }
             }
