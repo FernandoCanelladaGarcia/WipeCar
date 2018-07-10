@@ -77,7 +77,7 @@ public class AdapterPrincipalLista extends BaseAdapter{
 
             if(rol){
                 v = inflater.inflate(R.layout.item_lista_principal_pasajero,null);
-                Usuario pasajero = listaUsuarios.get(position);
+                final Usuario pasajero = listaUsuarios.get(position);
                 final Vinculo vinculo = listaVinculos.get(position);
                 Log.i(TAG,"Detino del vinculo " + vinculo.getDestino());
                 TextView nombrePasajero = (TextView) v.findViewById(R.id.NombrePasajero);
@@ -115,6 +115,10 @@ public class AdapterPrincipalLista extends BaseAdapter{
                                     case R.id.chatPasajero:
                                         if(vinculo.isVinculo()){
                                             //HACER MUESTRA DIALOGO DE CHAT
+                                            Object[] respuesta = new Object[2];
+                                            respuesta[0] = 7;
+                                            respuesta[1] = pasajero;
+                                            appMediador.getVistaPrincipal().mostrarDialogo(respuesta);
                                         }else{
                                             //Vinculo no confirmado Toast de no confirmado
                                             Toast.makeText(appMediador.getApplicationContext(),"No ha aceptado al pasajero como acompañante",Toast.LENGTH_SHORT).show();

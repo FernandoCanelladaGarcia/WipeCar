@@ -60,7 +60,7 @@ public class AdapterPrincipalVinculos extends BaseAdapter{
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 
             v = inflater.inflate(R.layout.item_lista_principal_conductor,null);
-            Usuario conductor = listaVinculos.get(position);
+            final Usuario conductor = listaVinculos.get(position);
             Vehiculo vehiculo = listaVehiculos.get(position);
             final Vinculo vinculo = vinculos.get(position);
             Log.i(TAG,"Detino del vinculo " + vinculo.getDestino());
@@ -89,6 +89,10 @@ public class AdapterPrincipalVinculos extends BaseAdapter{
                                 case R.id.chatConductor:
                                     if(vinculo.isVinculo()){
                                         //HACER MUESTRA DIALOGO DE CHAT
+                                        Object[] respuesta = new Object[2];
+                                        respuesta[0] = 7;
+                                        respuesta[1] = conductor;
+                                        appMediador.getVistaPrincipal().mostrarDialogo(respuesta);
                                     }else{
                                         //Vinculo no confirmado Toast de no confirmado
                                         Toast.makeText(appMediador.getApplicationContext(),"No ha sido aceptado por el conductor",Toast.LENGTH_SHORT).show();
