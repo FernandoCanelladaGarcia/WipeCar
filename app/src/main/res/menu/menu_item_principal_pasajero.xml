@@ -12,6 +12,5 @@
     <item
         android:id="@+id/chatPasajero"
         android:title="Chat"
-        android:visible="false"
         />
 </menu>
