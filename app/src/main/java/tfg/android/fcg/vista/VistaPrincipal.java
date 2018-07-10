@@ -212,6 +212,28 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                 break;
             case 5:
                 //Aceptar Pasajero
+                dialogBuild.setTitle("Aceptar Pasajero");
+                dialogBuild.setMessage("¿Esta seguro?");
+                dialogBuild.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //INT INFORMACION 0 = 0=> PICK UP, 0 = 1 => OTG.
+                        Vinculo vinculo = (Vinculo) datos[1];
+                        Object[] informacion = new Object[3];
+                        informacion[0] = 0;
+                        informacion[1] = vinculo.getIdPasajero();
+                        informacion[2] = vinculo.getIdConductor();
+                        appMediador.getPresentadorPrincipal().tratarOk(informacion);
+                    }
+                });
+                dialogBuild.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cerrarDialogo();
+                    }
+                });
+                dialogo = dialogBuild.create();
+                dialogo.show();
                 break;
             case 6:
                 //Eliminar Conductor

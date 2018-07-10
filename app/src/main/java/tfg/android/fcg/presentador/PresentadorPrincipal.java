@@ -156,8 +156,8 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                     vinculoConductor = true;
                     vinculosConductor = null;
                     vinculos = null;
-                    vinculosConductor = vinculos;
                     vinculos = vinculosList;
+                    vinculosConductor = vinculos;
                     vistaPrincipal.setListaVinculos(vinculos);
                     obtenerPasajerosVinculo(vinculosConductor);
                 }
@@ -207,6 +207,17 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                     vistaPrincipal.cerrarProgreso();
                     refrescarListas();
                     Toast.makeText(appMediador.getApplicationContext(),"Ha eliminado el vinculo correctamente",Toast.LENGTH_SHORT).show();
+                    vistaPrincipal.refrescarContenido();
+                }else{
+                    vistaPrincipal.cerrarProgreso();
+                }
+            }
+            if(intent.getAction().equals(AppMediador.AVISO_CONCRETAR_VINCULO)){
+                boolean respuesta = intent.getBooleanExtra(AppMediador.CLAVE_CONCRETAR_VINCULO,false);
+                if(respuesta){
+                    vistaPrincipal.cerrarProgreso();
+                    refrescarListas();
+                    Toast.makeText(appMediador.getApplicationContext(),"Ha aceptado al pasajero como acompañante",Toast.LENGTH_SHORT).show();
                     vistaPrincipal.refrescarContenido();
                 }else{
                     vistaPrincipal.cerrarProgreso();
@@ -317,7 +328,9 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
 
     @Override
     public void tratarOk(Object informacion) {
-
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_CONCRETAR_VINCULO);
+        vistaPrincipal.mostrarProgreso();
+        modelo.aceptarPasajero(informacion);
     }
 
     @Override

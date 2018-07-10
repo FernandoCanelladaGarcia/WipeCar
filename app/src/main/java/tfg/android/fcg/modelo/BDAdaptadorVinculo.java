@@ -118,15 +118,17 @@ public class BDAdaptadorVinculo {
         switch (tarea) {
             //PICK UP
             case 0:
-                reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                reference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
                             vinculo = snapshot.getValue(Vinculo.class);
+
                             if (vinculo.getIdPasajero().equals(idPasajero) && vinculo.getIdConductor().equals(idConductor)) {
                                 Map<String, Object> task = new HashMap<>();
                                 task.put("vinculo", true);
-                                dataSnapshot.getRef().updateChildren(task).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                snapshot.getRef().updateChildren(task).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {

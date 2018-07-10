@@ -73,7 +73,7 @@ public class AdapterPrincipalLista extends BaseAdapter{
         View v = convertView;
 
         if(convertView == null){
-            LayoutInflater inflater = (LayoutInflater) contexto.getSystemService(contexto.LAYOUT_INFLATER_SERVICE);
+            final LayoutInflater inflater = (LayoutInflater) contexto.getSystemService(contexto.LAYOUT_INFLATER_SERVICE);
 
             if(rol){
                 v = inflater.inflate(R.layout.item_lista_principal_pasajero,null);
@@ -98,7 +98,11 @@ public class AdapterPrincipalLista extends BaseAdapter{
                                 switch (id){
                                     case R.id.aceptarPasajero:
                                         //Confirmar vinculo
-                                        //Enviar push No OK
+                                        Object[] datos = new Object[2];
+                                        datos[0] = 5;
+                                        datos[1] = vinculo;
+                                        appMediador.getVistaPrincipal().mostrarDialogo(datos);
+                                        //Enviar push OK
                                         break;
                                     case R.id.rechazarPasajero:
                                         //Eliminar vinculo
@@ -106,7 +110,7 @@ public class AdapterPrincipalLista extends BaseAdapter{
                                         informacion[0] = 4;
                                         informacion[1] = vinculo;
                                         appMediador.getVistaPrincipal().mostrarDialogo(informacion);
-                                        //Enviar push OK
+                                        //Enviar push No OK
                                         break;
                                     case R.id.chatPasajero:
                                         if(vinculo.isVinculo()){
