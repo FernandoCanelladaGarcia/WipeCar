@@ -48,6 +48,7 @@ public class BDAdaptadorVinculo {
         String hora = (String) informacion[3];
         String origen = (String) informacion[4];
         String destino = (String) informacion[5];
+
         switch (tarea) {
             //PickUp
             case 0:
@@ -85,21 +86,17 @@ public class BDAdaptadorVinculo {
                             //Se ha agregado vinculo de pasajero a conductor
                             Log.i(TAG, "Agregado vinculo");
                             Bundle extras = new Bundle();
-                            extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, vinculo);
-                            appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras);
+                            extras.putBoolean(AppMediador.CLAVE_CREACION_VINCULO, true);
+                            appMediador.sendBroadcast(AppMediador.AVISO_CREACION_VINCULO, extras);
                         } else {
                             //Error a la hora de agregar vinculo
                             Log.i(TAG, "Error a la hora de agregar vinculo");
                             Bundle extras = new Bundle();
-                            extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, null);
-                            appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras);
+                            extras.putBoolean(AppMediador.CLAVE_CREACION_VINCULO, false);
+                            appMediador.sendBroadcast(AppMediador.AVISO_CREACION_VINCULO, extras);
                         }
                     }
                 });
-            default:
-                Log.i(TAG, "Error, no se ha introducido tipo de tarea");
-                return;
-
         }
 
     }
@@ -167,8 +164,9 @@ public class BDAdaptadorVinculo {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             vinculo = snapshot.getValue(Vinculo.class);
-                            if (vinculo.getIdPasajero().equals(idPasajero) && vinculo.getIdConductor().equals(idConductor)) {
+                            if (vinculo.getIdConductor().equals(idConductor) & vinculo.getIdPasajero().isEmpty()) {
                                 Map<String, Object> task = new HashMap<>();
+                                task.put("idPasajero", idPasajero);
                                 task.put("vinculo", true);
                                 dataSnapshot.getRef().updateChildren(task).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
@@ -327,7 +325,7 @@ public class BDAdaptadorVinculo {
 
                 for (DataSnapshot vinculo : dataSnapshot.getChildren()) {
                     Vinculo v = vinculo.getValue(Vinculo.class);
-                    if(v.getIdConductor().equals(idUser)) {
+                    if (v.getIdConductor().equals(idUser)) {
                         vinculos.add(v);
                         Bundle extras = new Bundle();
                         extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, v);
@@ -358,14 +356,14 @@ public class BDAdaptadorVinculo {
     }
 
     //TODO: NUEVO, REDACCION
-    public void obtenerListaVinculosConductores(final String idUser){
+    public void obtenerListaVinculosConductores(final String idUser) {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<Vinculo> vinculos = new ArrayList();
 
                 for (DataSnapshot vinculo : dataSnapshot.getChildren()) {
-                    if(vinculo.getValue(Vinculo.class).getIdPasajero().equals(idUser)) {
+                    if (vinculo.getValue(Vinculo.class).getIdPasajero().equals(idUser)) {
                         vinculos.add(vinculo.getValue(Vinculo.class));
                     }
                     Log.i(TAG, vinculo.getValue(Vinculo.class).getIdPasajero());

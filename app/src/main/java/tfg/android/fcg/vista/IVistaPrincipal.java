@@ -1,5 +1,7 @@
 package tfg.android.fcg.vista;
 
+import tfg.android.fcg.modelo.Usuario;
+
 public interface IVistaPrincipal {
 
     /**
@@ -54,6 +56,8 @@ public interface IVistaPrincipal {
     public void setListaVinculos(Object informacion);
 
     public void setVehiculosVinculo(Object informacion);
+
+    public Usuario getUsuario();
 
     public void refrescarContenido();
 }

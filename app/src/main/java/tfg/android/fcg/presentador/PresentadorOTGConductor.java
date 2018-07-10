@@ -4,10 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.util.Log;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.modelo.IModelo;
 import tfg.android.fcg.modelo.Modelo;
+import tfg.android.fcg.modelo.Usuario;
 import tfg.android.fcg.modelo.Vinculo;
 import tfg.android.fcg.vista.VistaOTGConductor;
 
@@ -16,10 +18,13 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor{
     private AppMediador appMediador;
     private VistaOTGConductor vistaOTGConductor;
     private IModelo modelo;
+    private Usuario user;
 
     private Handler timer = new Handler();
     private boolean atendiendoPeticion = false;
     private String conductor = "";
+
+    private final String TAG = "depurador";
 
     public PresentadorOTGConductor(){
         appMediador = AppMediador.getInstance();
@@ -85,6 +90,19 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor{
         }
     };
 
+    private BroadcastReceiver receptor = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(AppMediador.AVISO_CREACION_VINCULO));
+            boolean respuesta = (boolean)intent.getBooleanExtra(AppMediador.AVISO_CREACION_VINCULO,false);
+            if(respuesta){
+                appMediador.getVistaPrincipal().cerrarProgreso();
+            }else{
+                appMediador.getVistaPrincipal().cerrarProgreso();
+            }
+        }
+    };
+
     private BroadcastReceiver receptorGPS = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -103,7 +121,20 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor{
 
     @Override
     public void iniciar(final Object informacion) {
+        user = (Usuario) informacion;
+        appMediador.registerReceiver(receptor, AppMediador.AVISO_CREACION_VINCULO);
+        Object[] iniciar = new Object[7];
+        iniciar[0] = "";
+        iniciar[1] = user.getIdUser();
+        iniciar[2] = "";
+        iniciar[3] = "";
+        iniciar[4] = user.getOrigenDef();
+        iniciar[5] = user.getDestino();
+        iniciar[6] = 1;
+        modelo.guardarUsuarioPickup(iniciar);
+    }
 
+    private void iniciarThreds(){
         //1er hilo, busca posicion usuario
 
         Thread thread1 = new Thread(new Runnable() {
@@ -118,7 +149,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor{
         Thread thread2 = new Thread(new Runnable() {
             @Override
             public void run(){
-                buscarPeticiones(informacion);
+                buscarPeticiones(user.getIdUser());
             }
         });
         thread1.start();

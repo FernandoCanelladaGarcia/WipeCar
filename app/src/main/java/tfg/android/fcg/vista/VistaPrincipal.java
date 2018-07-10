@@ -779,6 +779,11 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         }
     }
 
+    @Override
+    public Usuario getUsuario(){
+        return user;
+    }
+
     class ViewPagerAdapter extends FragmentPagerAdapter {
 
         private final List<Fragment> mFragmentList = new ArrayList<>();

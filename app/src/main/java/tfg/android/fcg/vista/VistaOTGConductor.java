@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
+import tfg.android.fcg.modelo.Usuario;
 import tfg.android.fcg.presentador.IPresentadorOTGConductor;
 
 /**
@@ -41,9 +42,13 @@ public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, V
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view,savedInstanceState);
         botonIniciarRuta = (Button) view.findViewById(R.id.botonIniciarRuta);
+        botonIniciarRuta.setOnClickListener(this);
         botonAceptarPasajero = (Button) view.findViewById(R.id.botonAceptarPasajero);
+        botonAceptarPasajero.setOnClickListener(this);
         botonRechazarPasajero = (Button) view.findViewById(R.id.botonRechazarPasajero);
+        botonRechazarPasajero.setOnClickListener(this);
         botonFinalizarRuta = (Button) view.findViewById(R.id.botonFinalizarRuta);
+        botonFinalizarRuta.setOnClickListener(this);
     }
 
     @Override
@@ -65,6 +70,9 @@ public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, V
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.botonIniciarRuta:
+                appMediador.getVistaPrincipal().mostrarProgreso();
+                Usuario user = appMediador.getVistaPrincipal().getUsuario();
+                appMediador.getPresentadorOTGConductor().iniciar(user);
                 break;
             case R.id.botonAceptarPasajero:
                 break;
