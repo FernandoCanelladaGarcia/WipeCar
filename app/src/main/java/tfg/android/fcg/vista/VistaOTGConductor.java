@@ -23,6 +23,7 @@ public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, V
     private AppMediador appMediador;
     private IPresentadorOTGConductor presentadorOTGConductor;
     private Button botonIniciarRuta, botonAceptarPasajero, botonRechazarPasajero, botonFinalizarRuta;
+    private Usuario user;
     @Override
     public View onCreateView (LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +72,7 @@ public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, V
         switch(v.getId()){
             case R.id.botonIniciarRuta:
                 appMediador.getVistaPrincipal().mostrarProgreso();
-                Usuario user = appMediador.getVistaPrincipal().getUsuario();
+                user = appMediador.getVistaPrincipal().getUsuario();
                 appMediador.getPresentadorOTGConductor().iniciar(user);
                 break;
             case R.id.botonAceptarPasajero:
@@ -79,6 +80,8 @@ public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, V
             case R.id.botonRechazarPasajero:
                 break;
             case R.id.botonFinalizarRuta:
+                //appMediador.getVistaPrincipal().mostrarProgreso();
+                //appMediador.getPresentadorOTGConductor().tratarParar(user);
                 break;
 
         }

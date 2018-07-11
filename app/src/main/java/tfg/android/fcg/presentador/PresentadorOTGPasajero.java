@@ -59,8 +59,8 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
                 Posicion posConductor = (Posicion) intent.getSerializableExtra(AppMediador.CLAVE_OBTENER_POSICION);
                 posiciones.add(posConductor);
                 if(posiciones.size() == conductores.size()){
-                    //vistaOTGPasajero.setPosiciones(posiciones);
-                    //vistaOTGPasajero.mostrarVehiculos();
+                    vistaOTGPasajero.setPosiciones(posiciones);
+                    vistaOTGPasajero.mostrarVehiculos();
                     appMediador.unRegisterReceiver(this);
                     Log.i(TAG, "Posiciones " + posiciones.size());
                     vistaOTGPasajero.cerrarProgreso();

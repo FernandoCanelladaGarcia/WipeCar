@@ -29,10 +29,10 @@ public interface IVistaOTGPasajero {
      */
     public void mostrarMapaConPosicion(Object informacion);
 
+    //TODO: EDITADO, REDACCION
     /**
      * Muestra en el mapa los vehículos encontrados.
-     * @param informacion contendra:
      */
-    public void mostrarVehiculos(Object informacion);
+    public void mostrarVehiculos();
 
 }

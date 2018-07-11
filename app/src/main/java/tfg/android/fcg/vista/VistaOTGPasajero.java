@@ -29,6 +29,7 @@ import java.util.List;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
+import tfg.android.fcg.modelo.Posicion;
 import tfg.android.fcg.modelo.Usuario;
 import tfg.android.fcg.modelo.Vinculo;
 import tfg.android.fcg.presentador.IPresentadorOTGPasajero;
@@ -50,6 +51,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     private ArrayList<Marker> ubicacionConductores;
     private ArrayList<Vinculo> conductoresEnRuta;
     private ArrayList<Usuario> conductores;
+    private ArrayList<Posicion> posiciones;
     private final static String TAG = "depurador";
 
 
@@ -69,6 +71,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         presentadorOTGPasajero = appMediador.getPresentadorOTGPasajero();
         mapFragment = null;
         mMap = null;
+        ubicacionConductores = new ArrayList<>();
     }
 
     @Override
@@ -150,24 +153,24 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     }
 
     @Override
-    public void mostrarVehiculos(Object informacion) {
+    public void mostrarVehiculos() {
 
         if(!ubicacionConductores.isEmpty()){
             ubicacionConductores.clear();
         }
 
-        Object[] vehiculos = (Object[])informacion;
-        for(Object vehiculo: vehiculos){
-
+        for(int i = 0; i< conductores.size(); i++){
             Marker ubicacionVehiculo;
-            Object[] markVehiculo = (Object[])vehiculo;
-            Double latitud = (Double) markVehiculo[0];
-            Double longitud = (Double) markVehiculo[1];
-            String nombre = (String) markVehiculo[2];
+            Posicion posicionConductor = posiciones.get(i);
+            Usuario conductor = conductores.get(i);
+
+            Double latitud = Double.parseDouble(posicionConductor.getLatitud());
+            Double longitud = Double.parseDouble(posicionConductor.getLongitud());
+            String nombre = conductor.getNombre();
             LatLng lugar = new LatLng(latitud,longitud);
 
             ubicacionVehiculo = mMap.addMarker(new MarkerOptions().position(lugar).title(nombre)
-                    .icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation)));
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_car_user)));
             ubicacionConductores.add(ubicacionVehiculo);
         }
     }
@@ -221,6 +224,21 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
             appMediador.getPresentadorOTGPasajero().obtenerPosicionConductores(conductores);
         }else{
             conductores = new ArrayList<>();
+        }
+    }
+
+    public void setPosiciones(Object informacion){
+        ArrayList<Posicion> getPos = (ArrayList<Posicion>)informacion;
+        if(!getPos.isEmpty()){
+            if(posiciones == null){
+                Log.i(TAG, "set setPosiciones new");
+                posiciones = getPos;
+            }else{
+                posiciones = null;
+                posiciones = getPos;
+            }
+        }else{
+            posiciones = new ArrayList<>();
         }
     }
 }
