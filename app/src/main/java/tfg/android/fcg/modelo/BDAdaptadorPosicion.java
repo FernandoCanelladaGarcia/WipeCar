@@ -139,10 +139,10 @@ public class BDAdaptadorPosicion {
         Double longitud = (Double)informacion[2];
 
         Map<String, Object> posicionTask = new HashMap<>();
-        posicionTask.put("latitud", informacion[1]);
+        posicionTask.put("latitud", informacion[1].toString());
         //posicion.setLatitud(latitud);
 
-        posicionTask.put("longitud", informacion[2]);
+        posicionTask.put("longitud", informacion[2].toString());
         //posicion.setLongitud(longitud);
 
         database.child(idUser).updateChildren(posicionTask).addOnCompleteListener(new OnCompleteListener<Void>() {

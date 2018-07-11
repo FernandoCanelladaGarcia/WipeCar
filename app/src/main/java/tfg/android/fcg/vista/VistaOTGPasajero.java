@@ -154,12 +154,17 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
 
     @Override
     public void mostrarVehiculos() {
+        Log.i(TAG,"Markers: " + ubicacionConductores.size());
 
         if(!ubicacionConductores.isEmpty()){
-            ubicacionConductores.clear();
+            for(Marker ubicacion: ubicacionConductores){
+                ubicacion.remove();
+            }
+            ubicacionConductores = new ArrayList<>();
         }
-
+        Log.i(TAG,"Markers: " + ubicacionConductores.size());
         for(int i = 0; i< conductores.size(); i++){
+            Log.i(TAG,"Situando posicion");
             Marker ubicacionVehiculo;
             Posicion posicionConductor = posiciones.get(i);
             Usuario conductor = conductores.get(i);
@@ -173,6 +178,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_car_user)));
             ubicacionConductores.add(ubicacionVehiculo);
         }
+        appMediador.getPresentadorOTGPasajero().obtenerPosicionConductores(conductores);
     }
 
     @Override
@@ -237,6 +243,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                 posiciones = null;
                 posiciones = getPos;
             }
+            mostrarVehiculos();
         }else{
             posiciones = new ArrayList<>();
         }

@@ -53,17 +53,17 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
                     appMediador.unRegisterReceiver(this);
                     Log.i(TAG, "Conductores en ruta " + conductores.size());
                     vistaOTGPasajero.setConductores(conductores);
+                    vistaOTGPasajero.cerrarProgreso();
                 }
             }
             if(intent.getAction().equals(AppMediador.AVISO_OBTENER_POSICION)){
                 Posicion posConductor = (Posicion) intent.getSerializableExtra(AppMediador.CLAVE_OBTENER_POSICION);
                 posiciones.add(posConductor);
                 if(posiciones.size() == conductores.size()){
-                    vistaOTGPasajero.setPosiciones(posiciones);
-                    vistaOTGPasajero.mostrarVehiculos();
                     appMediador.unRegisterReceiver(this);
+                    vistaOTGPasajero.setPosiciones(posiciones);
                     Log.i(TAG, "Posiciones " + posiciones.size());
-                    vistaOTGPasajero.cerrarProgreso();
+                    posiciones = new ArrayList<>();
                 }
             }
         }
