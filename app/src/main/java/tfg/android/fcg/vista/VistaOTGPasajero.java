@@ -1,7 +1,10 @@
 package tfg.android.fcg.vista;
 
 import android.app.ProgressDialog;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -11,7 +14,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -94,7 +100,12 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
-                    presentadorOTGPasajero.tratarVehiculo(marker);
+                    String idUser = marker.getTitle();
+                    Toast.makeText(appMediador.getApplicationContext(),idUser, Toast.LENGTH_LONG).show();
+//                    for(Usuario conductor : conductores){
+//                        if(conductor.getIdUser().equals(idUser));
+//                        presentadorOTGPasajero.tratarVehiculo(conductor);
+//                    }
                     return true;
                 }
             });
@@ -157,28 +168,85 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         Log.i(TAG,"Markers: " + ubicacionConductores.size());
 
         if(!ubicacionConductores.isEmpty()){
-            for(Marker ubicacion: ubicacionConductores){
-                ubicacion.remove();
+            moverVehiculos();
+        }else {
+            Log.i(TAG, "Markers: " + ubicacionConductores.size());
+            for (int i = 0; i < conductores.size(); i++) {
+                Log.i(TAG, "Situando posicion");
+                Marker ubicacionVehiculo;
+                Posicion posicionConductor = posiciones.get(i);
+                Usuario conductor = conductores.get(i);
+
+                Double latitud = Double.parseDouble(posicionConductor.getLatitud());
+                Double longitud = Double.parseDouble(posicionConductor.getLongitud());
+                String titulo = conductor.getIdUser();
+                LatLng lugar = new LatLng(latitud, longitud);
+
+                ubicacionVehiculo = mMap.addMarker(new MarkerOptions().position(lugar).title(titulo)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_car_user)));
+                ubicacionConductores.add(ubicacionVehiculo);
             }
-            ubicacionConductores = new ArrayList<>();
-        }
-        Log.i(TAG,"Markers: " + ubicacionConductores.size());
-        for(int i = 0; i< conductores.size(); i++){
-            Log.i(TAG,"Situando posicion");
-            Marker ubicacionVehiculo;
-            Posicion posicionConductor = posiciones.get(i);
-            Usuario conductor = conductores.get(i);
-
-            Double latitud = Double.parseDouble(posicionConductor.getLatitud());
-            Double longitud = Double.parseDouble(posicionConductor.getLongitud());
-            String nombre = conductor.getNombre();
-            LatLng lugar = new LatLng(latitud,longitud);
-
-            ubicacionVehiculo = mMap.addMarker(new MarkerOptions().position(lugar).title(nombre)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_car_user)));
-            ubicacionConductores.add(ubicacionVehiculo);
         }
         appMediador.getPresentadorOTGPasajero().obtenerPosicionConductores(conductores);
+    }
+
+    private void moverVehiculos(){
+
+        final long start = SystemClock.uptimeMillis();
+        final Interpolator interpolator = new AccelerateDecelerateInterpolator();
+        final float durationInMs = 3000;
+        final boolean hideMarker = false;
+
+        for(int i = 0; i < conductores.size(); i++){
+
+            final Marker vehiculo = ubicacionConductores.get(i);
+            //Posicion Actual vehiculo
+            final LatLng posicionVehiculo = vehiculo.getPosition();
+            Location locatVehiculo = new Location("vehiculo");
+            locatVehiculo.setLatitude(posicionVehiculo.latitude);
+            locatVehiculo.setLongitude(posicionVehiculo.longitude);
+            //Posicion Nueva vehiculo
+            Posicion nuevaPosicion = posiciones.get(i);
+            final LatLng posicionFinal = new LatLng(Double.parseDouble(nuevaPosicion.getLatitud()),Double.parseDouble(nuevaPosicion.getLongitud()));
+            Location locatFinal = new Location("final");
+            locatFinal.setLatitude(posicionFinal.latitude);
+            locatFinal.setLongitude(posicionFinal.longitude);
+            //Distancia entre posiciones
+            float distance = locatVehiculo.distanceTo(locatFinal);
+
+            if(distance > 100) {
+                final Handler handler = new Handler();
+                handler.post(new Runnable() {
+                    long elapsed;
+                    float t;
+                    float v;
+
+                    @Override
+                    public void run() {
+                        elapsed = SystemClock.uptimeMillis() - start;
+                        t = elapsed / durationInMs;
+                        v = interpolator.getInterpolation(t);
+
+                        LatLng currentPosition = new LatLng(
+                                posicionVehiculo.latitude * (1 - t) + (posicionFinal.latitude) * t,
+                                posicionVehiculo.longitude * (1 - t) + (posicionFinal.longitude) * t
+                        );
+
+                        vehiculo.setPosition(currentPosition);
+
+                        if (t < 1) {
+                            handler.postDelayed(this, 16);
+                        } else {
+                            if (hideMarker) {
+                                vehiculo.setVisible(false);
+                            } else {
+                                vehiculo.setVisible(true);
+                            }
+                        }
+                    }
+                });
+            }
+        }
     }
 
     @Override
