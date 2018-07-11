@@ -346,6 +346,11 @@ public class Modelo implements IModelo{
     }
 
     @Override
+    public void actualizarLocalizacion(Object informacion){
+        adaptadorPosicion.actualizarPosicion((Object[])informacion);
+    }
+
+    @Override
     public void obtenerPeticionesDePasajeros(Object informacion) {
         Object[] datos = (Object[])informacion;
         int tarea = (int)datos[0];

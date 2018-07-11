@@ -185,4 +185,6 @@ public interface IModelo {
     public void cambiarRol(Object informacion);
 
     public void obtenerConductoresEnRuta(Object informacion);
+
+    public void actualizarLocalizacion(Object informacion);
 }

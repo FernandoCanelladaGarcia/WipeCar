@@ -135,15 +135,15 @@ public class BDAdaptadorPosicion {
     public void actualizarPosicion(Object[]informacion){
         //INFORMACION 0=idUser, 1=latitud 2=longitud
         String idUser = (String)informacion[0];
-        String latitud = (String)informacion[1];
-        String longitud = (String)informacion[2];
+        Double latitud = (Double)informacion[1];
+        Double longitud = (Double)informacion[2];
 
         Map<String, Object> posicionTask = new HashMap<>();
         posicionTask.put("latitud", informacion[1]);
-        posicion.setLatitud(latitud);
+        //posicion.setLatitud(latitud);
 
         posicionTask.put("longitud", informacion[2]);
-        posicion.setLongitud(longitud);
+        //posicion.setLongitud(longitud);
 
         database.child(idUser).updateChildren(posicionTask).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

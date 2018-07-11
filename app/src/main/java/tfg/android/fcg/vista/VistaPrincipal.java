@@ -703,11 +703,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     protected void onResume() {
         super.onResume();
         if (pausada) {
-            fragmentoPrincipal = null;
-            tabLayout = null;
-            viewPager = null;
-            Log.i(TAG, "On resume " + idUser);
-            appMediador.getPresentadorPrincipal().iniciar(idUser);
+            refrescarContenido();
         }
         pausada = false;
 
