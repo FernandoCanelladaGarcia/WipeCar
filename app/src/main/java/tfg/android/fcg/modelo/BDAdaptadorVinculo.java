@@ -78,8 +78,8 @@ public class BDAdaptadorVinculo {
             //OTG
             case 1:
                 vinculo = new Vinculo(idPasajero, idConductor, false, fecha, hora, origen, destino);
-
-                reference.setValue(vinculo).addOnCompleteListener(new OnCompleteListener<Void>() {
+                DatabaseReference referenciaOtg = reference.push();
+                referenciaOtg.setValue(vinculo).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -322,10 +322,9 @@ public class BDAdaptadorVinculo {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<Vinculo> vinculos = new ArrayList();
-
                 for (DataSnapshot vinculo : dataSnapshot.getChildren()) {
                     Vinculo v = vinculo.getValue(Vinculo.class);
-                    if (v.getIdConductor().equals(idUser)) {
+                    if (v.getIdConductor().equals(idUser) && !v.getIdPasajero().isEmpty()) {
                         vinculos.add(v);
                         Bundle extras = new Bundle();
                         extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, v);
@@ -363,10 +362,11 @@ public class BDAdaptadorVinculo {
                 ArrayList<Vinculo> vinculos = new ArrayList();
 
                 for (DataSnapshot vinculo : dataSnapshot.getChildren()) {
-                    if (vinculo.getValue(Vinculo.class).getIdPasajero().equals(idUser)) {
-                        vinculos.add(vinculo.getValue(Vinculo.class));
+                    Vinculo v = vinculo.getValue(Vinculo.class);
+                    if (v.getIdPasajero().equals(idUser)) {
+                        vinculos.add(v);
                     }
-                    Log.i(TAG, vinculo.getValue(Vinculo.class).getIdPasajero());
+                    Log.i(TAG, v.getIdPasajero());
                 }
 
                 Bundle extras = new Bundle();
@@ -385,5 +385,34 @@ public class BDAdaptadorVinculo {
                 reference.removeEventListener(this);
             }
         });
+    }
+
+    public void obtenerConductoresEnRuta(final String destino){
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<Vinculo> conductoresEnRuta = new ArrayList<>();
+
+                for(DataSnapshot vinculo: dataSnapshot.getChildren()){
+                    Vinculo v = vinculo.getValue(Vinculo.class);
+                    if(v.getIdPasajero().isEmpty() && v.getDestino().equals(destino)){
+                        conductoresEnRuta.add(v);
+                    }
+                }
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_CONDUCTORES_OTG,conductoresEnRuta);
+                appMediador.sendBroadcast(AppMediador.AVISO_CONDUCTORES_OTG,extras);
+                reference.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_CONDUCTORES_OTG,null);
+                appMediador.sendBroadcast(AppMediador.AVISO_CONDUCTORES_OTG,extras);
+                reference.removeEventListener(this);
+            }
+        });
+
     }
 }

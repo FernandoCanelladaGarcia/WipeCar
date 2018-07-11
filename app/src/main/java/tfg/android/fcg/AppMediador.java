@@ -90,6 +90,7 @@ public class AppMediador extends Application {
 	public static final String AVISO_ACTUALIZACION_POSICION = "tfg.android.fcg.AVISO_ACTUALIZACION_POSICION";
 	public static final String AVISO_ELIMINAR_USUARIO = "tfg.android.fcg.AVISO_ELIMINAR_USUARIO";
 	public static final String AVISO_VEHICULOS_OTGPASAJERO = "tfg.android.fcg.AVISO_VEHICULOS_OTGPASAJERO";
+	public static final String AVISO_CONDUCTORES_OTG = "tfg.android.fcg.AVISO_CONDUCTORES_OTG";
 	public static final String AVISO_LISTA_CONDUCTORES = "tfg.android.fcg.AVISO_LISTA_CONDUCTORES";
 	public static final String AVISO_LISTA_PASAJEROS = "tfg.android.fcg.AVISO_LISTA_PASAJEROS";
 	public static final String AVISO_CREACION_VINCULO = "tfg.android.fcg.AVISO_CREACION_VINCULO";
@@ -127,6 +128,7 @@ public class AppMediador extends Application {
 	public static final String CLAVE_RESULTADO_ACTUALIZACION_POSICION = "tfg.android.fcg.CLAVE_RESULTADO_ACTUALIZACION_POSICION";
     public static final String CLAVE_RESULTADO_ELIMINAR_USUARIO = "tfg.android.fcg.CLAVE_RESULTADO_ELIMINAR_USUARIO";
     public static final String CLAVE_VEHICULOS_OTGPASAJERO = "tfg.android.fcg.CLAVE_VEHICULOS_OTGPASAJERO";
+	public static final String CLAVE_CONDUCTORES_OTG = "tfg.android.fcg.CLAVE_CONDUCTORES_OTG";
     public static final String CLAVE_LISTA_CONDUCTORES = "tfg.android.fcg.CLAVE_LISTA_CONDUCTORES";
     public static final String CLAVE_LISTA_PASAJEROS = "tfg.android.fcg.CLAVE_LISTA_PASAJEROS";
     public static final String CLAVE_CREACION_VINCULO = "tfg.android.fcg.CLAVE_CREACION_VINCULO";

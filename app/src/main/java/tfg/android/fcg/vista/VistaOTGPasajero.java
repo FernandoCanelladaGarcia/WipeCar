@@ -28,6 +28,7 @@ import java.util.List;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
+import tfg.android.fcg.modelo.Usuario;
 import tfg.android.fcg.presentador.IPresentadorOTGPasajero;
 
 public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnMapReadyCallback, View.OnClickListener {
@@ -42,6 +43,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     private IPresentadorOTGPasajero presentadorOTGPasajero;
     private AlertDialog.Builder dialogBuild;
     private Button botonBuscar;
+    private Usuario user;
     private int anchoPantalla, altoPantalla;
 
     private final static String TAG = "depurador";
@@ -70,6 +72,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         super.onViewCreated(view,savedInstanceState);
         mMap = null;
         botonBuscar = (Button) view.findViewById(R.id.BuscarVehiculos);
+        botonBuscar.setOnClickListener(this);
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView);
         if(mapFragment != null){
             mapFragment.getMapAsync(this);
@@ -169,6 +172,8 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.BuscarVehiculos:
+                user = appMediador.getVistaPrincipal().getUsuario();
+                appMediador.getPresentadorOTGPasajero().tratarBuscar(user.getDestino());
                 break;
         }
     }

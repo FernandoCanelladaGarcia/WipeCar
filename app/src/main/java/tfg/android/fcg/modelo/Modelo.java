@@ -376,4 +376,9 @@ public class Modelo implements IModelo{
         adaptadorHistorial.agregarHistorial((Object[])informacion);
     }
 
+    @Override
+    public void obtenerConductoresEnRuta(Object informacion){
+        adaptadorVinculo.obtenerConductoresEnRuta((String)informacion);
+    }
+
 }

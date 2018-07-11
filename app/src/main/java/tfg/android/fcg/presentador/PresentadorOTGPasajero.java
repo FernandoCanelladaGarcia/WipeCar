@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.modelo.IModelo;
 import tfg.android.fcg.modelo.Modelo;
+import tfg.android.fcg.modelo.Vinculo;
 import tfg.android.fcg.modelo.bajonivel.ServicioLocalizacion;
 import tfg.android.fcg.vista.VistaOTGPasajero;
 
@@ -30,9 +31,13 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
     private BroadcastReceiver receptorDeAvisos = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(AppMediador.AVISO_VEHICULOS_OTGPASAJERO)){
-                ArrayList<Object> vehiculos = (ArrayList<Object>) intent.getSerializableExtra(AppMediador.CLAVE_VEHICULOS_OTGPASAJERO);
-                AppMediador.getInstance().getVistaOTGPasajero().mostrarVehiculos(vehiculos);
+            if(intent.getAction().equals(AppMediador.AVISO_CONDUCTORES_OTG)){
+                ArrayList<Vinculo> vehiculos = (ArrayList<Vinculo>) intent.getSerializableExtra(AppMediador.CLAVE_CONDUCTORES_OTG);
+                if(vehiculos != null){
+                    vistaOTGPasajero.cerrarProgreso();
+                }else{
+
+                }
             }
         }
     };
@@ -68,7 +73,9 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
 
     @Override
     public void tratarBuscar(Object informacion) {
-
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_CONDUCTORES_OTG);
+        vistaOTGPasajero.mostrarProgreso();
+        modelo.obtenerConductoresEnRuta(informacion);
     }
 
     @Override

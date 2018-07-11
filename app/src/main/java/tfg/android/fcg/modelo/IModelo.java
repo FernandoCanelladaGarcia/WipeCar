@@ -183,4 +183,6 @@ public interface IModelo {
 
     //TODO: NUEVO, REDACCION
     public void cambiarRol(Object informacion);
+
+    public void obtenerConductoresEnRuta(Object informacion);
 }
