@@ -1,6 +1,8 @@
 package tfg.android.fcg.modelo;
 
-public class Posicion {
+import java.io.Serializable;
+
+public class Posicion implements Serializable {
 
     //Variables Globales
 
@@ -9,6 +11,9 @@ public class Posicion {
     private String longitud;
 
     //Constructor
+    public Posicion(){
+
+    }
 
     public Posicion(String idUser, String latitud, String longitud){
         this.idUser = idUser;

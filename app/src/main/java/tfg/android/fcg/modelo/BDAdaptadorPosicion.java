@@ -10,8 +10,11 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -50,6 +53,23 @@ public class BDAdaptadorPosicion {
      */
     public void obtenerPosicion(Object informacion){
     //TODO: OBTENER POSICION LAT-LONG DE LA TABLA POSICIONES
+        database.child((String)informacion).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Posicion posicion = dataSnapshot.getValue(Posicion.class);
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_OBTENER_POSICION,posicion);
+                appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_POSICION,extras);
+                database.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_OBTENER_POSICION,null);
+                appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_POSICION,extras);
+            }
+        });
     }
 
     /**

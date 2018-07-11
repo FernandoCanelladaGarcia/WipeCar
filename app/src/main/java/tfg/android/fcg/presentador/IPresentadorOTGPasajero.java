@@ -32,4 +32,9 @@ public interface IPresentadorOTGPasajero {
      * @param informacion contendra:
      */
     public void tratarCancelar(Object informacion);
+
+    //TODO: NUEVO, REDACCION
+    public void obtenerConductores(Object informacion);
+
+    public void obtenerPosicionConductores(Object informacion);
 }

@@ -24,11 +24,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
 import tfg.android.fcg.modelo.Usuario;
+import tfg.android.fcg.modelo.Vinculo;
 import tfg.android.fcg.presentador.IPresentadorOTGPasajero;
 
 public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnMapReadyCallback, View.OnClickListener {
@@ -36,7 +38,6 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     private GoogleMap mMap;
     private SupportMapFragment mapFragment;
     private Marker miUbicacion;
-    private List<Marker> ubicacionConductores;
     private ProgressDialog dialogoProgreso;
     private AlertDialog dialogo;
     private AppMediador appMediador;
@@ -46,6 +47,9 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     private Usuario user;
     private int anchoPantalla, altoPantalla;
 
+    private ArrayList<Marker> ubicacionConductores;
+    private ArrayList<Vinculo> conductoresEnRuta;
+    private ArrayList<Usuario> conductores;
     private final static String TAG = "depurador";
 
 
@@ -185,5 +189,38 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         miUbicacion = null;
         super.onDestroy();
         appMediador.removePresentadorOTGPasajero();
+    }
+
+    public void setConductoresEnRuta(Object informacion){
+        ArrayList<Vinculo> getCondVinc = (ArrayList<Vinculo>) informacion;
+        if(!getCondVinc.isEmpty()){
+            if(conductoresEnRuta == null){
+                Log.i(TAG, "set setConductoresEnRuta new");
+                conductoresEnRuta = getCondVinc;
+            }else{
+                conductoresEnRuta = null;
+                conductoresEnRuta = getCondVinc;
+            }
+            appMediador.getPresentadorOTGPasajero().obtenerConductores(conductoresEnRuta);
+        }else{
+            conductoresEnRuta = new ArrayList<>();
+
+        }
+    }
+
+    public void setConductores(Object informacion){
+        ArrayList<Usuario> getCond = (ArrayList<Usuario>)informacion;
+        if(!getCond.isEmpty()){
+            if(conductores == null){
+                Log.i(TAG, "set setConductores new");
+                conductores = getCond;
+            }else{
+                conductores = null;
+                conductores = getCond;
+            }
+            appMediador.getPresentadorOTGPasajero().obtenerPosicionConductores(conductores);
+        }else{
+            conductores = new ArrayList<>();
+        }
     }
 }
