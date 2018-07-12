@@ -86,9 +86,16 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
                     Log.i(TAG,"Se ha creado vinculo");
                     appMediador.unRegisterReceiver(this);
                     vistaOTGPasajero.mostrarVehiculoVinculo();
+                    esperarRespuesta();
                 }else{
                     Log.i(TAG,"ERROR agregando vinculo");
                 }
+            }
+            if(intent.getAction().equals(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR)){
+
+            }
+            if(intent.getAction().equals(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR)){
+
             }
         }
     };
@@ -145,7 +152,7 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
         Usuario user = (Usuario)informacion;
         appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_CREACION_VINCULO);
         SimpleDateFormat tf = new SimpleDateFormat("HH:mm:ss");
-        SimpleDateFormat df = new SimpleDateFormat("dd:MM:yyyy");
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String fecha = tf.format(Calendar.getInstance().getTime());
         String hora = df.format(Calendar.getInstance().getTime());
         Object[] datos = new Object[7];
@@ -166,7 +173,9 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
 
     @Override
     public void esperarRespuesta(){
-        appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR);
+        Log.i(TAG, "Esperar respuesta");
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR);
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR);
     }
 
     @Override

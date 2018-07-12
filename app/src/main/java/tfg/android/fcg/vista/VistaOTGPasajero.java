@@ -137,13 +137,10 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
             if (conductores.get(i).getIdUser().equals(idUser)) {
                 marcadorConductor = marker;
                 conductorVinculo = conductores.get(i);
-                Toast.makeText(appMediador.getApplicationContext(), conductorVinculo.getNombre(), Toast.LENGTH_LONG).show();
                 posicionConductorVinculo = posiciones.get(i);
                 presentadorOTGPasajero.tratarVehiculo(conductorVinculo);
-                //mostrarVehiculoVinculo();
             }
         }
-        //presentadorOTGPasajero.tratarVehiculo(conductorVinculo);
     }
 
 
@@ -191,8 +188,6 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                     @Override
                     public void onClick(View v) {
                         tratarCoche = false;
-                        mostrarVehiculoVinculo();
-                        //AGREGAR VINCULO -- PASAR A OTGCONDUCTOR Y RECIBIR NOTIFICACION
                         presentadorOTGPasajero.tratarOk(user);
                         cerrarDialogo();
                     }
@@ -272,15 +267,14 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
 
                 CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 200);
                 mMap.animateCamera(cu);
-                //mMap.animateCamera(CameraUpdateFactory.zoomBy(AppMediador.ZOOM));
             }
             new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    Log.i(TAG, "Aplicamos un delay de 5 seg");
+                    Log.i(TAG, "Aplicamos un delay de 4 seg al setear");
                     appMediador.getPresentadorOTGPasajero().obtenerPosicionConductores(conductores);
                 }
-            }, 5000);
+            }, 4000);
         }else{
             Log.i(TAG, "Dejamos de recoger la posicion y de mover");
         }
@@ -315,10 +309,10 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         posiciones.clear();
 
         Log.i(TAG, "Listas ubicaciones y conductores limpiadas");
-
-        ubicacionConductores.add(marcadorConductor);
         conductores.add(conductorVinculo);
+        Log.i(TAG, "Conductores "+conductores.size());
         posiciones.add(posicionConductorVinculo);
+        Log.i(TAG, "Posiciones "+posiciones.size());
         //OBTENER VINCULO CREADO
         tratarCoche = false;
         Double latitud = Double.parseDouble(posicionConductorVinculo.getLatitud());
@@ -329,15 +323,17 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         marcadorConductor = mMap.addMarker(new MarkerOptions().position(lugar).title(titulo)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_car_user)));
 
+        ubicacionConductores.add(marcadorConductor);
+        Log.i(TAG, "Markers "+ubicacionConductores.size());
         Log.i(TAG,"Sigo obteniendo la posicion del conductor elegido");
 
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                Log.i(TAG, "Aplicamos un delay de 5 seg");
+                Log.i(TAG, "Aplicamos un delay de 4 seg al recoger el conductor");
                 appMediador.getPresentadorOTGPasajero().obtenerPosicionConductores(conductores);
             }
-        }, 5000);
+        }, 4000);
     }
 
     private void moverVehiculos(){
@@ -347,7 +343,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         final float durationInMs = 3000;
         final boolean hideMarker = false;
 
-        for(int i = 0; i < conductores.size(); i++){
+        for (int i = 0; i < conductores.size(); i++) {
             final Marker vehiculo = ubicacionConductores.get(i);
             //Posicion Actual vehiculo
             final LatLng posicionVehiculo = vehiculo.getPosition();
@@ -356,50 +352,50 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
             locatVehiculo.setLongitude(posicionVehiculo.longitude);
             //Posicion Nueva vehiculo
             Posicion nuevaPosicion = posiciones.get(i);
-            final LatLng posicionFinal = new LatLng(Double.parseDouble(nuevaPosicion.getLatitud()),Double.parseDouble(nuevaPosicion.getLongitud()));
+            final LatLng posicionFinal = new LatLng(Double.parseDouble(nuevaPosicion.getLatitud()), Double.parseDouble(nuevaPosicion.getLongitud()));
             Location locatFinal = new Location("final");
             locatFinal.setLatitude(posicionFinal.latitude);
             locatFinal.setLongitude(posicionFinal.longitude);
             //Distancia entre posiciones
             float distance = locatVehiculo.distanceTo(locatFinal);
 
-            if(distance > 200) {
-                final Handler handler = new Handler();
-                handler.post(new Runnable() {
-                    long elapsed;
-                    float t;
-                    float v;
+            //if(distance > 200) {
+            final Handler handler = new Handler();
+            handler.post(new Runnable() {
+                long elapsed;
+                float t;
+                float v;
 
-                    @Override
-                    public void run() {
-                        elapsed = SystemClock.uptimeMillis() - start;
-                        t = elapsed / durationInMs;
-                        v = interpolator.getInterpolation(t);
+                @Override
+                public void run() {
+                    elapsed = SystemClock.uptimeMillis() - start;
+                    t = elapsed / durationInMs;
+                    v = interpolator.getInterpolation(t);
 
-                        LatLng currentPosition = new LatLng(
-                                posicionVehiculo.latitude * (1 - t) + (posicionFinal.latitude) * t,
-                                posicionVehiculo.longitude * (1 - t) + (posicionFinal.longitude) * t
-                        );
+                    LatLng currentPosition = new LatLng(
+                            posicionVehiculo.latitude * (1 - t) + (posicionFinal.latitude) * t,
+                            posicionVehiculo.longitude * (1 - t) + (posicionFinal.longitude) * t
+                    );
 
-                        vehiculo.setPosition(currentPosition);
-                        if (t < 1) {
-                            handler.postDelayed(this, 16);
+                    vehiculo.setPosition(currentPosition);
+                    if (t < 1) {
+                        handler.postDelayed(this, 16);
+                    } else {
+                        if (hideMarker) {
+                            vehiculo.setVisible(false);
                         } else {
-                            if (hideMarker) {
-                                vehiculo.setVisible(false);
-                            } else {
-                                vehiculo.setVisible(true);
-                            }
+                            vehiculo.setVisible(true);
                         }
                     }
-                });
-            }
+                }
+            });
+            //}
         }
         centrarMapa();
     }
 
     private void centrarMapa(){
-        Log.i(TAG,"Aplicamos un delay de 2 seg tras moverse para ajustar el mapa");
+        Log.i(TAG,"centrarMapa");
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for(Posicion posicion: posiciones){
             LatLng latLng = new LatLng(Double.parseDouble(posicion.getLatitud()),Double.parseDouble(posicion.getLongitud()));
