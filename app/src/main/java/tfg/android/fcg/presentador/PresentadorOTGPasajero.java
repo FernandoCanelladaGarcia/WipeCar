@@ -8,7 +8,9 @@ import android.util.Log;
 
 import com.google.android.gms.maps.model.Marker;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.modelo.IModelo;
@@ -30,6 +32,7 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
     private ArrayList<Usuario> conductores;
     private ArrayList<Posicion> posiciones;
     private Vehiculo vehiculo;
+    private Usuario conductor;
     private final static String TAG = "depurador";
 
     private BroadcastReceiver receptorDeAvisos = new BroadcastReceiver() {
@@ -70,10 +73,21 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
             if(intent.getAction().equals(AppMediador.AVISO_OBTENER_VEHICULO)){
                 Vehiculo vehiculoConductor = (Vehiculo)intent.getSerializableExtra(AppMediador.CLAVE_OBTENER_VEHICULO);
                 if(vehiculoConductor == null){
-
+                    Log.i(TAG,"ERROR no se encuentra vehiculo");
                 }else{
+                    appMediador.unRegisterReceiver(this);
                     vehiculo = vehiculoConductor;
                     vistaOTGPasajero.setVehiculoConductor(vehiculo);
+                }
+            }
+            if(intent.getAction().equals(AppMediador.AVISO_CREACION_VINCULO)){
+                boolean respuesta = intent.getBooleanExtra(AppMediador.CLAVE_CREACION_VINCULO,false);
+                if(respuesta){
+                    Log.i(TAG,"Se ha creado vinculo");
+                    appMediador.unRegisterReceiver(this);
+                    vistaOTGPasajero.mostrarVehiculoVinculo();
+                }else{
+                    Log.i(TAG,"ERROR agregando vinculo");
                 }
             }
         }
@@ -121,19 +135,38 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
     @Override
     public void tratarVehiculo(Object informacion) {
         Log.i(TAG, "tratarVehiculo");
-        Usuario conductor = (Usuario)informacion;
+        conductor = (Usuario)informacion;
         appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_OBTENER_VEHICULO);
         modelo.obtenerVehiculoUsuario(conductor.getDatoVehiculo());
     }
 
     @Override
     public void tratarOk(Object informacion) {
-
+        Usuario user = (Usuario)informacion;
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_CREACION_VINCULO);
+        SimpleDateFormat tf = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("dd:MM:yyyy");
+        String fecha = tf.format(Calendar.getInstance().getTime());
+        String hora = df.format(Calendar.getInstance().getTime());
+        Object[] datos = new Object[7];
+        datos[0] = user.getIdUser();
+        datos[1] = conductor.getIdUser();
+        datos[2] = fecha;
+        datos[3] = hora;
+        datos[4] = user.getOrigenDef();
+        datos[5] = user.getDestino();
+        datos[6] = 1;
+        modelo.guardarUsuarioPickup(datos);
     }
 
     @Override
     public void tratarCancelar(Object informacion) {
 
+    }
+
+    @Override
+    public void esperarRespuesta(){
+        appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR);
     }
 
     @Override

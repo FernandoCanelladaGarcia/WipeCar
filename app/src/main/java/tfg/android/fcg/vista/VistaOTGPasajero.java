@@ -193,7 +193,8 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                         tratarCoche = false;
                         mostrarVehiculoVinculo();
                         //AGREGAR VINCULO -- PASAR A OTGCONDUCTOR Y RECIBIR NOTIFICACION
-                        //presentadorOTGPasajero.tratarOk();
+                        presentadorOTGPasajero.tratarOk(user);
+                        cerrarDialogo();
                     }
                 });
 
@@ -284,29 +285,33 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
             Log.i(TAG, "Dejamos de recoger la posicion y de mover");
         }
     }
-
-    private void mostrarVehiculoVinculo(){
+    @Override
+    public void mostrarVehiculoVinculo(){
 
         Log.i(TAG,"mostrarVehiculoVinculo");
 
         for(Marker ubicacion: ubicacionConductores){
             ubicacion.remove();
         }
+        Log.i(TAG, " "+ubicacionConductores.size());
         ubicacionConductores.clear();
 
         for(Usuario conductor: conductores){
             conductores.remove(conductor);
         }
+        Log.i(TAG, " "+conductores.size());
         conductores.clear();
 
         for(Vinculo vinculo: conductoresEnRuta){
             conductoresEnRuta.remove(vinculo);
         }
+        Log.i(TAG, " "+conductoresEnRuta.size());
         conductoresEnRuta.clear();
 
         for(Posicion posicion: posiciones){
             posiciones.remove(posicion);
         }
+        Log.i(TAG, " "+posiciones.size());
         posiciones.clear();
 
         Log.i(TAG, "Listas ubicaciones y conductores limpiadas");
@@ -315,7 +320,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         conductores.add(conductorVinculo);
         posiciones.add(posicionConductorVinculo);
         //OBTENER VINCULO CREADO
-
+        tratarCoche = false;
         Double latitud = Double.parseDouble(posicionConductorVinculo.getLatitud());
         Double longitud = Double.parseDouble(posicionConductorVinculo.getLongitud());
         String titulo = conductorVinculo.getIdUser();
@@ -326,7 +331,13 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
 
         Log.i(TAG,"Sigo obteniendo la posicion del conductor elegido");
 
-        appMediador.getPresentadorOTGPasajero().obtenerPosicionConductores(conductores);
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Log.i(TAG, "Aplicamos un delay de 5 seg");
+                appMediador.getPresentadorOTGPasajero().obtenerPosicionConductores(conductores);
+            }
+        }, 5000);
     }
 
     private void moverVehiculos(){

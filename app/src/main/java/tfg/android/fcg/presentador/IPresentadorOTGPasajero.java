@@ -37,4 +37,6 @@ public interface IPresentadorOTGPasajero {
     public void obtenerConductores(Object informacion);
 
     public void obtenerPosicionConductores(Object informacion);
+
+    public void esperarRespuesta();
 }

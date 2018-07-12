@@ -35,4 +35,6 @@ public interface IVistaOTGPasajero {
      */
     public void mostrarVehiculos();
 
+    public void mostrarVehiculoVinculo();
+
 }
