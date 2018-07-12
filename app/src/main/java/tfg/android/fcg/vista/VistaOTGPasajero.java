@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -32,6 +33,7 @@ import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -241,6 +243,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         if(!ubicacionConductores.isEmpty()){
             moverVehiculos();
         }else {
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
             Log.i(TAG, "Markers: " + ubicacionConductores.size());
             for (int i = 0; i < conductores.size(); i++) {
                 Log.i(TAG, "Situando posicion");
@@ -256,7 +259,15 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                 ubicacionVehiculo = mMap.addMarker(new MarkerOptions().position(lugar).title(titulo)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_car_user)));
                 ubicacionConductores.add(ubicacionVehiculo);
+                builder.include(ubicacionVehiculo.getPosition());
             }
+
+            builder.include(miUbicacion.getPosition());
+            LatLngBounds bounds = builder.build();
+
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,200);
+            mMap.moveCamera(cu);
+            //mMap.animateCamera(CameraUpdateFactory.zoomBy(AppMediador.ZOOM));
         }
         new Timer().schedule(new TimerTask() {
             @Override
@@ -318,7 +329,6 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         final Interpolator interpolator = new AccelerateDecelerateInterpolator();
         final float durationInMs = 3000;
         final boolean hideMarker = false;
-
         for(int i = 0; i < conductores.size(); i++){
 
             final Marker vehiculo = ubicacionConductores.get(i);
@@ -368,6 +378,14 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                 });
             }
         }
+//        final LatLngBounds.Builder builder = new LatLngBounds.Builder();
+//        builder.include(vehiculo.getPosition());
+//        builder.include(miUbicacion.getPosition());
+//        LatLngBounds bounds = builder.build();
+//
+//        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,0);
+//
+//        mMap.moveCamera(cu);
     }
 
     @Override
