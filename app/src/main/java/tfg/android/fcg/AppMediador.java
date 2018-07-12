@@ -76,7 +76,7 @@ public class AppMediador extends Application {
     private IModelo modelo;
 
 	//Constantes de comunicacion
-	public static final float ZOOM = 17f;
+	public static final float ZOOM = 12f;
 	public static final String GEOCODE_APIKEY = "AIzaSyCd5F6PDHPtEu_nTWWxyeoKfp3VfoWdePY";
 	public static final String GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
 

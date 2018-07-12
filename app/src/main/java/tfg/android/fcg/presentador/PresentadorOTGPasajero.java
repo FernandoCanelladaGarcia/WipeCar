@@ -15,6 +15,7 @@ import tfg.android.fcg.modelo.IModelo;
 import tfg.android.fcg.modelo.Modelo;
 import tfg.android.fcg.modelo.Posicion;
 import tfg.android.fcg.modelo.Usuario;
+import tfg.android.fcg.modelo.Vehiculo;
 import tfg.android.fcg.modelo.Vinculo;
 import tfg.android.fcg.modelo.bajonivel.ServicioLocalizacion;
 import tfg.android.fcg.vista.VistaOTGPasajero;
@@ -23,13 +24,12 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
 
     private AppMediador appMediador;
     private VistaOTGPasajero vistaOTGPasajero;
-    private Marker miUbicacion;
-    private Marker marcaSeleccionada;
     private IModelo modelo;
     private SharedPreferences sharedPreferences;
     private ArrayList<Vinculo> conductoresEnRuta;
     private ArrayList<Usuario> conductores;
     private ArrayList<Posicion> posiciones;
+    private Vehiculo vehiculo;
     private final static String TAG = "depurador";
 
     private BroadcastReceiver receptorDeAvisos = new BroadcastReceiver() {
@@ -64,6 +64,15 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
                     vistaOTGPasajero.setPosiciones(posiciones);
                     Log.i(TAG, "Posiciones " + posiciones.size());
                     posiciones = new ArrayList<>();
+                }
+            }
+            if(intent.getAction().equals(AppMediador.AVISO_OBTENER_VEHICULO)){
+                Vehiculo vehiculoConductor = (Vehiculo)intent.getSerializableExtra(AppMediador.CLAVE_OBTENER_VEHICULO);
+                if(vehiculoConductor == null){
+
+                }else{
+                    vehiculo = vehiculoConductor;
+                    vistaOTGPasajero.setVehiculoConductor(vehiculo);
                 }
             }
         }
@@ -110,7 +119,9 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
 
     @Override
     public void tratarVehiculo(Object informacion) {
-
+        Usuario conductor = (Usuario)informacion;
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_OBTENER_VEHICULO);
+        modelo.obtenerVehiculoUsuario(conductor.getIdUser());
     }
 
     @Override

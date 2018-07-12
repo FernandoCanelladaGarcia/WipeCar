@@ -1,6 +1,7 @@
 package tfg.android.fcg.vista;
 
 import android.app.ProgressDialog;
+import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,12 +12,15 @@ import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,6 +28,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -32,11 +37,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
 import tfg.android.fcg.modelo.Posicion;
 import tfg.android.fcg.modelo.Usuario;
+import tfg.android.fcg.modelo.Vehiculo;
 import tfg.android.fcg.modelo.Vinculo;
 import tfg.android.fcg.presentador.IPresentadorOTGPasajero;
 
@@ -58,14 +66,26 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     private ArrayList<Vinculo> conductoresEnRuta;
     private ArrayList<Usuario> conductores;
     private ArrayList<Posicion> posiciones;
-    private final static String TAG = "depurador";
 
+    private Posicion posicionConductorVinculo;
+    private Vinculo vinculoConductor;
+    private Usuario conductorVinculo;
+    private Marker marcadorConductor;
+    private Vehiculo vehiculoConductor;
+
+    private boolean vinculoExiste = false;
+    private final static String TAG = "depurador";
 
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
         View v = layoutInflater.inflate(R.layout.layout_vista_otgpasajero,container,false);
         mMap = null;
         mapFragment = null;
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        anchoPantalla = size.x;
+        altoPantalla = size.y;
         return v;
     }
 
@@ -96,16 +116,22 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if(mMap != null){
+        if (mMap != null) {
             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
                     String idUser = marker.getTitle();
-                    Toast.makeText(appMediador.getApplicationContext(),idUser, Toast.LENGTH_LONG).show();
-//                    for(Usuario conductor : conductores){
-//                        if(conductor.getIdUser().equals(idUser));
-//                        presentadorOTGPasajero.tratarVehiculo(conductor);
-//                    }
+                    Toast.makeText(appMediador.getApplicationContext(), idUser, Toast.LENGTH_LONG).show();
+                    for (int i = 0; i < conductores.size(); i++) {
+                        if (conductores.get(i).getIdUser().equals(idUser)) {
+                            marcadorConductor = marker;
+                            conductorVinculo = conductores.get(i);
+                            posicionConductorVinculo = posiciones.get(i);
+                            //presentadorOTGPasajero.tratarVehiculo(conductorVinculo);
+                            //mostrarVehiculoVinculo();
+                        }
+                    }
+                    //presentadorOTGPasajero.tratarVehiculo(conductorVinculo);
                     return true;
                 }
             });
@@ -135,9 +161,54 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
 
     @Override
     public void mostrarDialogo(Object informacion) {
-        dialogBuild = new AlertDialog.Builder(appMediador.getApplicationContext());
-        dialogo = dialogBuild.create();
-        dialogo.show();
+        int tarea = (int)informacion;
+        switch(tarea) {
+            case 0:
+                Projection projection = mMap.getProjection();
+                Point punto = projection.toScreenLocation(marcadorConductor.getPosition());
+                dialogBuild = new AlertDialog.Builder(appMediador.getApplicationContext());
+                View vistaDialogo = getLayoutInflater().inflate(R.layout.menu_vehiculo, null);
+                dialogBuild.setView(vistaDialogo);
+
+                Button botonSeleccionarVehiculo = (Button) vistaDialogo.findViewById(R.id.botonSeleccionarVehiculo);
+
+                TextView nombreConductor = (TextView) vistaDialogo.findViewById(R.id.nombreConductor);
+                nombreConductor.setText(conductorVinculo.getNombre());
+
+                TextView cocheConductor = (TextView) vistaDialogo.findViewById(R.id.cocheConductor);
+                cocheConductor.setText(vehiculoConductor.getMarca() + "-" + vehiculoConductor.getModelo() + " / "+ vehiculoConductor.getMatricula());
+                TextView valoracionConductor = (TextView) vistaDialogo.findViewById(R.id.valoracionMenuConductor);
+                if (conductorVinculo.getValoracion().isEmpty()) {
+                    valoracionConductor.setText("Sin Valorar");
+                } else {
+                    valoracionConductor.setText(conductorVinculo.getValoracion());
+                }
+
+
+                botonSeleccionarVehiculo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mostrarVehiculoVinculo();
+                        //AGREGAR VINCULO -- PASAR A OTGCONDUCTOR Y RECIBIR NOTIFICACION
+                        //presentadorOTGPasajero.tratarOk();
+                    }
+                });
+
+                dialogo = dialogBuild.create();
+                dialogo.show();
+
+                WindowManager.LayoutParams wmlp = dialogo.getWindow().getAttributes();
+                wmlp.copyFrom(dialogo.getWindow().getAttributes());
+                wmlp.width = 180;
+                wmlp.x = punto.x - anchoPantalla / 2;
+                wmlp.y = punto.y - altoPantalla / 2;
+                if (punto.x > anchoPantalla / 2)
+                    wmlp.x -= wmlp.width / 2;
+                else
+                    wmlp.x += wmlp.width / 2;
+                dialogo.getWindow().setAttributes(wmlp);
+                break;
+        }
     }
 
     @Override
@@ -187,6 +258,57 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                 ubicacionConductores.add(ubicacionVehiculo);
             }
         }
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Log.i(TAG,"Aplicamos un delay de 5 seg");
+                appMediador.getPresentadorOTGPasajero().obtenerPosicionConductores(conductores);
+            }
+        }, 5000);
+
+    }
+
+    private void mostrarVehiculoVinculo(){
+
+        Log.i(TAG,"mostrarVehiculoVinculo");
+
+        for(Marker ubicacion: ubicacionConductores){
+            ubicacion.remove();
+        }
+        ubicacionConductores.clear();
+
+        for(Usuario conductor: conductores){
+            conductores.remove(conductor);
+        }
+        conductores.clear();
+
+        for(Vinculo vinculo: conductoresEnRuta){
+            conductoresEnRuta.remove(vinculo);
+        }
+        conductoresEnRuta.clear();
+
+        for(Posicion posicion: posiciones){
+            posiciones.remove(posicion);
+        }
+        posiciones.clear();
+
+        Log.i(TAG, "Listas ubicaciones y conductores limpiadas");
+
+        ubicacionConductores.add(marcadorConductor);
+        conductores.add(conductorVinculo);
+        posiciones.add(posicionConductorVinculo);
+        //OBTENER VINCULO CREADO
+
+        Double latitud = Double.parseDouble(posicionConductorVinculo.getLatitud());
+        Double longitud = Double.parseDouble(posicionConductorVinculo.getLongitud());
+        String titulo = conductorVinculo.getIdUser();
+        LatLng lugar = new LatLng(latitud, longitud);
+
+        marcadorConductor = mMap.addMarker(new MarkerOptions().position(lugar).title(titulo)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_car_user)));
+
+        Log.i(TAG,"Sigo obteniendo la posicion del conductor elegido");
+
         appMediador.getPresentadorOTGPasajero().obtenerPosicionConductores(conductores);
     }
 
@@ -214,7 +336,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
             //Distancia entre posiciones
             float distance = locatVehiculo.distanceTo(locatFinal);
 
-            if(distance > 100) {
+            if(distance > 200) {
                 final Handler handler = new Handler();
                 handler.post(new Runnable() {
                     long elapsed;
@@ -233,7 +355,6 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                         );
 
                         vehiculo.setPosition(currentPosition);
-
                         if (t < 1) {
                             handler.postDelayed(this, 16);
                         } else {
@@ -281,7 +402,6 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
             appMediador.getPresentadorOTGPasajero().obtenerConductores(conductoresEnRuta);
         }else{
             conductoresEnRuta = new ArrayList<>();
-
         }
     }
 
@@ -314,6 +434,17 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
             mostrarVehiculos();
         }else{
             posiciones = new ArrayList<>();
+        }
+    }
+
+    public void setVehiculoConductor(Object informacion){
+        Vehiculo getVehic = (Vehiculo)informacion;
+        if(getVehic == null){
+            //ERROR
+        }else{
+            vehiculoConductor = null;
+            vehiculoConductor = getVehic;
+            mostrarDialogo(0);
         }
     }
 }
