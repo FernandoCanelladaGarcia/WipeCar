@@ -164,14 +164,13 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     @Override
     public void mostrarDialogo(Object informacion) {
         int tarea = (int)informacion;
+        dialogBuild = new AlertDialog.Builder(this.getContext());
         switch(tarea) {
             case 0:
                 Projection projection = mMap.getProjection();
                 Point punto = projection.toScreenLocation(marcadorConductor.getPosition());
-                dialogBuild = new AlertDialog.Builder(appMediador.getApplicationContext());
                 View vistaDialogo = getLayoutInflater().inflate(R.layout.menu_vehiculo, null);
                 dialogBuild.setView(vistaDialogo);
-
                 Button botonSeleccionarVehiculo = (Button) vistaDialogo.findViewById(R.id.botonSeleccionarVehiculo);
 
                 TextView nombreConductor = (TextView) vistaDialogo.findViewById(R.id.nombreConductor);
@@ -209,6 +208,20 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                 else
                     wmlp.x += wmlp.width / 2;
                 dialogo.getWindow().setAttributes(wmlp);
+                break;
+            case 1:
+                dialogBuild.setTitle("No hay conductores");
+                dialogBuild.setMessage("No existen conductores que se dirijan a " + user.getDestino()
+                        + ". Se sugiere que busque conductores que se dirijan a un destino cercano.");
+                dialogBuild.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cerrarDialogo();
+                        botonBuscar.setVisibility(View.VISIBLE);
+                    }
+                });
+                dialogo = dialogBuild.create();
+                dialogo.show();
                 break;
         }
     }
