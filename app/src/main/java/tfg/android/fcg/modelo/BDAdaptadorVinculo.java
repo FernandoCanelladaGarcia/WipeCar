@@ -158,51 +158,51 @@ public class BDAdaptadorVinculo {
                 });
                 break;
 
-            //OTG
-            case 1:
-                reference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            vinculo = snapshot.getValue(Vinculo.class);
-                            if (vinculo.getIdConductor().equals(idConductor) & vinculo.getIdPasajero().isEmpty()) {
-                                Map<String, Object> task = new HashMap<>();
-                                task.put("idPasajero", idPasajero);
-                                task.put("vinculo", true);
-                                dataSnapshot.getRef().updateChildren(task).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            //Creado vinculo
-                                            Bundle extras = new Bundle();
-                                            extras.putSerializable(AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR, vinculo);
-                                            appMediador.sendBroadcast(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR, extras);
-                                        } else {
-                                            //No se ha concretado vinculo
-                                            Bundle extras = new Bundle();
-                                            extras.putSerializable(AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR, null);
-                                            appMediador.sendBroadcast(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR, extras);
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                        reference.removeEventListener(this);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        //No se ha encontrado referencia
-                        Bundle extras = new Bundle();
-                        extras.putSerializable(AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR, null);
-                        appMediador.sendBroadcast(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR, extras);
-                        reference.removeEventListener(this);
-                    }
-                });
-                break;
-            default:
-                Log.i(TAG, "Error, no se ha introducido tipo de tarea");
-                return;
+//            //OTG
+//            case 1:
+//                reference.addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                            vinculo = snapshot.getValue(Vinculo.class);
+//                            if (vinculo.getIdConductor().equals(idConductor) & vinculo.getIdPasajero().isEmpty()) {
+//                                Map<String, Object> task = new HashMap<>();
+//                                task.put("idPasajero", idPasajero);
+//                                task.put("vinculo", true);
+//                                dataSnapshot.getRef().updateChildren(task).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<Void> task) {
+//                                        if (task.isSuccessful()) {
+//                                            //Creado vinculo
+//                                            Bundle extras = new Bundle();
+//                                            extras.putSerializable(AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR, vinculo);
+//                                            appMediador.sendBroadcast(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR, extras);
+//                                        } else {
+//                                            //No se ha concretado vinculo
+//                                            Bundle extras = new Bundle();
+//                                            extras.putSerializable(AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR, null);
+//                                            appMediador.sendBroadcast(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR, extras);
+//                                        }
+//                                    }
+//                                });
+//                            }
+//                        }
+//                        reference.removeEventListener(this);
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//                        //No se ha encontrado referencia
+//                        Bundle extras = new Bundle();
+//                        extras.putSerializable(AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR, null);
+//                        appMediador.sendBroadcast(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR, extras);
+//                        reference.removeEventListener(this);
+//                    }
+//                });
+//                break;
+//            default:
+//                Log.i(TAG, "Error, no se ha introducido tipo de tarea");
+//                return;
         }
     }
 
@@ -276,7 +276,7 @@ public class BDAdaptadorVinculo {
                                             //Se ha completado la eliminacion
                                             Bundle extras = new Bundle();
 
-                                            extras.putString(AppMediador.CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR, vinculo.getIdConductor());
+                                            extras.putBoolean(AppMediador.CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR, true);
                                             appMediador.sendBroadcast(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR, extras);
                                         } else {
                                             //No ha eliminado el vinculo
@@ -304,9 +304,6 @@ public class BDAdaptadorVinculo {
                     }
                 });
                 break;
-            default:
-                Log.i(TAG, "Error, no se ha introducido tipo de tarea");
-                return;
         }
 
     }
@@ -327,7 +324,7 @@ public class BDAdaptadorVinculo {
                     Vinculo v = vinculo.getValue(Vinculo.class);
                     if (v.getIdConductor().equals(idUser) && !v.getIdPasajero().isEmpty()) {
                         vinculos.add(v);
-                        Log.i(TAG,"HAY PETICION");
+                        Log.i(TAG, "HAY PETICION");
 //                        Bundle extras = new Bundle();
 //                        extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, v);
 //                        appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras);
@@ -356,14 +353,15 @@ public class BDAdaptadorVinculo {
         });
     }
 
-    public void obtenerListaVinculosOTG(final String idUser){
+    //TODO: NUEVO, REDACCION
+    public void obtenerListaVinculosOTG(final String idUser) {
 
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Vinculo vinculo = dataSnapshot.getValue(Vinculo.class);
-                if(vinculo.getIdConductor().equals(idUser) && !vinculo.getIdPasajero().isEmpty()){
-                    Log.i(TAG,"HAY PETICION");
+                if (vinculo.getIdConductor().equals(idUser) && !vinculo.getIdPasajero().isEmpty()) {
+                    Log.i(TAG, "HAY PETICION");
                     Bundle extras = new Bundle();
                     extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, vinculo);
                     appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras);
@@ -373,7 +371,7 @@ public class BDAdaptadorVinculo {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                
+
             }
 
             @Override
@@ -388,10 +386,50 @@ public class BDAdaptadorVinculo {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.i(TAG,"ERROR");
+                Log.i(TAG, "ERROR");
                 Bundle extras = new Bundle();
                 extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, null);
                 appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras);
+            }
+        });
+    }
+
+    //TODO: NUEVO, REDACCION
+    public void obtenerRespuestaVinculos(final String idPasajero, final String idConductor) {
+        reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Vinculo vinculo = dataSnapshot.getValue(Vinculo.class);
+                if (vinculo.getIdPasajero().equals(idPasajero) && vinculo.getIdConductor().equals(idConductor) && vinculo.isVinculo()) {
+                    Bundle extras = new Bundle();
+                    extras.putSerializable(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR, vinculo);
+                    appMediador.sendBroadcast(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR, extras);
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Vinculo vinculo = dataSnapshot.getValue(Vinculo.class);
+                if (vinculo.getIdPasajero().equals(idPasajero) && vinculo.getIdConductor().equals(idConductor)) {
+                    Bundle extras = new Bundle();
+                    extras.putSerializable(AppMediador.CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR, vinculo);
+                    appMediador.sendBroadcast(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR, extras);
+                }
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }
@@ -429,29 +467,29 @@ public class BDAdaptadorVinculo {
         });
     }
 
-    public void obtenerConductoresEnRuta(final String destino){
+    public void obtenerConductoresEnRuta(final String destino) {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<Vinculo> conductoresEnRuta = new ArrayList<>();
 
-                for(DataSnapshot vinculo: dataSnapshot.getChildren()){
+                for (DataSnapshot vinculo : dataSnapshot.getChildren()) {
                     Vinculo v = vinculo.getValue(Vinculo.class);
-                    if(v.getIdPasajero().isEmpty() && v.getDestino().equals(destino)){
+                    if (v.getIdPasajero().isEmpty() && v.getDestino().equals(destino)) {
                         conductoresEnRuta.add(v);
                     }
                 }
                 Bundle extras = new Bundle();
-                extras.putSerializable(AppMediador.CLAVE_CONDUCTORES_OTG,conductoresEnRuta);
-                appMediador.sendBroadcast(AppMediador.AVISO_CONDUCTORES_OTG,extras);
+                extras.putSerializable(AppMediador.CLAVE_CONDUCTORES_OTG, conductoresEnRuta);
+                appMediador.sendBroadcast(AppMediador.AVISO_CONDUCTORES_OTG, extras);
                 reference.removeEventListener(this);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Bundle extras = new Bundle();
-                extras.putSerializable(AppMediador.CLAVE_CONDUCTORES_OTG,null);
-                appMediador.sendBroadcast(AppMediador.AVISO_CONDUCTORES_OTG,extras);
+                extras.putSerializable(AppMediador.CLAVE_CONDUCTORES_OTG, null);
+                appMediador.sendBroadcast(AppMediador.AVISO_CONDUCTORES_OTG, extras);
                 reference.removeEventListener(this);
             }
         });

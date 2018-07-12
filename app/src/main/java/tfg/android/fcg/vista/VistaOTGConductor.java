@@ -1,7 +1,9 @@
 package tfg.android.fcg.vista;
 
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -9,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+
+import java.util.Locale;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
@@ -20,13 +24,14 @@ import tfg.android.fcg.presentador.IPresentadorOTGConductor;
  * Created by ferca on 21/03/2018.
  */
 
-public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, View.OnClickListener{
+public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, View.OnClickListener, TextToSpeech.OnInitListener{
 
     private AppMediador appMediador;
     private IPresentadorOTGConductor presentadorOTGConductor;
     private Button botonIniciarRuta, botonAceptarPasajero, botonRechazarPasajero, botonFinalizarRuta;
     private Usuario user;
     private Vinculo peticion;
+    private TextToSpeech textToSpeech;
     @Override
     public View onCreateView (LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +45,22 @@ public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, V
         appMediador = AppMediador.getInstance();
         appMediador.setVistaOTGConductor(this);
         presentadorOTGConductor = appMediador.getPresentadorOTGConductor();
+        textToSpeech = new TextToSpeech(getActivity().getApplicationContext(),this);
+    }
+
+    @Override
+    public void onInit(int status){
+        if ( status == TextToSpeech.LANG_MISSING_DATA | status == TextToSpeech.LANG_NOT_SUPPORTED )
+        {
+            Toast.makeText(getActivity().getApplicationContext(), "ERROR LANG_MISSING_DATA | LANG_NOT_SUPPORTED", Toast.LENGTH_SHORT ).show();
+        }
+    }
+
+    private void speak(String texto){
+        textToSpeech.setLanguage( new Locale( "spa", "ESP" ) );
+        textToSpeech.speak(texto,TextToSpeech.QUEUE_FLUSH,null,TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID);
+        textToSpeech.setSpeechRate( 0.0f );
+        textToSpeech.setPitch( 0.0f );
     }
 
     @Override
@@ -57,19 +78,22 @@ public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, V
 
     @Override
     public void indicarPeticionPasajero(Object informacion) {
-        peticion = (Vinculo)informacion;
-        Toast.makeText(getActivity().getApplicationContext(),
-                "Peticion recibida de usuario " + peticion.getIdPasajero(), Toast.LENGTH_SHORT).show();
+        if(informacion == null){
+            speak("Aun no ha recibido ninguna petición");
+        }else{
+            peticion = (Vinculo)informacion;
+            speak("Pasajero con destino " + peticion.getDestino() + " en "+ peticion.getOrigen() + " solicita ser recogido");
+        }
     }
 
     @Override
     public void indicarPasajeroAceptado(Object informacion) {
-
+        speak("Pasajero en "+ peticion.getOrigen() + " con destino " + peticion.getDestino() + " aceptado");
     }
 
     @Override
     public void indicarPasajeroRechazado(Object informacion) {
-
+        speak("Petición de pasajero rechazada");
     }
 
     @Override
@@ -81,14 +105,27 @@ public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, V
                 appMediador.getPresentadorOTGConductor().iniciar(user);
                 break;
             case R.id.botonAceptarPasajero:
+                appMediador.getPresentadorOTGConductor().tratarAceptar(peticion);
                 break;
             case R.id.botonRechazarPasajero:
+                appMediador.getPresentadorOTGConductor().tratarRechazar(peticion);
                 break;
             case R.id.botonFinalizarRuta:
-                //appMediador.getVistaPrincipal().mostrarProgreso();
-                //appMediador.getPresentadorOTGConductor().tratarParar(user);
+                appMediador.getVistaPrincipal().mostrarProgreso();
+                appMediador.getPresentadorOTGConductor().tratarParar(peticion);
                 break;
 
         }
+    }
+
+    @Override
+    public void onDestroy() {
+
+        if ( textToSpeech != null )
+        {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
+        super.onDestroy();
     }
 }

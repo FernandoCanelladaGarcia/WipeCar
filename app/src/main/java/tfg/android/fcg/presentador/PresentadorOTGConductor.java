@@ -19,10 +19,10 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
     private VistaOTGConductor vistaOTGConductor;
     private IModelo modelo;
     private Usuario user;
-
+    private Vinculo vinculo;
     private Handler timer = new Handler();
     private boolean atendiendoPeticion = false;
-    private String conductor = "";
+    private String pasajero = "";
 
     private final String TAG = "depurador";
 
@@ -52,43 +52,39 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
         public void onReceive(Context context, Intent intent) {
 
             if (intent.getAction().equals(AppMediador.AVISO_PETICION_OTGCONDUCTOR)) {
-                if (intent.getExtras().getSerializable(
-                        AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR) != null) {
+                if (intent.getExtras().getSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR) != null) {
                     atendiendoPeticion = true;
-                    Vinculo vinculo = (Vinculo) intent.getSerializableExtra(
-                            AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR);
-                    conductor = vinculo.getIdConductor();
+                    vinculo = (Vinculo) intent.getSerializableExtra(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR);
+                    pasajero = vinculo.getIdConductor();
                     vistaOTGConductor.indicarPeticionPasajero(vinculo);
-                    //informe sonoro datos del pasajero
                     timer.postDelayed(limiteDeTiempo, 30000);
+                    appMediador.unRegisterReceiver(this);
                 } else {
                     //TODO: NO HAY NADIE
+                    vistaOTGConductor.indicarPeticionPasajero(null);
                 }
             }
-            if (intent.getAction().equals(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR)) {
+            if (intent.getAction().equals(AppMediador.AVISO_CONCRETAR_VINCULO)) {
                 if (intent.getExtras().getSerializable(
-                        AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR) != null) {
+                        AppMediador.CLAVE_CONCRETAR_VINCULO) != null) {
                     //informe sonoro recoger pasajero
-                    Vinculo vinculo = (Vinculo) intent.getSerializableExtra(
-                            AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR);
-                    conductor = vinculo.getIdConductor();
-                    //vistaOTGConductor.indicarPasajeroAceptado(vinculo);
-                    buscarPeticiones(vinculo.getIdConductor());
+                    boolean respuesta = (boolean) intent.getSerializableExtra(AppMediador.CLAVE_CONCRETAR_VINCULO);
+                    if(respuesta){
+                        vistaOTGConductor.indicarPasajeroAceptado(vinculo);
+                    }
+                    //buscarPeticiones(user.getIdUser());
                 } else {
                     //TODO: PARAR APLICACION
                 }
             }
             if (intent.getAction().equals(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR)) {
-                if (intent.getExtras().getString(
-                        AppMediador.CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR) != null) {
-                    //informe sonoro no recoger pasajero
-                    String idConductor = intent.getStringExtra(
-                            AppMediador.CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR);
-                    conductor = idConductor;
-                    buscarPeticiones(idConductor);
+                boolean respuesta = (boolean) intent.getSerializableExtra(AppMediador.CLAVE_CONCRETAR_VINCULO);
+                if(respuesta){
+                    vistaOTGConductor.indicarPasajeroRechazado(vinculo);
                 } else {
                     //TODO: PARAR APLICACION
                 }
+                buscarPeticiones(user.getIdUser());
             }
         }
     };
@@ -211,20 +207,24 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
     }
 
     private void aceptarPeticion(Object informacion) {
-        appMediador.registerReceiver(receptorPeticiones, AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR);
-        modelo.aceptarPasajero(informacion);
+        appMediador.registerReceiver(receptorPeticiones, AppMediador.AVISO_CONCRETAR_VINCULO);
+        Vinculo v = (Vinculo)informacion;
+        Object[] datos = new Object[]{0,v.getIdPasajero(),v.getIdConductor()};
+        modelo.aceptarPasajero(datos);
     }
 
     private void rechazarPeticion(Object informacion) {
         appMediador.registerReceiver(receptorPeticiones, AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR);
-        modelo.rechazarPasajero(informacion);
+        Vinculo v = (Vinculo)informacion;
+        Object[] datos = new Object[]{1,v.getIdPasajero(),v.getIdConductor()};
+        modelo.rechazarPasajero(datos);
     }
 
     private Runnable limiteDeTiempo = new Runnable() {
         @Override
         public void run() {
             atendiendoPeticion = false;
-            buscarPeticiones(conductor);
+            buscarPeticiones(user.getIdUser());
         }
     };
 }
