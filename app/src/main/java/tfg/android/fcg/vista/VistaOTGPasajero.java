@@ -399,6 +399,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
             case R.id.BuscarVehiculos:
                 user = appMediador.getVistaPrincipal().getUsuario();
                 appMediador.getPresentadorOTGPasajero().tratarBuscar(user.getDestino());
+                botonBuscar.setVisibility(View.GONE);
                 break;
         }
     }
