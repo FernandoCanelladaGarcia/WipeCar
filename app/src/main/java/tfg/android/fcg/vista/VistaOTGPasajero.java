@@ -266,7 +266,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
             LatLngBounds bounds = builder.build();
 
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,200);
-            mMap.moveCamera(cu);
+            mMap.animateCamera(cu);
             //mMap.animateCamera(CameraUpdateFactory.zoomBy(AppMediador.ZOOM));
         }
         new Timer().schedule(new TimerTask() {
@@ -329,8 +329,8 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         final Interpolator interpolator = new AccelerateDecelerateInterpolator();
         final float durationInMs = 3000;
         final boolean hideMarker = false;
-        for(int i = 0; i < conductores.size(); i++){
 
+        for(int i = 0; i < conductores.size(); i++){
             final Marker vehiculo = ubicacionConductores.get(i);
             //Posicion Actual vehiculo
             final LatLng posicionVehiculo = vehiculo.getPosition();
@@ -378,16 +378,21 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                 });
             }
         }
-//        final LatLngBounds.Builder builder = new LatLngBounds.Builder();
-//        builder.include(vehiculo.getPosition());
-//        builder.include(miUbicacion.getPosition());
-//        LatLngBounds bounds = builder.build();
-//
-//        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,0);
-//
-//        mMap.moveCamera(cu);
+        centrarMapa();
     }
 
+    private void centrarMapa(){
+        Log.i(TAG,"Aplicamos un delay de 2 seg tras moverse para ajustar el mapa");
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for(Posicion posicion: posiciones){
+            LatLng latLng = new LatLng(Double.parseDouble(posicion.getLatitud()),Double.parseDouble(posicion.getLongitud()));
+            builder.include(latLng);
+        }
+        builder.include(miUbicacion.getPosition());
+        LatLngBounds bounds = builder.build();
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,200);
+        mMap.animateCamera(cu);
+    }
     @Override
     public void onClick(View v) {
         switch(v.getId()){
