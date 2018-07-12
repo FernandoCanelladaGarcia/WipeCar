@@ -8,10 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.R;
 import tfg.android.fcg.modelo.Usuario;
+import tfg.android.fcg.modelo.Vinculo;
 import tfg.android.fcg.presentador.IPresentadorOTGConductor;
 
 /**
@@ -24,6 +26,7 @@ public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, V
     private IPresentadorOTGConductor presentadorOTGConductor;
     private Button botonIniciarRuta, botonAceptarPasajero, botonRechazarPasajero, botonFinalizarRuta;
     private Usuario user;
+    private Vinculo peticion;
     @Override
     public View onCreateView (LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +57,9 @@ public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, V
 
     @Override
     public void indicarPeticionPasajero(Object informacion) {
-
+        peticion = (Vinculo)informacion;
+        Toast.makeText(getActivity().getApplicationContext(),
+                "Peticion recibida de usuario " + peticion.getIdPasajero(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

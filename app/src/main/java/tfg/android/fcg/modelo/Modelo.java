@@ -361,6 +361,8 @@ public class Modelo implements IModelo{
             case 1:
                 adaptadorVinculo.obtenerListaVinculosConductores((String)datos[1]);
                 break;
+            case 2:
+                adaptadorVinculo.obtenerListaVinculosOTG((String) datos[1]);
         }
     }
 

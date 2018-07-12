@@ -38,7 +38,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
             if (intent.getAction().equals(AppMediador.AVISO_ACTUALIZACION_POSICION)) {
                 if (intent.getExtras().getBoolean(
                         AppMediador.CLAVE_RESULTADO_ACTUALIZACION_POSICION)) {
-                    Log.i(TAG, "receptorLocalizacion localizacion guardada");
+                    //Log.i(TAG, "receptorLocalizacion localizacion guardada");
                 } else {
                     //TODO: PARAR APLICACION
                     //informe sonoro problemas
@@ -50,6 +50,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
     private BroadcastReceiver receptorPeticiones = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+
             if (intent.getAction().equals(AppMediador.AVISO_PETICION_OTGCONDUCTOR)) {
                 if (intent.getExtras().getSerializable(
                         AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR) != null) {
@@ -57,6 +58,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
                     Vinculo vinculo = (Vinculo) intent.getSerializableExtra(
                             AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR);
                     conductor = vinculo.getIdConductor();
+                    vistaOTGConductor.indicarPeticionPasajero(vinculo);
                     //informe sonoro datos del pasajero
                     timer.postDelayed(limiteDeTiempo, 30000);
                 } else {
@@ -70,6 +72,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
                     Vinculo vinculo = (Vinculo) intent.getSerializableExtra(
                             AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR);
                     conductor = vinculo.getIdConductor();
+                    //vistaOTGConductor.indicarPasajeroAceptado(vinculo);
                     buscarPeticiones(vinculo.getIdConductor());
                 } else {
                     //TODO: PARAR APLICACION
@@ -110,7 +113,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(AppMediador.AVISO_LOCALIZACION_GPS)) {
                 if (intent.getExtras() != null) {
-                    Log.i(TAG, "receptorGPS localizacion recibida");
+                    //Log.i(TAG, "receptorGPS localizacion recibida");
                     Object[] posicion = new Object[3];
                     posicion[0] = user.getIdUser();
                     posicion[1] = intent.getSerializableExtra(AppMediador.CLAVE_LATITUD);
@@ -146,23 +149,22 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
             @Override
             public void run() {
                 Log.i(TAG, "buscarPosicion");
-
                 buscarPosicion();
             }
         });
 //
-//        //2o hilo, busca peticiones
-//
-//        Thread thread2 = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Log.i(TAG, "buscarPeticiones");
-//                buscarPeticiones(user.getIdUser());
-//            }
-//        });
+        //2o hilo, busca peticiones
+
+        Thread thread2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(TAG, "buscarPeticiones");
+                buscarPeticiones(user.getIdUser());
+            }
+        });
 //
         thread1.start();
-//        thread2.start();
+        thread2.start();
     }
 
     @Override
@@ -192,14 +194,15 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
     }
 
     private void guardarPosicion(Object[] nuevaLocalizacion) {
-        Log.i(TAG, "guardarPosicion");
+        //Log.i(TAG, "guardarPosicion");
         appMediador.registerReceiver(receptorLocalizacion, AppMediador.AVISO_LOCALIZACION_GUARDADA);
         modelo.actualizarLocalizacion(nuevaLocalizacion);
     }
 
     private void buscarPeticiones(Object informacion) {
         appMediador.registerReceiver(receptorPeticiones, AppMediador.AVISO_PETICION_OTGCONDUCTOR);
-        modelo.obtenerPeticionesDePasajeros(informacion);
+        Object[] datos = new Object[]{2,informacion};
+        modelo.obtenerPeticionesDePasajeros(datos);
     }
 
     private void buscarPosicion() {
