@@ -74,8 +74,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     private Usuario conductorVinculo;
     private Marker marcadorConductor;
     private Vehiculo vehiculoConductor;
-
-    private boolean vinculoExiste = false;
+    private boolean tratarCoche = false;
     private final static String TAG = "depurador";
 
     @Override
@@ -122,24 +121,29 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
-                    String idUser = marker.getTitle();
-                    Toast.makeText(appMediador.getApplicationContext(), idUser, Toast.LENGTH_LONG).show();
-                    for (int i = 0; i < conductores.size(); i++) {
-                        if (conductores.get(i).getIdUser().equals(idUser)) {
-                            marcadorConductor = marker;
-                            conductorVinculo = conductores.get(i);
-                            posicionConductorVinculo = posiciones.get(i);
-                            //presentadorOTGPasajero.tratarVehiculo(conductorVinculo);
-                            //mostrarVehiculoVinculo();
-                        }
-                    }
-                    //presentadorOTGPasajero.tratarVehiculo(conductorVinculo);
+                    tratarCoche = true;
+                    getConductorMarcador(marker);
                     return true;
                 }
             });
         }
         Log.i(TAG, "onMapReady");
         presentadorOTGPasajero.iniciar();
+    }
+
+    private void getConductorMarcador(Marker marker) {
+        String idUser = marker.getTitle();
+        for (int i = 0; i < conductores.size(); i++) {
+            if (conductores.get(i).getIdUser().equals(idUser)) {
+                marcadorConductor = marker;
+                conductorVinculo = conductores.get(i);
+                Toast.makeText(appMediador.getApplicationContext(), conductorVinculo.getNombre(), Toast.LENGTH_LONG).show();
+                posicionConductorVinculo = posiciones.get(i);
+                presentadorOTGPasajero.tratarVehiculo(conductorVinculo);
+                //mostrarVehiculoVinculo();
+            }
+        }
+        //presentadorOTGPasajero.tratarVehiculo(conductorVinculo);
     }
 
 
@@ -165,11 +169,9 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     public void mostrarDialogo(Object informacion) {
         int tarea = (int)informacion;
         dialogBuild = new AlertDialog.Builder(this.getContext());
+        View vistaDialogo = getLayoutInflater().inflate(R.layout.menu_vehiculo, null);
         switch(tarea) {
             case 0:
-                Projection projection = mMap.getProjection();
-                Point punto = projection.toScreenLocation(marcadorConductor.getPosition());
-                View vistaDialogo = getLayoutInflater().inflate(R.layout.menu_vehiculo, null);
                 dialogBuild.setView(vistaDialogo);
                 Button botonSeleccionarVehiculo = (Button) vistaDialogo.findViewById(R.id.botonSeleccionarVehiculo);
 
@@ -178,17 +180,17 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
 
                 TextView cocheConductor = (TextView) vistaDialogo.findViewById(R.id.cocheConductor);
                 cocheConductor.setText(vehiculoConductor.getMarca() + "-" + vehiculoConductor.getModelo() + " / "+ vehiculoConductor.getMatricula());
+
                 TextView valoracionConductor = (TextView) vistaDialogo.findViewById(R.id.valoracionMenuConductor);
                 if (conductorVinculo.getValoracion().isEmpty()) {
                     valoracionConductor.setText("Sin Valorar");
                 } else {
                     valoracionConductor.setText(conductorVinculo.getValoracion());
                 }
-
-
                 botonSeleccionarVehiculo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        tratarCoche = false;
                         mostrarVehiculoVinculo();
                         //AGREGAR VINCULO -- PASAR A OTGCONDUCTOR Y RECIBIR NOTIFICACION
                         //presentadorOTGPasajero.tratarOk();
@@ -197,17 +199,6 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
 
                 dialogo = dialogBuild.create();
                 dialogo.show();
-
-                WindowManager.LayoutParams wmlp = dialogo.getWindow().getAttributes();
-                wmlp.copyFrom(dialogo.getWindow().getAttributes());
-                wmlp.width = 180;
-                wmlp.x = punto.x - anchoPantalla / 2;
-                wmlp.y = punto.y - altoPantalla / 2;
-                if (punto.x > anchoPantalla / 2)
-                    wmlp.x -= wmlp.width / 2;
-                else
-                    wmlp.x += wmlp.width / 2;
-                dialogo.getWindow().setAttributes(wmlp);
                 break;
             case 1:
                 dialogBuild.setTitle("No hay conductores");
@@ -252,44 +243,46 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     @Override
     public void mostrarVehiculos() {
         Log.i(TAG,"Markers: " + ubicacionConductores.size());
+        if(!tratarCoche) {
+            if (!ubicacionConductores.isEmpty()) {
+                moverVehiculos();
+            } else {
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                Log.i(TAG, "Markers: " + ubicacionConductores.size());
+                for (int i = 0; i < conductores.size(); i++) {
+                    Log.i(TAG, "Situando posicion");
+                    Marker ubicacionVehiculo;
+                    Posicion posicionConductor = posiciones.get(i);
+                    Usuario conductor = conductores.get(i);
 
-        if(!ubicacionConductores.isEmpty()){
-            moverVehiculos();
-        }else {
-            LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            Log.i(TAG, "Markers: " + ubicacionConductores.size());
-            for (int i = 0; i < conductores.size(); i++) {
-                Log.i(TAG, "Situando posicion");
-                Marker ubicacionVehiculo;
-                Posicion posicionConductor = posiciones.get(i);
-                Usuario conductor = conductores.get(i);
+                    Double latitud = Double.parseDouble(posicionConductor.getLatitud());
+                    Double longitud = Double.parseDouble(posicionConductor.getLongitud());
+                    String titulo = conductor.getIdUser();
+                    LatLng lugar = new LatLng(latitud, longitud);
 
-                Double latitud = Double.parseDouble(posicionConductor.getLatitud());
-                Double longitud = Double.parseDouble(posicionConductor.getLongitud());
-                String titulo = conductor.getIdUser();
-                LatLng lugar = new LatLng(latitud, longitud);
+                    ubicacionVehiculo = mMap.addMarker(new MarkerOptions().position(lugar).title(titulo)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_car_user)));
+                    ubicacionConductores.add(ubicacionVehiculo);
+                    builder.include(ubicacionVehiculo.getPosition());
+                }
 
-                ubicacionVehiculo = mMap.addMarker(new MarkerOptions().position(lugar).title(titulo)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_car_user)));
-                ubicacionConductores.add(ubicacionVehiculo);
-                builder.include(ubicacionVehiculo.getPosition());
+                builder.include(miUbicacion.getPosition());
+                LatLngBounds bounds = builder.build();
+
+                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 200);
+                mMap.animateCamera(cu);
+                //mMap.animateCamera(CameraUpdateFactory.zoomBy(AppMediador.ZOOM));
             }
-
-            builder.include(miUbicacion.getPosition());
-            LatLngBounds bounds = builder.build();
-
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,200);
-            mMap.animateCamera(cu);
-            //mMap.animateCamera(CameraUpdateFactory.zoomBy(AppMediador.ZOOM));
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Log.i(TAG, "Aplicamos un delay de 5 seg");
+                    appMediador.getPresentadorOTGPasajero().obtenerPosicionConductores(conductores);
+                }
+            }, 5000);
+        }else{
+            Log.i(TAG, "Dejamos de recoger la posicion y de mover");
         }
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                Log.i(TAG,"Aplicamos un delay de 5 seg");
-                appMediador.getPresentadorOTGPasajero().obtenerPosicionConductores(conductores);
-            }
-        }, 5000);
-
     }
 
     private void mostrarVehiculoVinculo(){
@@ -475,6 +468,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     }
 
     public void setVehiculoConductor(Object informacion){
+
         Vehiculo getVehic = (Vehiculo)informacion;
         if(getVehic == null){
             //ERROR

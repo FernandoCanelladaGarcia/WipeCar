@@ -120,9 +120,10 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
 
     @Override
     public void tratarVehiculo(Object informacion) {
+        Log.i(TAG, "tratarVehiculo");
         Usuario conductor = (Usuario)informacion;
         appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_OBTENER_VEHICULO);
-        modelo.obtenerVehiculoUsuario(conductor.getIdUser());
+        modelo.obtenerVehiculoUsuario(conductor.getDatoVehiculo());
     }
 
     @Override
