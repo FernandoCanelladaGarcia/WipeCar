@@ -275,7 +275,6 @@ public class BDAdaptadorVinculo {
                                         if (task.isSuccessful()) {
                                             //Se ha completado la eliminacion
                                             Bundle extras = new Bundle();
-
                                             extras.putBoolean(AppMediador.CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR, true);
                                             appMediador.sendBroadcast(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR, extras);
                                         } else {

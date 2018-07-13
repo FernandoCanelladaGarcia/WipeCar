@@ -35,6 +35,7 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
     private Usuario conductor;
     private Usuario user;
     private final static String TAG = "depurador";
+    private boolean aceptado = false;
 
     private BroadcastReceiver receptorDeAvisos = new BroadcastReceiver() {
         @Override
@@ -112,6 +113,23 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
         }
     };
 
+    private BroadcastReceiver receptorDeRespuestas = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR)){
+                Log.i(TAG,"Aceptada la peticion");
+                aceptado = true;
+            }
+            if(intent.getAction().equals(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR)){
+                if(!aceptado){
+                    Log.i(TAG,"Rechazada la peticion");
+                }else{
+                    Log.i(TAG,"Finalizada la ruta, reiniciar pantalla y set historial");
+                }
+            }
+        }
+    };
+
     public PresentadorOTGPasajero(){
         appMediador = AppMediador.getInstance();
         vistaOTGPasajero = (VistaOTGPasajero) appMediador.getVistaOTGPasajero();
@@ -162,19 +180,6 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
         modelo.guardarUsuarioPickup(datos);
     }
 
-    private BroadcastReceiver receptorDeRespuestas = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR)){
-                //Vinculo vi = (Vinculo) intent.getSerializableExtra(AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR);
-                Log.i(TAG,"Aceptada la peticion");
-            }
-            if(intent.getAction().equals(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR)){
-                Log.i(TAG,"Rechazada la peticion");
-            }
-        }
-    };
-
     @Override
     public void tratarCancelar(Object informacion) {
 
@@ -206,6 +211,5 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
         for(Usuario conductor : conduct){
             modelo.obtenerPosicionUsuario(conductor.getIdUser());
         }
-
     }
 }
