@@ -390,4 +390,11 @@ public class Modelo implements IModelo{
         adaptadorVinculo.obtenerConductoresEnRuta((String)informacion);
     }
 
+    @Override
+    public void obtenerRespuestaConductor(Object informacion) {
+        Object[] vinculo = (Object[])informacion;
+        String idPasajero = (String)vinculo[0];
+        String idConductor = (String)vinculo[1];
+        adaptadorVinculo.obtenerRespuestaVinculos(idPasajero,idConductor);
+    }
 }

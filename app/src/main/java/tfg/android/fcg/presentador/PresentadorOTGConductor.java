@@ -90,8 +90,9 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
             if(intent.getAction().equals(AppMediador.AVISO_TERMINAR_RUTA)){
                 boolean respuesta = intent.getBooleanExtra(AppMediador.CLAVE_TERMINAR_RUTA,false);
                 if(respuesta){
-                    appMediador.getVistaPrincipal().cerrarProgreso();
+                    //appMediador.getVistaPrincipal().cerrarProgreso();
                     Toast.makeText(appMediador.getApplicationContext(),"Ha finalizado su ruta correctamente", Toast.LENGTH_LONG).show();
+                    appMediador.unRegisterReceiver(this);
                 }else{
                     //TODO: PARAR APLICACION
                 }
@@ -194,7 +195,6 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
     @Override
     public void tratarParar(Object informacion) {
         appMediador.unRegisterReceiver(receptorGPS);
-        appMediador.unRegisterReceiver(receptorPeticiones);
         appMediador.unRegisterReceiver(receptorLocalizacion);
         modelo.pararRuta(informacion);
     }

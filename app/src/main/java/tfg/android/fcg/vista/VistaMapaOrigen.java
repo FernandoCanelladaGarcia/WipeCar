@@ -239,7 +239,7 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
     @Override
     public void onBackPressed(){
         if(deshabilitoBack){
-
+            mostrarDialogo(0);
         }else{
             super.onBackPressed();
         }

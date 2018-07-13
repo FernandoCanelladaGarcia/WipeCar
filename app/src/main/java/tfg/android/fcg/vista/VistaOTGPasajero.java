@@ -275,6 +275,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                     appMediador.getPresentadorOTGPasajero().obtenerPosicionConductores(conductores);
                 }
             }, 4000);
+
         }else{
             Log.i(TAG, "Dejamos de recoger la posicion y de mover");
         }
@@ -287,33 +288,26 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         for(Marker ubicacion: ubicacionConductores){
             ubicacion.remove();
         }
-        Log.i(TAG, " "+ubicacionConductores.size());
         ubicacionConductores.clear();
+        Log.i(TAG, " "+ubicacionConductores.size());
 
-        for(Usuario conductor: conductores){
-            conductores.remove(conductor);
-        }
-        Log.i(TAG, " "+conductores.size());
         conductores.clear();
+        Log.i(TAG, " "+conductores.size());
 
-        for(Vinculo vinculo: conductoresEnRuta){
-            conductoresEnRuta.remove(vinculo);
-        }
-        Log.i(TAG, " "+conductoresEnRuta.size());
         conductoresEnRuta.clear();
+        Log.i(TAG, " "+conductoresEnRuta.size());
 
-        for(Posicion posicion: posiciones){
-            posiciones.remove(posicion);
-        }
-        Log.i(TAG, " "+posiciones.size());
         posiciones.clear();
+        Log.i(TAG, " "+posiciones.size());
 
         Log.i(TAG, "Listas ubicaciones y conductores limpiadas");
+
         conductores.add(conductorVinculo);
         Log.i(TAG, "Conductores "+conductores.size());
+
         posiciones.add(posicionConductorVinculo);
         Log.i(TAG, "Posiciones "+posiciones.size());
-        //OBTENER VINCULO CREADO
+
         tratarCoche = false;
         Double latitud = Double.parseDouble(posicionConductorVinculo.getLatitud());
         Double longitud = Double.parseDouble(posicionConductorVinculo.getLongitud());
@@ -325,15 +319,16 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
 
         ubicacionConductores.add(marcadorConductor);
         Log.i(TAG, "Markers "+ubicacionConductores.size());
-        Log.i(TAG,"Sigo obteniendo la posicion del conductor elegido");
 
+        Log.i(TAG,"Sigo obteniendo la posicion del conductor elegido");
+        appMediador.getPresentadorOTGPasajero().esperarRespuesta();
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                Log.i(TAG, "Aplicamos un delay de 4 seg al recoger el conductor");
+                Log.i(TAG, "Aplicamos un delay de 5 seg al recoger el conductor");
                 appMediador.getPresentadorOTGPasajero().obtenerPosicionConductores(conductores);
             }
-        }, 4000);
+        }, 5000);
     }
 
     private void moverVehiculos(){
@@ -422,8 +417,16 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         mMap = null;
         mapFragment = null;
         miUbicacion = null;
+        posiciones = new ArrayList<>();
+        conductores = new ArrayList<>();
+        user = null;
         super.onDestroy();
         appMediador.removePresentadorOTGPasajero();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     public void setConductoresEnRuta(Object informacion){

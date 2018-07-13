@@ -450,7 +450,7 @@ public class BDAdaptadorVinculo {
                 Vinculo vinculo = dataSnapshot.getValue(Vinculo.class);
                 if (vinculo.getIdPasajero().equals(idPasajero) && vinculo.getIdConductor().equals(idConductor) && vinculo.isVinculo()) {
                     Bundle extras = new Bundle();
-                    extras.putSerializable(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR, vinculo);
+                    extras.putSerializable(AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR, vinculo);
                     appMediador.sendBroadcast(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR, extras);
                 }
             }
@@ -460,7 +460,7 @@ public class BDAdaptadorVinculo {
                 Vinculo vinculo = dataSnapshot.getValue(Vinculo.class);
                 if (vinculo.getIdPasajero().equals(idPasajero) && vinculo.getIdConductor().equals(idConductor)) {
                     Bundle extras = new Bundle();
-                    extras.putSerializable(AppMediador.CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR, vinculo);
+                    extras.putBoolean(AppMediador.CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR, true);
                     appMediador.sendBroadcast(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR, extras);
                 }
             }
@@ -472,7 +472,10 @@ public class BDAdaptadorVinculo {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.i(TAG, "ERROR");
+                Bundle extras = new Bundle();
+                extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, null);
+                appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras);
             }
         });
     }

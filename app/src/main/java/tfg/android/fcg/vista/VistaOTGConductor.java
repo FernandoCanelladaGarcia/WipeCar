@@ -94,7 +94,7 @@ public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, V
 
     @Override
     public void indicarPasajeroRechazado(Object informacion) {
-        speak("La peetición de pasajero ha sido rechazada");
+        speak("La petición de pasajero ha sido rechazada");
     }
 
     @Override
@@ -113,7 +113,7 @@ public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, V
                 appMediador.getPresentadorOTGConductor().tratarRechazar(peticion);
                 break;
             case R.id.botonFinalizarRuta:
-                appMediador.getVistaPrincipal().mostrarProgreso();
+                //appMediador.getVistaPrincipal().mostrarProgreso();
                 appMediador.getPresentadorOTGConductor().tratarParar(peticion);
                 botonFinalizarRuta.setEnabled(false);
                 break;

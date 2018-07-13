@@ -33,6 +33,7 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
     private ArrayList<Posicion> posiciones;
     private Vehiculo vehiculo;
     private Usuario conductor;
+    private Usuario user;
     private final static String TAG = "depurador";
 
     private BroadcastReceiver receptorDeAvisos = new BroadcastReceiver() {
@@ -45,6 +46,7 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
                     vistaOTGPasajero.mostrarDialogo(1);
                 }else{
                     Log.i(TAG, "Existen conductores en ruta " + vehiculos.size());
+                    appMediador.unRegisterReceiver(this);
                     conductoresEnRuta = new ArrayList<>();
                     conductoresEnRuta = vehiculos;
                     vistaOTGPasajero.setConductoresEnRuta(conductoresEnRuta);
@@ -86,16 +88,10 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
                     Log.i(TAG,"Se ha creado vinculo");
                     appMediador.unRegisterReceiver(this);
                     vistaOTGPasajero.mostrarVehiculoVinculo();
-                    esperarRespuesta();
+                    //esperarRespuesta();
                 }else{
                     Log.i(TAG,"ERROR agregando vinculo");
                 }
-            }
-            if(intent.getAction().equals(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR)){
-
-            }
-            if(intent.getAction().equals(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR)){
-
             }
         }
     };
@@ -149,7 +145,7 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
 
     @Override
     public void tratarOk(Object informacion) {
-        Usuario user = (Usuario)informacion;
+        user = (Usuario)informacion;
         appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_CREACION_VINCULO);
         SimpleDateFormat tf = new SimpleDateFormat("HH:mm:ss");
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -166,6 +162,19 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
         modelo.guardarUsuarioPickup(datos);
     }
 
+    private BroadcastReceiver receptorDeRespuestas = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR)){
+                //Vinculo vi = (Vinculo) intent.getSerializableExtra(AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR);
+                Log.i(TAG,"Aceptada la peticion");
+            }
+            if(intent.getAction().equals(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR)){
+                Log.i(TAG,"Rechazada la peticion");
+            }
+        }
+    };
+
     @Override
     public void tratarCancelar(Object informacion) {
 
@@ -174,8 +183,11 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
     @Override
     public void esperarRespuesta(){
         Log.i(TAG, "Esperar respuesta");
-        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR);
-        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR);
+        appMediador.registerReceiver(receptorDeRespuestas,AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR);
+        appMediador.registerReceiver(receptorDeRespuestas,AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR);
+        String[] vinculo = new String[]{user.getIdUser(),conductor.getIdUser()};
+        modelo.obtenerRespuestaConductor(vinculo);
+
     }
 
     @Override
