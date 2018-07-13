@@ -39,19 +39,20 @@ public class BDAdaptadorHistorial {
      * con un pasajero y un conductor cuando finaliza su vínculo.
      * @param informacion contendra:
      */
-    public void agregarHistorial(Object[] informacion){
+    public void agregarHistorial(Object informacion){
         //Informacion: 0 = idUserPasajero, 1 = idUserConductor, 2 fecha, 3 hora, 4 origen 5 destino
-        String idPasajero = (String)informacion[0];
-        String idConductor = (String)informacion[1];
-        String fecha = (String)informacion[2];
-        String hora = (String)informacion[3];
-        String origen = (String)informacion[4];
-        String destino = (String)informacion[5];
+        Vinculo vinculo = (Vinculo)informacion;
+        String idPasajero = vinculo.getIdPasajero();
+        String idConductor = vinculo.getIdConductor();
+        String fecha = vinculo.getFecha();
+        String hora = vinculo.getDestino();
+        String origen = vinculo.getOrigen();
+        String destino = vinculo.getDestino();
         //TODO: NUEVOS VALORES, REDACCION
-        String nombrePasajero = (String)informacion[6];
-        String nombreConductor = (String)informacion[7];
+        //String nombrePasajero = (String)informacion[6];
+        //String nombreConductor = (String)informacion[7];
 
-        historial = new Historial(idPasajero,idConductor,fecha,hora,origen,destino, nombreConductor,nombrePasajero);
+        historial = new Historial(idPasajero,idConductor,fecha,hora,origen,destino, "","");
 
         reference.setValue(historial).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

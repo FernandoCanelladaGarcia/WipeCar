@@ -304,6 +304,49 @@ public class BDAdaptadorVinculo {
                     }
                 });
                 break;
+            case 2:
+                reference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            vinculo = snapshot.getValue(Vinculo.class);
+
+                            if (vinculo.getIdConductor().equals(idConductor) && vinculo.getIdPasajero().isEmpty()) {
+                                snapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            //Se ha completado la eliminacion
+                                            Bundle extras = new Bundle();
+
+                                            extras.putBoolean(AppMediador.CLAVE_TERMINAR_RUTA, true);
+                                            appMediador.sendBroadcast(AppMediador.AVISO_TERMINAR_RUTA, extras);
+                                        } else {
+                                            //No ha eliminado el vinculo
+                                            Bundle extras = new Bundle();
+
+                                            extras.putBoolean(AppMediador.CLAVE_TERMINAR_RUTA, false);
+                                            appMediador.sendBroadcast(AppMediador.AVISO_TERMINAR_RUTA, extras);
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                        reference.removeEventListener(this);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        //No ha encontrado vinculo
+                        Bundle extras = new Bundle();
+
+                        extras.putBoolean(AppMediador.CLAVE_TERMINAR_RUTA, false);
+                        appMediador.sendBroadcast(AppMediador.AVISO_TERMINAR_RUTA, extras);
+                        reference.removeEventListener(this);
+                    }
+                });
+                break;
+
         }
 
     }

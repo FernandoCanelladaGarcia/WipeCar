@@ -73,6 +73,7 @@ public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, V
         botonRechazarPasajero = (Button) view.findViewById(R.id.botonRechazarPasajero);
         botonRechazarPasajero.setOnClickListener(this);
         botonFinalizarRuta = (Button) view.findViewById(R.id.botonFinalizarRuta);
+        botonFinalizarRuta.setEnabled(false);
         botonFinalizarRuta.setOnClickListener(this);
     }
 
@@ -93,7 +94,7 @@ public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, V
 
     @Override
     public void indicarPasajeroRechazado(Object informacion) {
-        speak("Petición de pasajero rechazada");
+        speak("La peetición de pasajero ha sido rechazada");
     }
 
     @Override
@@ -103,6 +104,7 @@ public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, V
                 appMediador.getVistaPrincipal().mostrarProgreso();
                 user = appMediador.getVistaPrincipal().getUsuario();
                 appMediador.getPresentadorOTGConductor().iniciar(user);
+                botonFinalizarRuta.setEnabled(true);
                 break;
             case R.id.botonAceptarPasajero:
                 appMediador.getPresentadorOTGConductor().tratarAceptar(peticion);
@@ -113,6 +115,7 @@ public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, V
             case R.id.botonFinalizarRuta:
                 appMediador.getVistaPrincipal().mostrarProgreso();
                 appMediador.getPresentadorOTGConductor().tratarParar(peticion);
+                botonFinalizarRuta.setEnabled(false);
                 break;
 
         }

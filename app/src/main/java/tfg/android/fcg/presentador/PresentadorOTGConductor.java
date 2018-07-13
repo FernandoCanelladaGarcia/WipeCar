@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.modelo.IModelo;
@@ -78,13 +79,22 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
                 }
             }
             if (intent.getAction().equals(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR)) {
-                boolean respuesta = (boolean) intent.getSerializableExtra(AppMediador.CLAVE_CONCRETAR_VINCULO);
+                boolean respuesta = (boolean) intent.getSerializableExtra(AppMediador.CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR);
                 if(respuesta){
                     vistaOTGConductor.indicarPasajeroRechazado(vinculo);
                 } else {
                     //TODO: PARAR APLICACION
                 }
                 buscarPeticiones(user.getIdUser());
+            }
+            if(intent.getAction().equals(AppMediador.AVISO_TERMINAR_RUTA)){
+                boolean respuesta = intent.getBooleanExtra(AppMediador.CLAVE_TERMINAR_RUTA,false);
+                if(respuesta){
+                    appMediador.getVistaPrincipal().cerrarProgreso();
+                    Toast.makeText(appMediador.getApplicationContext(),"Ha finalizado su ruta correctamente", Toast.LENGTH_LONG).show();
+                }else{
+                    //TODO: PARAR APLICACION
+                }
             }
         }
     };
