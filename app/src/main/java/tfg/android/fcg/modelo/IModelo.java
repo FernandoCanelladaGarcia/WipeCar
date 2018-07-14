@@ -189,4 +189,6 @@ public interface IModelo {
     public void actualizarLocalizacion(Object informacion);
 
     public void obtenerRespuestaConductor(Object informacion);
+
+    public void agregarHistorial(Object informacion);
 }

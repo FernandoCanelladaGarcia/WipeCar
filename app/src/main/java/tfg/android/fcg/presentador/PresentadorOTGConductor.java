@@ -199,7 +199,14 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
     public void tratarParar(Object informacion) {
         appMediador.unRegisterReceiver(receptorGPS);
         appMediador.unRegisterReceiver(receptorLocalizacion);
-        modelo.pararRuta(informacion);
+        if(informacion == null){
+            Object[] datos = new Object[]{0,user.getIdUser()};
+            modelo.pararRuta(datos);
+        }else{
+            Object[] datos = new Object[]{1,informacion};
+            modelo.pararRuta(datos);
+        }
+
     }
 
     private void guardarPosicion(Object[] nuevaLocalizacion) {

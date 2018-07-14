@@ -39,4 +39,6 @@ public interface IPresentadorOTGPasajero {
     public void obtenerPosicionConductores(Object informacion);
 
     public void esperarRespuesta();
+
+    public void generarHistorial();
 }

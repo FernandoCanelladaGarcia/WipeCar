@@ -379,11 +379,22 @@ public class Modelo implements IModelo{
     @Override
     public void pararRuta(Object informacion) {
         adaptadorPosicion.finalizarGps();
-        Vinculo v = (Vinculo)informacion;
-        Object[] datos = new Object[]{2,"",v.getIdConductor()};
-        adaptadorVinculo.eliminarVinculo(datos);
-        Object[] vinculo = new Object[]{1,v.getIdPasajero(),v.getIdConductor()};
-        adaptadorVinculo.eliminarVinculo(vinculo);
+        Object[] datos = (Object[])informacion;
+        int tarea = (int)datos[0];
+        switch (tarea){
+            case 0:
+                Object[] info = new Object[]{2,"",datos[1]};
+                adaptadorVinculo.eliminarVinculo(info);
+                break;
+            case 1:
+                Vinculo v = (Vinculo)datos[1];
+                Object[] vinculo = new Object[]{1,v.getIdPasajero(),v.getIdConductor()};
+                adaptadorVinculo.eliminarVinculo(vinculo);
+                Object[] vin = new Object[]{2,"",v.getIdConductor()};
+                adaptadorVinculo.eliminarVinculo(vin);
+                break;
+
+        }
         //adaptadorHistorial.agregarHistorial(informacion);
     }
 
@@ -398,5 +409,10 @@ public class Modelo implements IModelo{
         String idPasajero = (String)vinculo[0];
         String idConductor = (String)vinculo[1];
         adaptadorVinculo.obtenerRespuestaVinculos(idPasajero,idConductor);
+    }
+
+    @Override
+    public void agregarHistorial(Object informacion){
+        adaptadorHistorial.agregarHistorial(informacion);
     }
 }

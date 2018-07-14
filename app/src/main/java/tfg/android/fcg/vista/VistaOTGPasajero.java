@@ -133,13 +133,17 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
 
     private void getConductorMarcador(Marker marker) {
         String idUser = marker.getTitle();
-        for (int i = 0; i < conductores.size(); i++) {
-            if (conductores.get(i).getIdUser().equals(idUser)) {
-                marcadorConductor = marker;
-                conductorVinculo = conductores.get(i);
-                posicionConductorVinculo = posiciones.get(i);
-                presentadorOTGPasajero.tratarVehiculo(conductorVinculo);
+        if (!marker.getTitle().equals("Mi posicion")) {
+            for (int i = 0; i < conductores.size(); i++) {
+                if (conductores.get(i).getIdUser().equals(idUser)) {
+                    marcadorConductor = marker;
+                    conductorVinculo = conductores.get(i);
+                    posicionConductorVinculo = posiciones.get(i);
+                    presentadorOTGPasajero.tratarVehiculo(conductorVinculo);
+                }
             }
+        }else{
+            Toast.makeText(appMediador.getApplicationContext(),"Mi Ubicacion",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -211,7 +215,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                 dialogo.show();
                 break;
             case 2:
-                dialogBuild.setMessage("Han aceptado tu petición");
+                dialogBuild.setTitle("Han aceptado tu petición");
                 dialogBuild.setMessage("El conductor "+ conductorVinculo.getNombre()+ " se dispone a recogerle en " + user.getOrigen());
                 dialogBuild.setPositiveButton("¡Gracias!", new DialogInterface.OnClickListener() {
                     @Override
@@ -219,6 +223,21 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                         cerrarDialogo();
                     }
                 });
+                dialogo = dialogBuild.create();
+                dialogo.show();
+                break;
+            case 3:
+                dialogBuild.setTitle("Ha finalizado su ruta");
+                dialogBuild.setMessage("Puede visitar su historial para valorar su experiencia con " +conductorVinculo.getNombre() +" en el menu Historial");
+                dialogBuild.setPositiveButton("¡Gracias!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        presentadorOTGPasajero.generarHistorial();
+                        cerrarDialogo();
+                    }
+                });
+                dialogo = dialogBuild.create();
+                dialogo.show();
                 break;
         }
     }
@@ -299,24 +318,24 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
             ubicacion.remove();
         }
         ubicacionConductores.clear();
-        Log.i(TAG, " "+ubicacionConductores.size());
+        //Log.i(TAG, " "+ubicacionConductores.size());
 
         conductores.clear();
-        Log.i(TAG, " "+conductores.size());
+        //Log.i(TAG, " "+conductores.size());
 
         conductoresEnRuta.clear();
-        Log.i(TAG, " "+conductoresEnRuta.size());
+        //Log.i(TAG, " "+conductoresEnRuta.size());
 
         posiciones.clear();
-        Log.i(TAG, " "+posiciones.size());
+        //Log.i(TAG, " "+posiciones.size());
 
         Log.i(TAG, "Listas ubicaciones y conductores limpiadas");
 
         conductores.add(conductorVinculo);
-        Log.i(TAG, "Conductores "+conductores.size());
+        //Log.i(TAG, "Conductores "+conductores.size());
 
         posiciones.add(posicionConductorVinculo);
-        Log.i(TAG, "Posiciones "+posiciones.size());
+        //Log.i(TAG, "Posiciones "+posiciones.size());
 
         tratarCoche = false;
         Double latitud = Double.parseDouble(posicionConductorVinculo.getLatitud());
@@ -437,6 +456,31 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
     @Override
     public void onPause() {
         super.onPause();
+    }
+
+    public void refrescarPantalla(){
+        for(Marker ubicacion: ubicacionConductores){
+            ubicacion.remove();
+        }
+        ubicacionConductores.clear();
+        //Log.i(TAG, " "+ubicacionConductores.size());
+
+        conductores.clear();
+        //Log.i(TAG, " "+conductores.size());
+
+        conductoresEnRuta.clear();
+        //Log.i(TAG, " "+conductoresEnRuta.size());
+
+        posiciones.clear();
+        //Log.i(TAG, " "+posiciones.size());
+
+        Log.i(TAG, "Listas ubicaciones y conductores limpiadas");
+
+        //Log.i(TAG, "Posiciones "+posiciones.size());
+        botonBuscar.setVisibility(View.VISIBLE);
+
+        presentadorOTGPasajero.iniciar();
+
     }
 
     public void setConductoresEnRuta(Object informacion){

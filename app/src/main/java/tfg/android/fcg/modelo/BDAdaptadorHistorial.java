@@ -41,27 +41,27 @@ public class BDAdaptadorHistorial {
      */
     public void agregarHistorial(Object informacion){
         //Informacion: 0 = idUserPasajero, 1 = idUserConductor, 2 fecha, 3 hora, 4 origen 5 destino
-        Vinculo vinculo = (Vinculo)informacion;
+        Object[] datos = (Object[]) informacion;
+        Vinculo vinculo = (Vinculo) datos[0];
         String idPasajero = vinculo.getIdPasajero();
         String idConductor = vinculo.getIdConductor();
         String fecha = vinculo.getFecha();
-        String hora = vinculo.getDestino();
+        String hora = vinculo.getHora();
         String origen = vinculo.getOrigen();
         String destino = vinculo.getDestino();
         //TODO: NUEVOS VALORES, REDACCION
-        //String nombrePasajero = (String)informacion[6];
-        //String nombreConductor = (String)informacion[7];
+        String nombreConductor = (String)datos[1];
+        String nombrePasajero = (String)datos[2];
 
-        historial = new Historial(idPasajero,idConductor,fecha,hora,origen,destino, "","");
-
-        reference.setValue(historial).addOnCompleteListener(new OnCompleteListener<Void>() {
+        historial = new Historial(idPasajero,idConductor,fecha,hora,origen,destino, nombreConductor,nombrePasajero);
+        DatabaseReference referencia = reference.push();
+        referencia.setValue(historial).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     //Se ha agregado historial de pasajero a conductor
                     Log.i(TAG, "Agregado historial");
                     Bundle extras = new Bundle();
-
                     extras.putBoolean(AppMediador.CLAVE_CREACION_HISTORIAL, true);
                     appMediador.sendBroadcast(AppMediador.AVISO_CREACION_HISTORIAL, extras);
                 } else {
@@ -132,18 +132,17 @@ public class BDAdaptadorHistorial {
      * @param idUser contendra:
      */
     public void obtenerHistorial(final String idUser){
-        final ArrayList<Historial> listaHistorial = new ArrayList<>();
-
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(TAG, "dentro de tabla Historial");
-                Log.i(TAG, "numero de historiales del usuario: " + dataSnapshot.getChildrenCount());
-
+                ArrayList<Historial> listaHistorial = new ArrayList<>();
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    Log.i(TAG," "+dataSnapshot.getChildrenCount());
                     Historial historial = snapshot.getValue(Historial.class);
                     if(historial.getIdPasajero().equals(idUser) || historial.getIdConductor().equals(idUser)){
                         //Si coincide añadimos a la lista
+                        Log.i(TAG, "Añadimos a la tabla");
                         listaHistorial.add(historial);
                     }
                 }
@@ -160,7 +159,6 @@ public class BDAdaptadorHistorial {
                 Bundle extras = new Bundle();
                 extras.putSerializable(AppMediador.CLAVE_HISTORIAL, listaHistorial);
                 appMediador.sendBroadcast(AppMediador.AVISO_HISTORIAL,extras);
-
                 reference.removeEventListener(this);
             }
 

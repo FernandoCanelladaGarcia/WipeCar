@@ -34,6 +34,7 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
     private Vehiculo vehiculo;
     private Usuario conductor;
     private Usuario user;
+    private Vinculo vinculo;
     private final static String TAG = "depurador";
     private boolean aceptado = false;
 
@@ -126,10 +127,24 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
                     Log.i(TAG,"Rechazada la peticion");
                     appMediador.unRegisterReceiver(this);
                     appMediador.unRegisterReceiver(receptorDeAvisos);
+                    vinculo = null;
+                    //Refresh con todos los coches
                 }else{
                     Log.i(TAG,"Finalizada la ruta, reiniciar pantalla y set historial");
                     appMediador.unRegisterReceiver(this);
                     appMediador.unRegisterReceiver(receptorDeAvisos);
+                    //refresh pantalla con mi ubicacion
+                    vistaOTGPasajero.mostrarDialogo(3);
+                    vistaOTGPasajero.refrescarPantalla();
+                }
+            }
+            if(intent.getAction().equals(AppMediador.AVISO_CREACION_HISTORIAL)){
+                boolean respuesta = intent.getBooleanExtra(AppMediador.CLAVE_CREACION_HISTORIAL,false);
+                if(respuesta){
+                    Log.i(TAG, "Todo okey");
+                }else{
+                    Log.i(TAG,"Error en la creacion del historial");
+
                 }
             }
         }
@@ -172,8 +187,8 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
         appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_CREACION_VINCULO);
         SimpleDateFormat tf = new SimpleDateFormat("HH:mm:ss");
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        String fecha = tf.format(Calendar.getInstance().getTime());
-        String hora = df.format(Calendar.getInstance().getTime());
+        String hora = tf.format(Calendar.getInstance().getTime());
+        String fecha = df.format(Calendar.getInstance().getTime());
         Object[] datos = new Object[7];
         datos[0] = user.getIdUser();
         datos[1] = conductor.getIdUser();
@@ -182,9 +197,11 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
         datos[4] = user.getOrigenDef();
         datos[5] = user.getDestino();
         datos[6] = 1;
+        vinculo = new Vinculo(user.getIdUser(),conductor.getIdUser(),false,fecha,hora,user.getOrigenDef(),user.getDestino());
         modelo.guardarUsuarioPickup(datos);
     }
 
+    //TODO: REDACCION NO SE USA
     @Override
     public void tratarCancelar(Object informacion) {
 
@@ -216,5 +233,12 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
         for(Usuario conductor : conduct){
             modelo.obtenerPosicionUsuario(conductor.getIdUser());
         }
+    }
+
+    @Override
+    public void generarHistorial(){
+        appMediador.registerReceiver(receptorDeRespuestas,AppMediador.AVISO_CREACION_HISTORIAL);
+        Object[] info = new Object[]{vinculo,conductor.getNombre(),user.getNombre()};
+        modelo.agregarHistorial(info);
     }
 }

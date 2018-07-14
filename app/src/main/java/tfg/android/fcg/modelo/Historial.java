@@ -19,6 +19,11 @@ public class Historial {
 
     //Constructor
 
+
+    public Historial(){
+
+    }
+
     public Historial(String idPasajero, String idConductor, String fecha, String hora, String origen,
                      String destino, String nombreConductor, String nombrePasajero) {
         this.idPasajero = idPasajero;
@@ -30,12 +35,6 @@ public class Historial {
         this.nombreConductor = nombreConductor;
         this.nombrePasajero = nombrePasajero;
     }
-
-    public Historial(){
-
-    }
-
-
     //Getters & Setters
 
     public String getIdPasajero() {
