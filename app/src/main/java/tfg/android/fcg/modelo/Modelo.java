@@ -384,7 +384,7 @@ public class Modelo implements IModelo{
         adaptadorVinculo.eliminarVinculo(datos);
         Object[] vinculo = new Object[]{1,v.getIdPasajero(),v.getIdConductor()};
         adaptadorVinculo.eliminarVinculo(vinculo);
-        adaptadorHistorial.agregarHistorial(informacion);
+        //adaptadorHistorial.agregarHistorial(informacion);
     }
 
     @Override

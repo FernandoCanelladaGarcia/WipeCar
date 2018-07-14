@@ -132,6 +132,7 @@ public class BDAdaptadorVinculo {
                                         if (task.isSuccessful()) {
                                             //Creado vinculo
                                             Bundle extras = new Bundle();
+                                            Log.i(TAG,"CONCRETADO VINCULO");
                                             extras.putBoolean(AppMediador.CLAVE_CONCRETAR_VINCULO, true);
                                             appMediador.sendBroadcast(AppMediador.AVISO_CONCRETAR_VINCULO, extras);
                                         } else {
@@ -317,7 +318,6 @@ public class BDAdaptadorVinculo {
                                         if (task.isSuccessful()) {
                                             //Se ha completado la eliminacion
                                             Bundle extras = new Bundle();
-
                                             extras.putBoolean(AppMediador.CLAVE_TERMINAR_RUTA, true);
                                             appMediador.sendBroadcast(AppMediador.AVISO_TERMINAR_RUTA, extras);
                                         } else {
@@ -338,7 +338,6 @@ public class BDAdaptadorVinculo {
                     public void onCancelled(DatabaseError databaseError) {
                         //No ha encontrado vinculo
                         Bundle extras = new Bundle();
-
                         extras.putBoolean(AppMediador.CLAVE_TERMINAR_RUTA, false);
                         appMediador.sendBroadcast(AppMediador.AVISO_TERMINAR_RUTA, extras);
                         reference.removeEventListener(this);
@@ -512,6 +511,7 @@ public class BDAdaptadorVinculo {
         });
     }
 
+    //TODO: NUEVO, REDACCION
     public void obtenerConductoresEnRuta(final String destino) {
         reference.addValueEventListener(new ValueEventListener() {
             @Override

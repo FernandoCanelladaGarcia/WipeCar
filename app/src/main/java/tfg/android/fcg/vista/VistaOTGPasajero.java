@@ -210,6 +210,16 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                 dialogo = dialogBuild.create();
                 dialogo.show();
                 break;
+            case 2:
+                dialogBuild.setMessage("Han aceptado tu petición");
+                dialogBuild.setMessage("El conductor "+ conductorVinculo.getNombre()+ " se dispone a recogerle en " + user.getOrigen());
+                dialogBuild.setPositiveButton("¡Gracias!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cerrarDialogo();
+                    }
+                });
+                break;
         }
     }
 

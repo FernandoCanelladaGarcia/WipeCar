@@ -53,9 +53,10 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
         public void onReceive(Context context, Intent intent) {
 
             if (intent.getAction().equals(AppMediador.AVISO_PETICION_OTGCONDUCTOR)) {
-                if (intent.getExtras().getSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR) != null) {
+                Vinculo peticion = (Vinculo) intent.getSerializableExtra(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR);
+                if(peticion != null){
+                    vinculo = peticion;
                     atendiendoPeticion = true;
-                    vinculo = (Vinculo) intent.getSerializableExtra(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR);
                     pasajero = vinculo.getIdConductor();
                     vistaOTGConductor.indicarPeticionPasajero(vinculo);
                     timer.postDelayed(limiteDeTiempo, 30000);
@@ -72,6 +73,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
                     boolean respuesta = (boolean) intent.getSerializableExtra(AppMediador.CLAVE_CONCRETAR_VINCULO);
                     if(respuesta){
                         vistaOTGConductor.indicarPasajeroAceptado(vinculo);
+                        appMediador.unRegisterReceiver(this);
                     }
                     //buscarPeticiones(user.getIdUser());
                 } else {
@@ -82,6 +84,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
                 boolean respuesta = (boolean) intent.getSerializableExtra(AppMediador.CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR);
                 if(respuesta){
                     vistaOTGConductor.indicarPasajeroRechazado(vinculo);
+                    appMediador.unRegisterReceiver(this);
                 } else {
                     //TODO: PARAR APLICACION
                 }
@@ -91,7 +94,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
                 boolean respuesta = intent.getBooleanExtra(AppMediador.CLAVE_TERMINAR_RUTA,false);
                 if(respuesta){
                     //appMediador.getVistaPrincipal().cerrarProgreso();
-                    Toast.makeText(appMediador.getApplicationContext(),"Ha finalizado su ruta correctamente", Toast.LENGTH_LONG).show();
+                    Log.i(TAG,"Ha finalizado su ruta correctamente");
                     appMediador.unRegisterReceiver(this);
                 }else{
                     //TODO: PARAR APLICACION

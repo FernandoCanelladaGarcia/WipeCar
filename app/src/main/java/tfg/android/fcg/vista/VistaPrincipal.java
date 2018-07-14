@@ -703,6 +703,9 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     protected void onResume() {
         super.onResume();
         if (pausada) {
+            viewPager = null;
+            adaptador = null;
+            tabLayout = null;
             refrescarContenido();
         }
         pausada = false;

@@ -119,12 +119,17 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
             if(intent.getAction().equals(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR)){
                 Log.i(TAG,"Aceptada la peticion");
                 aceptado = true;
+                vistaOTGPasajero.mostrarDialogo(2);
             }
             if(intent.getAction().equals(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR)){
                 if(!aceptado){
                     Log.i(TAG,"Rechazada la peticion");
+                    appMediador.unRegisterReceiver(this);
+                    appMediador.unRegisterReceiver(receptorDeAvisos);
                 }else{
                     Log.i(TAG,"Finalizada la ruta, reiniciar pantalla y set historial");
+                    appMediador.unRegisterReceiver(this);
+                    appMediador.unRegisterReceiver(receptorDeAvisos);
                 }
             }
         }
