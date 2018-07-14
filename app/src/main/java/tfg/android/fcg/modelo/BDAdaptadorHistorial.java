@@ -132,6 +132,7 @@ public class BDAdaptadorHistorial {
      * @param idUser contendra:
      */
     public void obtenerHistorial(final String idUser){
+        Log.i(TAG,idUser);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -140,6 +141,8 @@ public class BDAdaptadorHistorial {
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
                     Log.i(TAG," "+dataSnapshot.getChildrenCount());
                     Historial historial = snapshot.getValue(Historial.class);
+                    Log.i(TAG,historial.getIdPasajero());
+                    Log.i(TAG,historial.getIdConductor());
                     if(historial.getIdPasajero().equals(idUser) || historial.getIdConductor().equals(idUser)){
                         //Si coincide añadimos a la lista
                         Log.i(TAG, "Añadimos a la tabla");

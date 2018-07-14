@@ -698,7 +698,6 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         }
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();

@@ -64,7 +64,7 @@ public class AdapterHistorialLista extends BaseAdapter{
         ImageButton options = (ImageButton)v.findViewById(R.id.opcionesItemHistorial);
         ImageView icono = (ImageView) v.findViewById(R.id.iconoUserHistorial);
 
-        if(idUser == historial.getIdPasajero()){
+        if(historial.getIdPasajero().equals(idUser)){
             //Icono Coche
             icono.setImageResource(R.drawable.icon_car_user);
             nombreUsuario.setText(historial.getNombreConductor());
@@ -74,7 +74,7 @@ public class AdapterHistorialLista extends BaseAdapter{
             icono.setImageResource(R.drawable.icon_user);
             nombreUsuario.setText(historial.getNombrePasajero());
         }
-        fecha.setText(historial.getFecha());
+        fecha.setText(historial.getFecha() + " - "+ historial.getHora());
         facultad.setText(historial.getDestino());
 
         options.setOnClickListener(new View.OnClickListener() {

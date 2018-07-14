@@ -9,14 +9,17 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="125dp"
+        android:background="@color/background2">
 
         <ImageView
             android:id="@+id/iconoUserHistorial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:layout_marginLeft="2dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="15dp"
             android:src="@drawable/icon_user"/>
 
         <TextView
@@ -24,42 +27,47 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
+            android:layout_marginTop="5dp"
             android:text="Nombre Historial"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="#000"
+            android:textColor="@color/texto_borde"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/Destino"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="220dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="65dp"
             android:text="Destino:"
-            android:textColor="#000"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            android:textColor="@color/texto_borde"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textStyle="bold"/>
         <TextView
             android:id="@+id/Fecha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="35dp"
             android:layout_marginLeft="40dp"
             android:text="Fecha"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/texto_borde"/>
         <TextView
             android:id="@+id/Facultad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="220dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="95dp"
             android:text="Facultad"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/texto_borde"/>
 
         <ImageButton
             android:id="@+id/opcionesItemHistorial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
             android:layout_marginTop="2dp"
             android:background="@null"
             android:src="@drawable/ic_more_vert_black_24dp" />

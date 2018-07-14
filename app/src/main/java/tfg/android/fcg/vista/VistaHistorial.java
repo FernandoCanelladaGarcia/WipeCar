@@ -38,6 +38,7 @@ public class VistaHistorial extends AppCompatActivity implements IVistaHistorial
     private AdapterHistorialLista adaptador;
     private List<Historial> listaHistorial;
     private String idUser;
+    private boolean deshabilitoBack = true;
 
     private final static String TAG = "depurador";
     @Override
@@ -54,7 +55,7 @@ public class VistaHistorial extends AppCompatActivity implements IVistaHistorial
         botonSalir = (Button) findViewById(R.id.botonSalirHistorial);
         botonSalir.setOnClickListener(this);
 
-        SharedPreferences sharedPreferences = appMediador.getSharedPreferences("login",0);
+        SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login",0);
         idUser = sharedPreferences.getString("idUser",null);
 
         presentadorHistorial.iniciar(idUser);
@@ -144,7 +145,7 @@ public class VistaHistorial extends AppCompatActivity implements IVistaHistorial
         ListView listView = (ListView) findViewById(R.id.ListaHistorial);
         Object[] respuesta = (Object[])informacion;
         listaHistorial = (ArrayList<Historial>)respuesta[1];
-        adaptador = new AdapterHistorialLista(VistaHistorial.this, listaHistorial,idUser, appMediador);
+        adaptador = new AdapterHistorialLista(VistaHistorial.this, listaHistorial, idUser, appMediador);
         listView.setAdapter(adaptador);
         if((int)respuesta[0] == 1){
             findViewById(R.id.elementoListaHistorialVacia).setVisibility(View.GONE);
@@ -170,5 +171,14 @@ public class VistaHistorial extends AppCompatActivity implements IVistaHistorial
     public void onDestroy(){
         super.onDestroy();
         appMediador.removePresentadorHistorial();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (deshabilitoBack) {
+
+        } else {
+            super.onBackPressed();
+        }
     }
 }
