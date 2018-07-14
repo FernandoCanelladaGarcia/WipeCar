@@ -44,6 +44,7 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
             if(intent.getAction().equals(AppMediador.AVISO_CONDUCTORES_OTG)){
                 ArrayList<Vinculo> vehiculos = (ArrayList<Vinculo>) intent.getSerializableExtra(AppMediador.CLAVE_CONDUCTORES_OTG);
                 if(vehiculos.isEmpty() || vehiculos == null){
+                    appMediador.unRegisterReceiver(this);
                     vistaOTGPasajero.cerrarProgreso();
                     vistaOTGPasajero.mostrarDialogo(1);
                 }else{

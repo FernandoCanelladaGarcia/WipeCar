@@ -103,13 +103,12 @@ public class VistaHistorial extends AppCompatActivity implements IVistaHistorial
                 dialogo.show();
                 break;
             case 1:
-                CharSequence[] values = {"0","1","2","3","4","5"};
+                final CharSequence[] values = {"0","1","2","3","4","5"};
                 dialogBuild.setTitle("Valoración del usuario");
                 dialogBuild.setSingleChoiceItems(values, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
-                        //Toast.makeText(appMediador.getApplicationContext(),i,Toast.LENGTH_SHORT).show();
-                        presentadorHistorial.tratarValoracion(i);
+                        presentadorHistorial.tratarValoracion(values[i]);
                         cerrarDialogo();
                     }
                 });
@@ -144,6 +143,9 @@ public class VistaHistorial extends AppCompatActivity implements IVistaHistorial
     public void mostrarHistorial(Object informacion) {
         ListView listView = (ListView) findViewById(R.id.ListaHistorial);
         Object[] respuesta = (Object[])informacion;
+        if(listaHistorial != null){
+            listaHistorial = new ArrayList<>();
+        }
         listaHistorial = (ArrayList<Historial>)respuesta[1];
         adaptador = new AdapterHistorialLista(VistaHistorial.this, listaHistorial, idUser, appMediador);
         listView.setAdapter(adaptador);

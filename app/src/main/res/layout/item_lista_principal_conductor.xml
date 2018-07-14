@@ -89,7 +89,7 @@
             android:layout_marginBottom="6dp"
             android:textColor="@color/texto_borde"
             android:text="Valoracion"
-            android:visibility="gone"/>
+            />
 
         <ImageButton
             android:id="@+id/opcionesItemConductor"

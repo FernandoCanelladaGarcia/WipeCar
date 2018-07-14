@@ -88,15 +88,19 @@ public class AdapterHistorialLista extends BaseAdapter{
                         switch (id){
                             case R.id.eliminarHistorial:
                                 Toast.makeText(contexto,"Eliminar Historial", Toast.LENGTH_SHORT).show();
-                                Object[] datos = new Object[]{historial.getIdPasajero(),historial.getIdConductor()};
+                                Object[] datos = new Object[]{true,historial.getIdPasajero(),historial.getIdConductor()};
                                 appMediador.getPresentadorHistorial().tratarEliminar(datos);
                                 break;
                             case R.id.agregarValoracion:
-                                //Toast.makeText(contexto,"Agregar Valoracion", Toast.LENGTH_SHORT).show();
-                                if(idUser == historial.getIdPasajero()){
-                                    appMediador.getPresentadorHistorial().tratarValoracion(historial.getIdConductor());
+                                Toast.makeText(contexto,"Agregar Valoracion", Toast.LENGTH_SHORT).show();
+                                if(historial.getIdPasajero().equals(idUser)){
+                                    appMediador.getPresentadorHistorial().tratarValorar(historial.getIdConductor());
+                                    Object[] val1 = new Object[]{false,idUser,historial.getIdConductor()};
+                                    appMediador.getPresentadorHistorial().tratarEliminar(val1);
                                 }else{
-                                    appMediador.getPresentadorHistorial().tratarValoracion(historial.getIdPasajero());
+                                    Object[] val2 = new Object[]{false,historial.getIdPasajero(),idUser};
+                                    appMediador.getPresentadorHistorial().tratarValorar(historial.getIdPasajero());
+                                    appMediador.getPresentadorHistorial().tratarEliminar(val2);
                                 }
                                 break;
                         }

@@ -28,6 +28,7 @@ public class PresentadorHistorial implements IPresentadorHistorial{
      appMediador = AppMediador.getInstance();
      modelo = Modelo.getInstance();
      vistaHistorial = (VistaHistorial) appMediador.getVistaHistorial();
+
     }
 
     private BroadcastReceiver receptorDeAvisos = new BroadcastReceiver() {
@@ -64,10 +65,23 @@ public class PresentadorHistorial implements IPresentadorHistorial{
                 appMediador.launchActivity(VistaLogin.class,this,null);
             }
             if(intent.getAction().equals(AppMediador.AVISO_ELIMINAR_HISTORIAL)){
-                appMediador.unRegisterReceiver(this);
-                vistaHistorial.cerrarProgreso();
-                Log.i(TAG,"Historial eliminado");
-                iniciar(idUser);
+                boolean resultado = intent.getBooleanExtra(AppMediador.CLAVE_RESULTADO_ELIMINAR_HISTORIAL,false);
+                if(resultado) {
+                    appMediador.unRegisterReceiver(this);
+                    vistaHistorial.cerrarProgreso();
+                    Log.i(TAG, "Historial eliminado");
+                    iniciar(idUser);
+                }
+            }
+            if(intent.getAction().equals(AppMediador.AVISO_ACTUALIZACION_USUARIO)){
+                Object[] datos = (Object[]) intent.getSerializableExtra(AppMediador.CLAVE_ACTUALIZACION_USUARIO);
+                if((boolean)datos[0]){
+                    if(datos[1].equals("valoracion")){
+                        appMediador.unRegisterReceiver(this);
+                        Log.i(TAG, "Agregada valoracion correctamente");
+                        eliminarHistorial();
+                    }
+                }
             }
         }
     };
@@ -98,8 +112,14 @@ public class PresentadorHistorial implements IPresentadorHistorial{
 
     @Override
     public void tratarEliminar(Object informacion){
-        vistaHistorial.mostrarDialogo(3);
-        datosHistorial = (Object[]) informacion;
+        Object[] datos = (Object[])informacion;
+        boolean tarea = (boolean)datos[0];
+        if(tarea){
+            vistaHistorial.mostrarDialogo(3);
+            datosHistorial = new Object[]{datos[1],datos[2]};
+        }else{
+            datosHistorial = new Object[]{datos[1],datos[2]};
+        }
     }
     //TODO: EDITADO, REDACCION
     @Override
@@ -107,6 +127,7 @@ public class PresentadorHistorial implements IPresentadorHistorial{
         vistaHistorial.mostrarProgreso();
         appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_ELIMINAR_HISTORIAL);
         modelo.eliminarHistorial(datosHistorial);
+        Log.i(TAG,"eliminarHistorial");
     }
 
     //TODO: NO SE USA, REDACCION

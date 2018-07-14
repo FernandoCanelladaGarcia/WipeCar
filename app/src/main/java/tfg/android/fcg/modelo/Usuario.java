@@ -10,7 +10,7 @@ public class Usuario implements Serializable {
     private String nombre;
     private String telefono;
     private boolean rol;
-    private String valoracion;
+    private float valoracion;
     //TODO: NUEVO, REDACCION
     private String origenDef;
     private String origen;
@@ -21,7 +21,7 @@ public class Usuario implements Serializable {
 
     //Constructor
 
-    public Usuario (String idUser, String nombre, String telefono, boolean rol, String valoracion, String origen,String origenDef, String destino, String fecha, String hora, String datoVehiculo){
+    public Usuario (String idUser, String nombre, String telefono, boolean rol, float valoracion, String origen,String origenDef, String destino, String fecha, String hora, String datoVehiculo){
         this.idUser = idUser;
         this.nombre = nombre;
         this.telefono = telefono;
@@ -72,11 +72,11 @@ public class Usuario implements Serializable {
         this.rol = rol;
     }
 
-    public String getValoracion() {
+    public float getValoracion() {
         return valoracion;
     }
 
-    public void setValoracion(String valoracion) {
+    public void setValoracion(float valoracion) {
         this.valoracion = valoracion;
     }
 

@@ -75,7 +75,12 @@ public class AdapterPrincipalVinculos extends BaseAdapter{
             marcaCoche.setText(vehiculo.getMarca());
             modeloCoche.setText(vehiculo.getModelo());
             destinovehiculo.setText(conductor.getDestino());
-            valoracionVehiculo.setText(conductor.getValoracion());
+            valoracionVehiculo.setText(String.valueOf(conductor.getValoracion()));
+            if(conductor.getValoracion() != 0) {
+                valoracionVehiculo.setText(String.valueOf(conductor.getValoracion()));
+            }else{
+                valoracionVehiculo.setText("Sin valorar");
+            }
             ImageButton options = (ImageButton)v.findViewById(R.id.opcionesItemConductor);
             options.setOnClickListener(new View.OnClickListener() {
                 @Override

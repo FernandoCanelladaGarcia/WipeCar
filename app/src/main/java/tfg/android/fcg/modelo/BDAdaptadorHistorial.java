@@ -85,27 +85,27 @@ public class BDAdaptadorHistorial {
      */
     public void eliminarHistorial(final String idPasajero, final String idConductor){
 
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
                     Historial historial = snapshot.getValue(Historial.class);
-
-                    if (historial.getIdPasajero().equals(idPasajero) && historial.getIdConductor().equals(idConductor)){
+                    Log.i(TAG,historial.getFecha());
+                    Log.i(TAG,historial.getIdPasajero() + " "+ idPasajero);
+                    Log.i(TAG,historial.getIdConductor() + " "+idConductor);
+                    if (historial.getIdPasajero().equals(idPasajero) && historial.getIdConductor().equals(idConductor)) {
                         snapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()){
+                                if (task.isSuccessful()) {
                                     //Eliminacion satisfactoria
                                     Bundle extras = new Bundle();
-                                    extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_HISTORIAL,true);
-
-                                    appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_HISTORIAL,extras);
-                                }else{
+                                    extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_HISTORIAL, true);
+                                    appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_HISTORIAL, extras);
+                                } else {
                                     //Error eliminando
                                     Bundle extras = new Bundle();
-                                    extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_HISTORIAL,false);
-
+                                    extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_HISTORIAL, false);
                                     appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_HISTORIAL, extras);
                                 }
                             }
@@ -122,6 +122,7 @@ public class BDAdaptadorHistorial {
                 extras.putBoolean(AppMediador.CLAVE_RESULTADO_ELIMINAR_HISTORIAL,false);
 
                 appMediador.sendBroadcast(AppMediador.AVISO_ELIMINAR_HISTORIAL, extras);
+                reference.removeEventListener(this);
             }
         });
     }

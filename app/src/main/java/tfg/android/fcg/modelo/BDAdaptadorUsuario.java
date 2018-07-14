@@ -281,7 +281,7 @@ public class BDAdaptadorUsuario {
                                 //Creamos el Login del usuario
                                 login = new Login(idUser, nombreEncriptado, email);
                                 //Guardamos en la tabla el usuario
-                                usuario = new Usuario(idUser, nombreEncriptado, telefono, rol, "", "",origen, "", "", "", null);
+                                usuario = new Usuario(idUser, nombreEncriptado, telefono, rol, 0, "",origen, "", "", "", null);
                                 DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(idUser);
                                 referenciaUsuario.setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     //                                    referenciaUsuario.setValue(usuario, new DatabaseReference.CompletionListener() {
@@ -693,7 +693,7 @@ public class BDAdaptadorUsuario {
                                     taskMap.put("rol", newRol);
                                     editor.putBoolean("rol", newRol);
                                 }
-                                DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(usuarioActual.getUid());
+                                final DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(usuarioActual.getUid());
                                 referenciaUsuario.updateChildren(taskMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
@@ -795,6 +795,7 @@ public class BDAdaptadorUsuario {
                     datos[1] = error;
                     extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
                     appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
+
                 }
             }
         });
@@ -803,17 +804,22 @@ public class BDAdaptadorUsuario {
     private void actualizarValoracion(String[] informacion) {
         String idUserValorar = informacion[0];
         final float valoracion = Float.parseFloat(informacion[1]);
-        DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(idUserValorar);
 
-        referenciaUsuario.addListenerForSingleValueEvent(new ValueEventListener() {
+        final DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(idUserValorar);
+
+        referenciaUsuario.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                usuario = dataSnapshot.getValue(Usuario.class);
-                float valoracionActual = 0;
-                if(usuario.getValoracion() != null){
-                    float valoracionUsuario = Float.parseFloat(usuario.getValoracion());
-                    valoracionActual = (valoracion + valoracionUsuario)/2;
-                }else{
+
+                Usuario user = dataSnapshot.getValue(Usuario.class);
+                float valoracionActual;
+
+                if (user.getValoracion() != 0) {
+                    float valoracionUsuario = user.getValoracion();
+                    Log.i(TAG, "Valoracion actual de usuario " + valoracionUsuario);
+                    valoracionActual = (valoracion + valoracionUsuario) / 2;
+                    Log.i(TAG, "Valoracion FINAL de usuario " + valoracionActual);
+                } else {
                     valoracionActual = valoracion;
                 }
                 dataSnapshot.getRef().child("valoracion").setValue(valoracionActual).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -839,11 +845,20 @@ public class BDAdaptadorUsuario {
                         }
                     }
                 });
+                referenciaUsuario.removeEventListener(this);
             }
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Bundle extras = new Bundle();
+                Object[] datos = new Object[2];
+                String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_VALORACION;
+                datos[0] = databaseError;
+                datos[1] = error;
+                extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
+                appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
+                referenciaUsuario.removeEventListener(this);
             }
         });
     }

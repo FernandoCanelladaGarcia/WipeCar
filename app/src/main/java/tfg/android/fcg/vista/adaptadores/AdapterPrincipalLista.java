@@ -85,7 +85,11 @@ public class AdapterPrincipalLista extends BaseAdapter{
                 TextView valoracionPasajero = (TextView) v.findViewById(R.id.valoracionPasajero);
                 nombrePasajero.setText(pasajero.getNombre());
                 origenPasajero.setText(pasajero.getOrigen());
-                valoracionPasajero.setText(pasajero.getValoracion());
+                if(pasajero.getValoracion() != 0) {
+                    valoracionPasajero.setText(String.valueOf(pasajero.getValoracion()));
+                }else{
+                    valoracionPasajero.setText("Sin valorar");
+                }
                 ImageButton options = (ImageButton)v.findViewById(R.id.opcionesItemPasajero);
                 options.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -148,7 +152,11 @@ public class AdapterPrincipalLista extends BaseAdapter{
                 marcaCoche.setText(vehiculo.getMarca());
                 modeloCoche.setText(vehiculo.getModelo());
                 destinovehiculo.setText(conductor.getDestino());
-                valoracionCond.setText(conductor.getValoracion());
+                if(conductor.getValoracion() != 0) {
+                    valoracionCond.setText(String.valueOf(conductor.getValoracion()));
+                }else{
+                    valoracionCond.setText("Sin valorar");
+                }
                 ImageButton options = (ImageButton)v.findViewById(R.id.opcionesItemConductor);
                 options.setOnClickListener(new View.OnClickListener() {
                     @Override

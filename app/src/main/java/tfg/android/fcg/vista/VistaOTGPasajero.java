@@ -183,10 +183,10 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                 cocheConductor.setText(vehiculoConductor.getMarca() + "-" + vehiculoConductor.getModelo() + " / "+ vehiculoConductor.getMatricula());
 
                 TextView valoracionConductor = (TextView) vistaDialogo.findViewById(R.id.valoracionMenuConductor);
-                if (conductorVinculo.getValoracion().isEmpty()) {
+                if (conductorVinculo.getValoracion() == 0) {
                     valoracionConductor.setText("Sin Valorar");
                 } else {
-                    valoracionConductor.setText(conductorVinculo.getValoracion());
+                    valoracionConductor.setText(String.valueOf(conductorVinculo.getValoracion()));
                 }
                 botonSeleccionarVehiculo.setOnClickListener(new View.OnClickListener() {
                     @Override
