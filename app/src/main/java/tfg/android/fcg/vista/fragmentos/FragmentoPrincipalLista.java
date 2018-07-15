@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ public class FragmentoPrincipalLista extends Fragment{
 
     private View rootView;
     private FloatingActionButton floatPrincipal;
+    private Button botonRefrescar;
     private ListView listView;
     private VistaPrincipal vistaPrincipal;
     private AppMediador appMediador;
@@ -59,7 +61,7 @@ public class FragmentoPrincipalLista extends Fragment{
         rootView = inflater.inflate(R.layout.fragment_pickup, container, false);
         listView = (ListView) rootView.findViewById(R.id.listaPrincipal);
         floatPrincipal = (FloatingActionButton) rootView.findViewById(R.id.floatPrincipal);
-
+        botonRefrescar = (Button) rootView.findViewById(R.id.botonRefrescar);
         if(!pausada){
             if(!rol){
                 vistaPrincipal.obtenerVehiculos();

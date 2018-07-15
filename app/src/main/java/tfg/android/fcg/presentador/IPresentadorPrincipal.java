@@ -70,4 +70,8 @@ public interface IPresentadorPrincipal {
     public void obtenerVinculosPasajero(Object informacion);
 
     public void obtenerVehiculosVinculo(Object informacion);
+
+    public void esperarRespuestas();
+
+    public void finEsperarRespuestas();
 }

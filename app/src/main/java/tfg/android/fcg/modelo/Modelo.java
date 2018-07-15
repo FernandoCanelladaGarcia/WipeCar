@@ -405,9 +405,9 @@ public class Modelo implements IModelo{
 
     @Override
     public void obtenerRespuestaConductor(Object informacion) {
-        Object[] vinculo = (Object[])informacion;
-        String idPasajero = (String)vinculo[0];
-        String idConductor = (String)vinculo[1];
+        String[] vinculo = (String[])informacion;
+        String idPasajero = vinculo[0];
+        String idConductor = vinculo[1];
         adaptadorVinculo.obtenerRespuestaVinculos(idPasajero,idConductor);
     }
 

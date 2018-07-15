@@ -1,6 +1,7 @@
 package tfg.android.fcg.vista.adaptadores;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -80,6 +81,13 @@ public class AdapterPrincipalVinculos extends BaseAdapter{
                 valoracionVehiculo.setText(String.valueOf(conductor.getValoracion()));
             }else{
                 valoracionVehiculo.setText("Sin valorar");
+            }
+            if(vinculo.isVinculo()){
+                CardView cardView = (CardView) v.findViewById(R.id.cardItemListaUsuario_Conductor);
+                cardView.setCardBackgroundColor(appMediador.getResources().getColor(R.color.background2));
+            }else{
+                CardView cardView = (CardView) v.findViewById(R.id.cardItemListaUsuario_Conductor);
+                cardView.setCardBackgroundColor(appMediador.getResources().getColor(R.color.noactivo));
             }
             ImageButton options = (ImageButton)v.findViewById(R.id.opcionesItemConductor);
             options.setOnClickListener(new View.OnClickListener() {

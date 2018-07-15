@@ -175,6 +175,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
 //
         thread1.start();
         thread2.start();
+        //appMediador.getPresentadorPrincipal().finEsperarRespuestas();
     }
 
     @Override

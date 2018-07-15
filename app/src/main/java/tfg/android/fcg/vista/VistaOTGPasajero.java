@@ -227,8 +227,8 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                 dialogo.show();
                 break;
             case 3:
-                dialogBuild.setTitle("Ha finalizado su ruta");
-                dialogBuild.setMessage("Puede visitar su historial para valorar su experiencia con " +conductorVinculo.getNombre() +" en el menu Historial");
+                dialogBuild.setTitle("Ha finalizado su ruta.");
+                dialogBuild.setMessage("Puede visitar su historial para valorar su experiencia con " +conductorVinculo.getNombre() +" en el menu Historial.");
                 dialogBuild.setPositiveButton("¡Gracias!", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -239,6 +239,17 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                 dialogo = dialogBuild.create();
                 dialogo.show();
                 break;
+            case 4:
+                dialogBuild.setTitle("Ha sido rechazado.");
+                dialogBuild.setMessage("Pruebe a realizar una nueva búsqueda.");
+                dialogBuild.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cerrarDialogo();
+                    }
+                });
+                dialogo = dialogBuild.create();
+                dialogo.show();
         }
     }
 

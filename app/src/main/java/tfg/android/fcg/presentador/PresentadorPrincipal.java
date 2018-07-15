@@ -3,6 +3,7 @@ package tfg.android.fcg.presentador;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.service.restrictions.RestrictionsReceiver;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -33,7 +34,7 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
     private final static String TAG = "depurador";
     private boolean vinculosPasajero = false;
     private boolean vinculoConductor = false;
-
+    private boolean peticion = false;
     public PresentadorPrincipal() {
         appMediador = AppMediador.getInstance();
         modelo = Modelo.getInstance();
@@ -208,6 +209,7 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                     refrescarListas();
                     Toast.makeText(appMediador.getApplicationContext(),"Ha eliminado el vinculo correctamente",Toast.LENGTH_SHORT).show();
                     vistaPrincipal.refrescarContenido();
+                    peticion = false;
                 }else{
                     vistaPrincipal.cerrarProgreso();
                 }
@@ -219,6 +221,7 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                     refrescarListas();
                     Toast.makeText(appMediador.getApplicationContext(),"Ha aceptado al pasajero como acompañante",Toast.LENGTH_SHORT).show();
                     vistaPrincipal.refrescarContenido();
+                    peticion = false;
                 }else{
                     vistaPrincipal.cerrarProgreso();
                 }
@@ -226,8 +229,44 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
         }
     };
 
+//    private BroadcastReceiver receptorDeRespuestas = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            if(intent.getAction().equals(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR)){
+//                Log.i(TAG,"Aceptada la peticion");
+//                if(intent.getSerializableExtra(AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR) != null) {
+//                    appMediador.unRegisterReceiver(this);
+//                    Toast.makeText(appMediador.getApplicationContext(), "Ha sido aceptado como acompañante", Toast.LENGTH_SHORT).show();
+//                    vistaPrincipal.refrescarContenido();
+//                }
+//            }
+//            if(intent.getAction().equals(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR)){
+//                Log.i(TAG,"Peticion rechazada");
+//                boolean respuesta = intent.getBooleanExtra(AppMediador.CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR,false);
+//                if(respuesta) {
+//                    appMediador.unRegisterReceiver(this);
+//                    Toast.makeText(appMediador.getApplicationContext(), "Ha sido rechazado como acompañante", Toast.LENGTH_SHORT).show();
+//                    vistaPrincipal.refrescarContenido();
+//                }
+//            }
+//            if(intent.getAction().equals(AppMediador.AVISO_PETICION_OTGCONDUCTOR)){
+//                Log.i(TAG,"Existe peticion nueva");
+//                if(!peticion) {
+//                    Vinculo v = (Vinculo)intent.getSerializableExtra(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR);
+//                    if(v.getIdConductor().equals(usuario.getIdUser())) {
+//                        peticion = true;
+//                        appMediador.unRegisterReceiver(this);
+//                        Toast.makeText(appMediador.getApplicationContext(), "Tiene una nueva peticion", Toast.LENGTH_SHORT).show();
+//                        vistaPrincipal.refrescarContenido();
+//                    }
+//                }
+//            }
+//        }
+//    };
+
     @Override
     public void iniciar(Object informacion) {
+        refrescarListas();
         appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_OBTENER_USUARIO);
         vistaPrincipal.mostrarProgreso();
         modelo.obtenerUsuario(informacion);
@@ -334,21 +373,6 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
     }
 
     @Override
-    public void tratarCancelar(Object informacion) {
-
-    }
-
-    @Override
-    public void tratarChat(Object informacion) {
-
-    }
-
-    @Override
-    public void tratarMapa(Object informacion) {
-
-    }
-
-    @Override
     public void tratarConfiguracion(Object informacion) {
         Object[] datos = (Object[]) informacion;
         Object[] respuesta = new Object[13];
@@ -387,8 +411,28 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
     }
 
     @Override
-    public void tratarOnTheGo(Object informacion) {
+    public void esperarRespuestas(){
+//        Log.i(TAG,"Esperando respuestas a vinculos");
+//        if(!usuario.isRol()) {
+//            Log.i(TAG,"Esperando respuestas a vinculos de tipo pasajero");
+//            appMediador.registerReceiver(receptorDeRespuestas, AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR);
+//            appMediador.registerReceiver(receptorDeRespuestas, AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR);
+//            for (Vinculo v : vinculos) {
+//                Log.i(TAG,"Vinculos = " +vinculos.size());
+//                String[] vinculo = new String[]{usuario.getIdUser(), v.getIdConductor()};
+//                modelo.obtenerRespuestaConductor(vinculo);
+//            }
+//        }else{
+//            Log.i(TAG,"Esperando respuestas a vinculos de conductor");
+//            appMediador.registerReceiver(receptorDeRespuestas,AppMediador.AVISO_PETICION_OTGCONDUCTOR);
+//            Object[] datos = new Object[]{2,usuario.getIdUser()};
+//            modelo.obtenerPeticionesDePasajeros(datos);
+//        }
+   }
 
+    public void finEsperarRespuestas(){
+//        Log.i(TAG,"finEsperarRespuestas");
+//        appMediador.unRegisterReceiver(receptorDeRespuestas);
     }
 
     private void refrescarListas(){
@@ -400,5 +444,26 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
         vinculos = new ArrayList<>();
         vehiculosVinculo = new ArrayList<>();
         vinculosConductor = new ArrayList<>();
+    }
+
+    //TODO: NO SE USAN
+    @Override
+    public void tratarCancelar(Object informacion) {
+
+    }
+
+    @Override
+    public void tratarChat(Object informacion) {
+
+    }
+
+    @Override
+    public void tratarMapa(Object informacion) {
+
+    }
+
+    @Override
+    public void tratarOnTheGo(Object informacion) {
+
     }
 }

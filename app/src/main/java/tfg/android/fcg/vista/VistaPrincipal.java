@@ -301,29 +301,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     //TODO: NO USADO, REDACCION
     @Override
     public void mostrarUsuarios(Object informacion) {
-//        ListView listView = (ListView) findViewById(R.id.listaPrincipal);
-//        Object[] respuesta = (Object[]) informacion;
-//        listaUsuarios = (ArrayList<Usuario>) respuesta[1];
-//        Log.i(TAG,"CONDUCTORES " + listaUsuarios.size());
-//        if(respuesta[2] != null){
-//            listaVehiculos = (ArrayList<Vehiculo>)respuesta[2];
-//            adaptador = new AdapterPrincipalLista(VistaPrincipal.this, listaUsuarios, appMediador, listaVehiculos);
-//        }else{
-//            adaptador = new AdapterPrincipalLista(VistaPrincipal.this, listaUsuarios, appMediador);
-//        }
-//        listView.setAdapter(adaptador);
-//        if ((int) respuesta[0] == 1) {
-//            findViewById(R.id.elementoListaPrincipalVacia).setVisibility(View.GONE);
-//        }if ((int) respuesta[0] == 0) {
-//            findViewById(R.id.elementoListaPrincipalVacia).setVisibility(View.VISIBLE);
-//            if(rol){
-//                TextView mensajeListaVacia = (TextView) findViewById(R.id.mensajeListaPrincipalVacia);
-//                mensajeListaVacia.setText("No existen pasajeros que le hayan escogido para ir a su destino");
-//            }else{
-//                ImageView iconoListaVacia = (ImageView)findViewById(R.id.imagenListaVacia);
-//                iconoListaVacia.setImageResource(R.drawable.icon_car_user);
-//            }
-//        }
+
     }
 
     @Override
@@ -479,6 +457,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     private void prepararTabs() {
 
         checkView();
+
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -570,6 +549,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         tabLayout.setupWithViewPager(viewPager);
 
         cerrarProgreso();
+        //appMediador.getPresentadorPrincipal().esperarRespuestas();
     }
 
     @Override
@@ -694,6 +674,9 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
                     config[1] = fechaHora;
                     appMediador.getPresentadorPrincipal().tratarConfiguracion(config);
                 }
+                break;
+            case R.id.botonRefrescar:
+                refrescarContenido();
                 break;
         }
     }

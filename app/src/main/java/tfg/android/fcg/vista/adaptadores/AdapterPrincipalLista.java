@@ -3,6 +3,7 @@ package tfg.android.fcg.vista.adaptadores;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -89,6 +90,13 @@ public class AdapterPrincipalLista extends BaseAdapter{
                     valoracionPasajero.setText(String.valueOf(pasajero.getValoracion()));
                 }else{
                     valoracionPasajero.setText("Sin valorar");
+                }
+                if(vinculo.isVinculo()){
+                    CardView cardView = (CardView) v.findViewById(R.id.cardItemListaUsuario_Pasajero);
+                    cardView.setCardBackgroundColor(appMediador.getResources().getColor(R.color.background2));
+                }else{
+                    CardView cardView = (CardView) v.findViewById(R.id.cardItemListaUsuario_Pasajero);
+                    cardView.setCardBackgroundColor(appMediador.getResources().getColor(R.color.noactivo));
                 }
                 ImageButton options = (ImageButton)v.findViewById(R.id.opcionesItemPasajero);
                 options.setOnClickListener(new View.OnClickListener() {

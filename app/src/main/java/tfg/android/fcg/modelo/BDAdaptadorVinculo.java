@@ -366,9 +366,6 @@ public class BDAdaptadorVinculo {
                     if (v.getIdConductor().equals(idUser) && !v.getIdPasajero().isEmpty()) {
                         vinculos.add(v);
                         Log.i(TAG, "HAY PETICION");
-//                        Bundle extras = new Bundle();
-//                        extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, v);
-//                        appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras);
                     }
                 }
                 Bundle extras = new Bundle();
@@ -400,13 +397,14 @@ public class BDAdaptadorVinculo {
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                reference.removeEventListener(this);
                 Vinculo vinculo = dataSnapshot.getValue(Vinculo.class);
                 if (vinculo.getIdConductor().equals(idUser) && !vinculo.getIdPasajero().isEmpty()) {
                     Log.i(TAG, "HAY PETICION");
                     Bundle extras = new Bundle();
                     extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, vinculo);
                     appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras);
-                    reference.removeEventListener(this);
+
                 }
             }
 
@@ -431,6 +429,7 @@ public class BDAdaptadorVinculo {
                 Bundle extras = new Bundle();
                 extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, null);
                 appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras);
+                reference.removeEventListener(this);
             }
         });
     }
@@ -450,6 +449,7 @@ public class BDAdaptadorVinculo {
                     Bundle extras = new Bundle();
                     extras.putSerializable(AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR, vinculo);
                     appMediador.sendBroadcast(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR, extras);
+                    reference.removeEventListener(this);
                 }
             }
 
@@ -460,6 +460,7 @@ public class BDAdaptadorVinculo {
                     Bundle extras = new Bundle();
                     extras.putBoolean(AppMediador.CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR, true);
                     appMediador.sendBroadcast(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR, extras);
+                    reference.removeEventListener(this);
                 }
             }
 
@@ -474,6 +475,7 @@ public class BDAdaptadorVinculo {
                 Bundle extras = new Bundle();
                 extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, null);
                 appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras);
+                reference.removeEventListener(this);
             }
         });
     }

@@ -130,6 +130,8 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
                     appMediador.unRegisterReceiver(receptorDeAvisos);
                     vinculo = null;
                     //Refresh con todos los coches
+                    vistaOTGPasajero.mostrarDialogo(4);
+                    vistaOTGPasajero.refrescarPantalla();
                 }else{
                     Log.i(TAG,"Finalizada la ruta, reiniciar pantalla y set historial");
                     appMediador.unRegisterReceiver(this);
@@ -145,7 +147,6 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
                     Log.i(TAG, "Todo okey");
                 }else{
                     Log.i(TAG,"Error en la creacion del historial");
-
                 }
             }
         }
