@@ -113,7 +113,6 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         }
     }
 
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -130,23 +129,6 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
         Log.i(TAG, "onMapReady");
         presentadorOTGPasajero.iniciar();
     }
-
-    private void getConductorMarcador(Marker marker) {
-        String idUser = marker.getTitle();
-        if (!marker.getTitle().equals("Mi posicion")) {
-            for (int i = 0; i < conductores.size(); i++) {
-                if (conductores.get(i).getIdUser().equals(idUser)) {
-                    marcadorConductor = marker;
-                    conductorVinculo = conductores.get(i);
-                    posicionConductorVinculo = posiciones.get(i);
-                    presentadorOTGPasajero.tratarVehiculo(conductorVinculo);
-                }
-            }
-        }else{
-            Toast.makeText(appMediador.getApplicationContext(),"Mi Ubicacion",Toast.LENGTH_SHORT).show();
-        }
-    }
-
 
     @Override
     public void mostrarProgreso() {
@@ -320,6 +302,25 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
             Log.i(TAG, "Dejamos de recoger la posicion y de mover");
         }
     }
+
+    //NUEVOS
+
+    private void getConductorMarcador(Marker marker) {
+        String idUser = marker.getTitle();
+        if (!marker.getTitle().equals("Mi posicion")) {
+            for (int i = 0; i < conductores.size(); i++) {
+                if (conductores.get(i).getIdUser().equals(idUser)) {
+                    marcadorConductor = marker;
+                    conductorVinculo = conductores.get(i);
+                    posicionConductorVinculo = posiciones.get(i);
+                    presentadorOTGPasajero.tratarVehiculo(conductorVinculo);
+                }
+            }
+        }else{
+            Toast.makeText(appMediador.getApplicationContext(),"Mi Ubicacion",Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     public void mostrarVehiculoVinculo(){
 

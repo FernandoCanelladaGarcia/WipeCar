@@ -65,22 +65,6 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        if (mMap != null) {
-            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                @Override
-                public void onMapClick(LatLng latLng) {
-                    miLatLng = latLng;
-                    presentadorMapaOrigen.tratarSeleccionarOrigen(1);
-                }
-            });
-        }
-        Log.i(TAG, "onMapReady");
-        presentadorMapaOrigen.iniciar();
-    }
-
-    @Override
     public void mostrarProgreso() {
         Log.i(TAG, " mostrar Progreso");
         dialogoProgreso = new ProgressDialog(this);
@@ -232,11 +216,6 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
     }
 
     @Override
-    public void mostrarOrigen(Object informacion) {
-
-    }
-
-    @Override
     public void onBackPressed(){
         if(deshabilitoBack){
             mostrarDialogo(0);
@@ -246,13 +225,34 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
     }
 
     @Override
-    public void onMapClick(LatLng latLng) {
+    public void onDestroy() {
+        super.onDestroy();
+        appMediador.removePresentadorMapaOrigen();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        if (mMap != null) {
+            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    miLatLng = latLng;
+                    presentadorMapaOrigen.tratarSeleccionarOrigen(1);
+                }
+            });
+        }
+        Log.i(TAG, "onMapReady");
+        presentadorMapaOrigen.iniciar();
+    }
+
+    @Override
+    public void mostrarOrigen(Object informacion) {
 
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        appMediador.removePresentadorMapaOrigen();
+    public void onMapClick(LatLng latLng) {
+
     }
 }

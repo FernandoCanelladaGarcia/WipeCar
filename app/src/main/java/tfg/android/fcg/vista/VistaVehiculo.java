@@ -119,7 +119,7 @@ public class VistaVehiculo extends AppCompatActivity implements IVistaVehiculo, 
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.regisHistorialButton:
-                if(checkEditText()){
+                if(camposValidos()){
                     presentadorVehiculo.tratarGuardar(0);
                 }
                 break;
@@ -132,7 +132,7 @@ public class VistaVehiculo extends AppCompatActivity implements IVistaVehiculo, 
         appMediador.removePresentadorVehiculo();
     }
 
-    private boolean checkEditText(){
+    private boolean camposValidos(){
         if(marca.getText().toString().equals("") || modelo.getText().toString().equals("") ||
                 matricula.getText().toString().equals("") || email.getText().toString().equals("") || password.getText().toString().equals("")){
             Toast.makeText(getApplicationContext(), "Rellene los datos por favor", Toast.LENGTH_SHORT).show();

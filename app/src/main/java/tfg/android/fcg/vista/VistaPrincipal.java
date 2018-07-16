@@ -298,22 +298,6 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         dialogo.cancel();
     }
 
-    //TODO: NO USADO, REDACCION
-    @Override
-    public void mostrarUsuarios(Object informacion) {
-
-    }
-
-    @Override
-    public void mostrarSeleccion(Object informacion) {
-
-    }
-
-    @Override
-    public void desmarcarUsuario(Object informacion) {
-
-    }
-
     @Override
     public void setUsuario(Object informacion) {
 
@@ -569,7 +553,6 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         fragmentoPrincipalVinculos.setListaVinculos(listaVinculos,listaVehiculosVinculo,vinculos);
     }
 
-    //HASTA AQUI
     @Override
     public void onClick(View v) {
         Object[] informacion;
@@ -792,5 +775,20 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
+    }
+
+    @Override
+    public void mostrarUsuarios(Object informacion) {
+
+    }
+
+    @Override
+    public void mostrarSeleccion(Object informacion) {
+
+    }
+
+    @Override
+    public void desmarcarUsuario(Object informacion) {
+
     }
 }

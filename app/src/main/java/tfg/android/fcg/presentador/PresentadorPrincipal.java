@@ -239,6 +239,89 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
     }
 
     @Override
+    public void tratarSeleccion(Object informacion) {
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_CREACION_VINCULO);
+        vistaPrincipal.mostrarProgreso();
+        modelo.guardarUsuarioPickup((Object[])informacion);
+    }
+
+    @Override
+    public void tratarOk(Object informacion) {
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_CONCRETAR_VINCULO);
+        vistaPrincipal.mostrarProgreso();
+        modelo.aceptarPasajero(informacion);
+    }
+
+    @Override
+    public void tratarBorrarSeleccion(Object informacion) {
+        Object[] datos = (Object[])informacion;
+        int tarea = (int)datos[0];
+        switch (tarea){
+            case 0:
+                //Eliminar seleccion de conductor
+                appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_ELIMINAR_VINCULO);
+                vistaPrincipal.mostrarProgreso();
+                Vinculo vinculoConductor = (Vinculo) datos[1];
+                Object[] eliminarConductor = new Object[3];
+                eliminarConductor[0] = 0;
+                eliminarConductor[1] = vinculoConductor.getIdPasajero();
+                eliminarConductor[2] = vinculoConductor.getIdConductor();
+                modelo.eliminarUsuarioPickup(eliminarConductor);
+                break;
+            case 1:
+                //Eliminar pasajero
+                appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_ELIMINAR_VINCULO);
+                vistaPrincipal.mostrarProgreso();
+                Vinculo vinculoPasajero = (Vinculo) datos[1];
+                Object[] eliminarPasajero = new Object[3];
+                eliminarPasajero[0] = 0;
+                eliminarPasajero[1] = vinculoPasajero.getIdPasajero();
+                eliminarPasajero[2] = vinculoPasajero.getIdConductor();
+                modelo.eliminarUsuarioPickup(eliminarPasajero);
+                break;
+        }
+    }
+
+    @Override
+    public void tratarConfiguracion(Object informacion) {
+        Object[] datos = (Object[]) informacion;
+        Object[] respuesta = new Object[13];
+        int tarea = (int) datos[0];
+        switch (tarea) {
+            case 0:
+                appMediador.launchActivity(VistaPerfil.class, this, null);
+                vistaPrincipal.finish();
+                break;
+            case 1:
+                vistaPrincipal.mostrarProgreso();
+                appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_DESLOGIN);
+                modelo.deslogearUsuario();
+                break;
+            case 2:
+                vistaPrincipal.mostrarProgreso();
+                vistaPrincipal.cerrarDialogo();
+                appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_ACTUALIZACION_USUARIO);
+
+                respuesta[0] = 1;
+                respuesta[5] = "1";
+                respuesta[6] = datos[1];
+                modelo.guardarPerfil(respuesta);
+                break;
+            case 3:
+                vistaPrincipal.mostrarProgreso();
+                vistaPrincipal.cerrarDialogo();
+                String[] fechaHora = (String[]) datos[1];
+                appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_ACTUALIZACION_USUARIO);
+                respuesta[0] = 4;
+                respuesta[9] = fechaHora[0];
+                respuesta[10] = fechaHora[1];
+                modelo.guardarPerfil(respuesta);
+        }
+
+    }
+
+    //NUEVOS
+    @Override
     public void obtenerPeticionesPasajeros(Object informacion) {
         appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_LISTA_PASAJEROS_VINCULO);
         Object[] datos = new Object[]{0,(String)informacion};
@@ -294,88 +377,6 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
         }
     }
 
-    @Override
-    public void tratarSeleccion(Object informacion) {
-        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_CREACION_VINCULO);
-        vistaPrincipal.mostrarProgreso();
-        modelo.guardarUsuarioPickup((Object[])informacion);
-    }
-
-    @Override
-    public void tratarBorrarSeleccion(Object informacion) {
-        Object[] datos = (Object[])informacion;
-        int tarea = (int)datos[0];
-        switch (tarea){
-            case 0:
-                //Eliminar seleccion de conductor
-                appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_ELIMINAR_VINCULO);
-                vistaPrincipal.mostrarProgreso();
-                Vinculo vinculoConductor = (Vinculo) datos[1];
-                Object[] eliminarConductor = new Object[3];
-                eliminarConductor[0] = 0;
-                eliminarConductor[1] = vinculoConductor.getIdPasajero();
-                eliminarConductor[2] = vinculoConductor.getIdConductor();
-                modelo.eliminarUsuarioPickup(eliminarConductor);
-                break;
-            case 1:
-                //Eliminar pasajero
-                appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_ELIMINAR_VINCULO);
-                vistaPrincipal.mostrarProgreso();
-                Vinculo vinculoPasajero = (Vinculo) datos[1];
-                Object[] eliminarPasajero = new Object[3];
-                eliminarPasajero[0] = 0;
-                eliminarPasajero[1] = vinculoPasajero.getIdPasajero();
-                eliminarPasajero[2] = vinculoPasajero.getIdConductor();
-                modelo.eliminarUsuarioPickup(eliminarPasajero);
-                break;
-        }
-    }
-
-    @Override
-    public void tratarOk(Object informacion) {
-        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_CONCRETAR_VINCULO);
-        vistaPrincipal.mostrarProgreso();
-        modelo.aceptarPasajero(informacion);
-    }
-
-    @Override
-    public void tratarConfiguracion(Object informacion) {
-        Object[] datos = (Object[]) informacion;
-        Object[] respuesta = new Object[13];
-        int tarea = (int) datos[0];
-        switch (tarea) {
-            case 0:
-                appMediador.launchActivity(VistaPerfil.class, this, null);
-                vistaPrincipal.finish();
-                break;
-            case 1:
-                vistaPrincipal.mostrarProgreso();
-                appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_DESLOGIN);
-                modelo.deslogearUsuario();
-                break;
-            case 2:
-                vistaPrincipal.mostrarProgreso();
-                vistaPrincipal.cerrarDialogo();
-                appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_ACTUALIZACION_USUARIO);
-
-                respuesta[0] = 1;
-                respuesta[5] = "1";
-                respuesta[6] = datos[1];
-                modelo.guardarPerfil(respuesta);
-                break;
-            case 3:
-                vistaPrincipal.mostrarProgreso();
-                vistaPrincipal.cerrarDialogo();
-                String[] fechaHora = (String[]) datos[1];
-                appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_ACTUALIZACION_USUARIO);
-                respuesta[0] = 4;
-                respuesta[9] = fechaHora[0];
-                respuesta[10] = fechaHora[1];
-                modelo.guardarPerfil(respuesta);
-        }
-
-    }
-
     private void refrescarListas(){
         vinculosPasajero = false;
         vinculoConductor = false;
@@ -387,6 +388,7 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
         vinculosConductor = new ArrayList<>();
     }
 
+    //ESTAN OKEY
     @Override
     public void tratarCancelar(Object informacion) {
 

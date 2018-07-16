@@ -204,6 +204,11 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
     }
 
     @Override
+    public void tratarCancelar(Object informacion) {
+
+    }
+
+    @Override
     public void esperarRespuesta(){
         Log.i(TAG, "Esperar respuesta");
         appMediador.registerReceiver(receptorDeRespuestas,AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR);
@@ -238,9 +243,4 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
         modelo.agregarHistorial(info);
     }
 
-
-    @Override
-    public void tratarCancelar(Object informacion) {
-
-    }
 }

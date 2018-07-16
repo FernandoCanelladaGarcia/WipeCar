@@ -150,33 +150,6 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
         modelo.guardarUsuarioPickup(iniciar);
     }
 
-    private void iniciarThreds() {
-        //1er hilo, busca posicion usuario
-        Log.i(TAG, "iniciarThreds");
-        Thread thread1 = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                Log.i(TAG, "buscarPosicion");
-                buscarPosicion();
-            }
-        });
-//
-        //2o hilo, busca peticiones
-
-        Thread thread2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(TAG, "buscarPeticiones");
-                buscarPeticiones(user.getIdUser());
-            }
-        });
-//
-        thread1.start();
-        thread2.start();
-        //appMediador.getPresentadorPrincipal().finEsperarRespuestas();
-    }
-
     @Override
     public void tratarAceptar(Object informacion) {
         if (atendiendoPeticion) {
@@ -209,10 +182,37 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
 
     }
 
-    private void guardarPosicion(Object[] nuevaLocalizacion) {
+    private void iniciarThreds() {
+        //1er hilo, busca posicion usuario
+        Log.i(TAG, "iniciarThreds");
+        Thread thread1 = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                Log.i(TAG, "buscarPosicion");
+                buscarPosicion();
+            }
+        });
+//
+        //2o hilo, busca peticiones
+
+        Thread thread2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(TAG, "buscarPeticiones");
+                buscarPeticiones(user.getIdUser());
+            }
+        });
+//
+        thread1.start();
+        thread2.start();
+        //appMediador.getPresentadorPrincipal().finEsperarRespuestas();
+    }
+
+    private void guardarPosicion(Object informacion) {
         //Log.i(TAG, "guardarPosicion");
         appMediador.registerReceiver(receptorLocalizacion, AppMediador.AVISO_LOCALIZACION_GUARDADA);
-        modelo.actualizarLocalizacion(nuevaLocalizacion);
+        modelo.actualizarLocalizacion(informacion);
     }
 
     private void buscarPeticiones(Object informacion) {
