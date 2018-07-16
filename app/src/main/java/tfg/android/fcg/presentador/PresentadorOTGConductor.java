@@ -41,8 +41,8 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
                         AppMediador.CLAVE_RESULTADO_ACTUALIZACION_POSICION)) {
                     //Log.i(TAG, "receptorLocalizacion localizacion guardada");
                 } else {
-                    //TODO: PARAR APLICACION
-                    //informe sonoro problemas
+                    vistaOTGConductor.indicarProblema();
+                    tratarParar(null);
                 }
             }
         }
@@ -54,7 +54,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
 
             if (intent.getAction().equals(AppMediador.AVISO_PETICION_OTGCONDUCTOR)) {
                 Vinculo peticion = (Vinculo) intent.getSerializableExtra(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR);
-                if(peticion != null){
+                if (peticion != null) {
                     vinculo = peticion;
                     atendiendoPeticion = true;
                     pasajero = vinculo.getIdConductor();
@@ -70,33 +70,32 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
                         AppMediador.CLAVE_CONCRETAR_VINCULO) != null) {
                     //informe sonoro recoger pasajero
                     boolean respuesta = (boolean) intent.getSerializableExtra(AppMediador.CLAVE_CONCRETAR_VINCULO);
-                    if(respuesta){
+                    if (respuesta) {
                         vistaOTGConductor.indicarPasajeroAceptado(vinculo);
                         appMediador.unRegisterReceiver(this);
+                    } else {
+                        vistaOTGConductor.indicarPasajeroAceptado(null);
                     }
-                    //buscarPeticiones(user.getIdUser());
-                } else {
-                    //TODO: PARAR APLICACION
                 }
             }
             if (intent.getAction().equals(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR)) {
                 boolean respuesta = (boolean) intent.getSerializableExtra(AppMediador.CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR);
-                if(respuesta){
+                if (respuesta) {
                     vistaOTGConductor.indicarPasajeroRechazado(vinculo);
                     appMediador.unRegisterReceiver(this);
                 } else {
-                    //TODO: PARAR APLICACION
+                    vistaOTGConductor.indicarPasajeroRechazado(null);
                 }
                 buscarPeticiones(user.getIdUser());
             }
-            if(intent.getAction().equals(AppMediador.AVISO_TERMINAR_RUTA)){
-                boolean respuesta = intent.getBooleanExtra(AppMediador.CLAVE_TERMINAR_RUTA,false);
-                if(respuesta){
-                    //appMediador.getVistaPrincipal().cerrarProgreso();
-                    Log.i(TAG,"Ha finalizado su ruta correctamente");
+            if (intent.getAction().equals(AppMediador.AVISO_TERMINAR_RUTA)) {
+                boolean respuesta = intent.getBooleanExtra(AppMediador.CLAVE_TERMINAR_RUTA, false);
+                if (respuesta) {
+                    Log.i(TAG, "Ha finalizado su ruta correctamente");
                     appMediador.unRegisterReceiver(this);
-                }else{
-                    //TODO: PARAR APLICACION
+                } else {
+                    vistaOTGConductor.indicarProblema();
+                    tratarParar(null);
                 }
             }
         }
@@ -129,7 +128,8 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
                     posicion[2] = intent.getSerializableExtra(AppMediador.CLAVE_LONGITUD);
                     guardarPosicion(posicion);
                 } else {
-                    //TODO: PARAR APLICACION
+                    vistaOTGConductor.indicarProblema();
+                    tratarParar(null);
                 }
             }
         }
@@ -199,11 +199,11 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
     public void tratarParar(Object informacion) {
         appMediador.unRegisterReceiver(receptorGPS);
         appMediador.unRegisterReceiver(receptorLocalizacion);
-        if(informacion == null){
-            Object[] datos = new Object[]{0,user.getIdUser()};
+        if (informacion == null) {
+            Object[] datos = new Object[]{0, user.getIdUser()};
             modelo.pararRuta(datos);
-        }else{
-            Object[] datos = new Object[]{1,informacion};
+        } else {
+            Object[] datos = new Object[]{1, informacion};
             modelo.pararRuta(datos);
         }
 
@@ -217,7 +217,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
 
     private void buscarPeticiones(Object informacion) {
         appMediador.registerReceiver(receptorPeticiones, AppMediador.AVISO_PETICION_OTGCONDUCTOR);
-        Object[] datos = new Object[]{2,informacion};
+        Object[] datos = new Object[]{2, informacion};
         modelo.obtenerPeticionesDePasajeros(datos);
     }
 
@@ -228,15 +228,15 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
 
     private void aceptarPeticion(Object informacion) {
         appMediador.registerReceiver(receptorPeticiones, AppMediador.AVISO_CONCRETAR_VINCULO);
-        Vinculo v = (Vinculo)informacion;
-        Object[] datos = new Object[]{0,v.getIdPasajero(),v.getIdConductor()};
+        Vinculo v = (Vinculo) informacion;
+        Object[] datos = new Object[]{0, v.getIdPasajero(), v.getIdConductor()};
         modelo.aceptarPasajero(datos);
     }
 
     private void rechazarPeticion(Object informacion) {
         appMediador.registerReceiver(receptorPeticiones, AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR);
-        Vinculo v = (Vinculo)informacion;
-        Object[] datos = new Object[]{1,v.getIdPasajero(),v.getIdConductor()};
+        Vinculo v = (Vinculo) informacion;
+        Object[] datos = new Object[]{1, v.getIdPasajero(), v.getIdConductor()};
         modelo.rechazarPasajero(datos);
     }
 

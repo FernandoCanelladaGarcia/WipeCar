@@ -39,7 +39,7 @@
         android:ems="10"
         android:fontFamily="@font/ubuntu_medium"
         android:hint="Email"
-        android:inputType="textEmailAddress|textPersonName"
+        android:inputType="textEmailAddress"
         android:textColor="@color/texto_borde"
         android:textColorHint="@color/texto_sombra"
         android:textStyle="bold|italic"

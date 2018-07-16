@@ -28,10 +28,12 @@ public interface IPresentadorHistorial {
      * @param informacion contendra:
      */
     public void tratarEliminar(Object informacion);
+
     /**
      * Elimina de la tabla Historial la referencia de un vinculo
      * realizado por el usuario de la aplicación
      */
+    //TODO: EDITADO, REDACCION
     public void eliminarHistorial();
 
     /**
@@ -40,6 +42,7 @@ public interface IPresentadorHistorial {
      * de conductores y pasajeros que han realizado un viaje con el usuario.
      * @param informacion contendra:
      */
+    //TODO: NO SE USA, REDACCION
     public void tratarCarga(Object informacion);
 
     /**
@@ -50,5 +53,6 @@ public interface IPresentadorHistorial {
     /**
      * Realiza el logout del usuario conectado en la aplicación
      */
+    //TODO: NUEVO, REDACCION
     public void tratarSalir();
 }

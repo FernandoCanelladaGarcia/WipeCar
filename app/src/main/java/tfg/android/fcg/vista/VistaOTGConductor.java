@@ -89,14 +89,26 @@ public class VistaOTGConductor extends Fragment implements IVistaOTGConductor, V
 
     @Override
     public void indicarPasajeroAceptado(Object informacion) {
-        speak("Pasajero en "+ peticion.getOrigen() + " con destino " + peticion.getDestino() + " aceptado");
+        if(informacion == null){
+            speak("Ha sucedido un problema");
+        }else{
+            speak("Pasajero en " + peticion.getOrigen() + " con destino " + peticion.getDestino() + " aceptado");
+        }
     }
 
     @Override
     public void indicarPasajeroRechazado(Object informacion) {
-        speak("La petición de pasajero ha sido rechazada");
+        if(informacion == null) {
+            speak("Ha sucedido un problema");
+        }else{
+            speak("La petición de pasajero ha sido rechazada");
+        }
     }
 
+    @Override
+    public void indicarProblema(){
+        speak("Ha sucedido algun problema que no podemos controlar. Se finalizara su ruta.");
+    }
     @Override
     public void onClick(View v) {
         switch(v.getId()){

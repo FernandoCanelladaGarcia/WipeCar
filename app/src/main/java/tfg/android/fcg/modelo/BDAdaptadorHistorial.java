@@ -187,7 +187,7 @@ public class BDAdaptadorHistorial {
         });
     }
 
-    //TODO: REDACTAR, NO SE USA.
+    //TODO: NO SE USA, REDACCION.
 
     public void agregarValoracion(String[] informacion){
     //Informacion => 0 idPasajero, 1 idConductor, 2 valorPasajero, 3 valorConductor.

@@ -22,11 +22,24 @@ public interface IPresentadorPrincipal {
     public void tratarOk(Object informacion);
 
     /**
+     * Elimina la selección del usuario (de su acompañante).
+     * @param informacion contendra:
+     */
+    public void tratarBorrarSeleccion(Object informacion);
+
+    /**
+     * Presenta la vista de perfil,
+     * para que el usuario pueda cambiar la información de su perfil.
+     * @param informacion contendra:
+     */
+    public void tratarConfiguracion(Object informacion);
+
+    /**
      * Trata la selección del botón Cancelar.
      * @param informacion contendra:
      */
+    //TODO: NO SE USAN
     public void tratarCancelar(Object informacion);
-
 
     /**
      * Trata la selección del botón Chat, para poner en contacto a los usuarios acompañantes.
@@ -39,19 +52,6 @@ public interface IPresentadorPrincipal {
      * @param informacion contendra:
      */
     public void tratarMapa(Object informacion);
-
-    /**
-     * Elimina la selección del usuario (de su acompañante).
-     * @param informacion contendra:
-     */
-    public void tratarBorrarSeleccion(Object informacion);
-
-    /**
-     * Presenta la vista de perfil,
-     * para que el usuario pueda cambiar la información de su perfil.
-     * @param informacion contendra:
-     */
-    public void tratarConfiguracion(Object informacion);
 
     /**
      * Presenta la vista On the Go
@@ -70,8 +70,4 @@ public interface IPresentadorPrincipal {
     public void obtenerVinculosPasajero(Object informacion);
 
     public void obtenerVehiculosVinculo(Object informacion);
-
-    public void esperarRespuestas();
-
-    public void finEsperarRespuestas();
 }

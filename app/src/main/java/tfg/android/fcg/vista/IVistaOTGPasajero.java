@@ -35,6 +35,10 @@ public interface IVistaOTGPasajero {
      */
     public void mostrarVehiculos();
 
+    //TODO: NUEVO, REDACCION
+    /**
+     * Muestra en el mapa solo aquellos vehiculos que mantengan un vínculo con el usuario
+     */
     public void mostrarVehiculoVinculo();
 
 }

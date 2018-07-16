@@ -15,6 +15,7 @@ public interface IPresentadorVehiculo {
      */
     public void tratarGuardarVehiculo(Object informacion);
 
+    //TODO: NO SE USAN, SE EDITA EN PERFIL.
     /**
      * Trata la selección del botón Cancelar.
      * @param informacion contendra:

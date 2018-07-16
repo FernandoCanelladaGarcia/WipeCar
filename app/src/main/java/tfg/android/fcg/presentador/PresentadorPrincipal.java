@@ -375,16 +375,6 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
 
     }
 
-    @Override
-    public void esperarRespuestas(){
-
-   }
-
-    @Override
-    public void finEsperarRespuestas(){
-
-    }
-
     private void refrescarListas(){
         vinculosPasajero = false;
         vinculoConductor = false;
@@ -396,7 +386,6 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
         vinculosConductor = new ArrayList<>();
     }
 
-    //TODO: NO SE USAN
     @Override
     public void tratarCancelar(Object informacion) {
 

@@ -203,12 +203,6 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
         modelo.guardarUsuarioPickup(datos);
     }
 
-    //TODO: NO SE USA, REDACCION
-    @Override
-    public void tratarCancelar(Object informacion) {
-
-    }
-
     @Override
     public void esperarRespuesta(){
         Log.i(TAG, "Esperar respuesta");
@@ -242,5 +236,11 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
         appMediador.registerReceiver(receptorDeRespuestas,AppMediador.AVISO_CREACION_HISTORIAL);
         Object[] info = new Object[]{vinculo,conductor.getNombre(),user.getNombre()};
         modelo.agregarHistorial(info);
+    }
+
+
+    @Override
+    public void tratarCancelar(Object informacion) {
+
     }
 }

@@ -27,6 +27,7 @@ public interface IPresentadorLogin {
      * del usuario.
      * @param informacion contendra:
      */
+    //TODO: NO SE USA, REDACCION
     public void tratarCambiarPassword(Object informacion);
 
     /**

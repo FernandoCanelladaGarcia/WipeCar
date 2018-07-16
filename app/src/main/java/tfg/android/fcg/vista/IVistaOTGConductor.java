@@ -9,15 +9,21 @@ public interface IVistaOTGConductor {
     public void indicarPeticionPasajero(Object informacion);
 
     /**
-     * Indicación de que el pasajero ha sido aceptado.
+     * Indicación sonora de que el pasajero ha sido aceptado.
      * @param informacion contendra:
      */
     public void indicarPasajeroAceptado(Object informacion);
 
     /**
-     * Indicación de que el pasajero ha sido rechazado.
+     * Indicación sonora de que el pasajero ha sido rechazado.
      * @param informacion contendra:
      */
     public void indicarPasajeroRechazado(Object informacion);
+
+    /**
+     * Indicación sonora de que ha sucedido algún problema
+     */
+    //TODO NUEVO, REDACCION
+    public void indicarProblema();
 
 }

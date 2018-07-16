@@ -42,6 +42,7 @@ public interface IPresentadorPerfil {
      * Presenta la vista de historial para que el usuario
      * pueda comprobar el listado de su historial.
      */
+    //TODO: EDITADO, REDACCION
     public void tratarHistorial();
 
     /**
@@ -55,6 +56,7 @@ public interface IPresentadorPerfil {
      * para que el usuario pueda confirmar la eliminación del perfil.
      * @param informacion contendra:
      */
+    //TODO: NUEVO, REDACCION
     public void tratarPapelera(Object informacion);
 
     /**

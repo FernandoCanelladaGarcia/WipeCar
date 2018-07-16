@@ -25,6 +25,7 @@ public class VistaLogin extends AppCompatActivity implements IVistaLogin, View.O
     private AlertDialog dialogo;
     private AppMediador appMediador;
     private IPresentadorLogin presentadorLogin;
+    private boolean deshabilitoBack = true;
 
     private final static String TAG = "depurador";
 
@@ -186,6 +187,15 @@ public class VistaLogin extends AppCompatActivity implements IVistaLogin, View.O
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (deshabilitoBack) {
+
+        } else {
+            super.onBackPressed();
+        }
     }
 
 }

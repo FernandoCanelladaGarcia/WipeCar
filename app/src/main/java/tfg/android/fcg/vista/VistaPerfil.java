@@ -163,7 +163,7 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
                 presentadorPerfil.tratarPapelera(4);
                 break;
             case R.id.ayudaButton:
-                Toast.makeText(getApplicationContext(), "Ayuda para el usuario como Dialogo", Toast.LENGTH_SHORT).show();
+                presentadorPerfil.tratarAyuda(5);
                 break;
         }
     }
@@ -302,6 +302,25 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
                 dialogo = dialogBuild.create();
                 dialogo.show();
                 break;
+            case 5:
+                dialogBuild.setTitle("AYUDA");
+                dialogBuild.setMessage("WipeCar es una aplicación de CarSharing, hecho por y para los estudiantes de la ULPGC. " +
+                        "Nada más comenzar podra elegir su origen (el lugar donde va a ser recogido) y su destino. " +
+                        "Para poder hacer las cosas mas fáciles para todos, siempre se lo pediremos al inicio; así, " +
+                        "si cambia de origen, destino o ambas, podrá tenerlo en cuenta siempre. " +
+                        "La pantalla principal contendrá la información de los conductores que se dirijan a su destino. " +
+                        "O, si se dispone a recoger a algun estudiante, los pasajeros que le hayan escogido. " +
+                        "Acepte o rechace a su gusto, ya que WipeCar esta hecho con el sentido de podernos ayudar entre todos. " +
+                        "Gracias por escoger WipeCar");
+                dialogBuild.setPositiveButton("Entendido", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cerrarDialogo();
+                    }
+                });
+                dialogo = dialogBuild.create();
+                dialogo.show();
+                break;
         }
     }
 
@@ -333,7 +352,6 @@ public class VistaPerfil extends AppCompatActivity implements IVistaPerfil, View
         showFabButtons();
     }
 
-    //TODO: NUEVO, REDACCION
     @Override
     public void salirEdicion() {
         Log.i(TAG, "Salir modo Edicion");

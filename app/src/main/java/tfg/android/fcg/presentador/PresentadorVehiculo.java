@@ -79,7 +79,6 @@ public class PresentadorVehiculo implements IPresentadorVehiculo{
         modelo.guardarVehiculo((Object[]) informacion);
     }
 
-    //TODO: NO SE USAN, SE EDITA EN PERFIL.
     @Override
     public void tratarCancelar(Object informacion) {
 

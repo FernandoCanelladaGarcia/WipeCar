@@ -69,14 +69,13 @@ public class PresentadorLogin implements IPresentadorLogin {
         modelo.recuperarPassword(informacion);
     }
 
-    //TODO: NO SE USA, REDACCION
-    @Override
-    public void tratarCambiarPassword(Object informacion) {
-
-    }
-
     @Override
     public void tratarNuevo() {
         appMediador.launchActivity(VistaRegistro.class, this,null);
+    }
+
+    @Override
+    public void tratarCambiarPassword(Object informacion) {
+
     }
 }

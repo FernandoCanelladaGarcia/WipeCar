@@ -27,6 +27,7 @@ public interface IPresentadorOTGPasajero {
      */
     public void tratarOk(Object informacion);
 
+    //TODO: NO SE USA, REDACCION
     /**
      * Trata la selección del botón Cancelar.
      * @param informacion contendra:

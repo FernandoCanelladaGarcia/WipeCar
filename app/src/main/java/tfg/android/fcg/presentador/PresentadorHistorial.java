@@ -121,7 +121,20 @@ public class PresentadorHistorial implements IPresentadorHistorial{
             datosHistorial = new Object[]{datos[1],datos[2]};
         }
     }
-    //TODO: EDITADO, REDACCION
+
+    @Override
+    public void tratarVolver() {
+        Log.i(TAG,"Volver");
+        vistaHistorial.finish();
+    }
+
+    @Override
+    public void tratarSalir(){
+        vistaHistorial.mostrarProgreso();
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_DESLOGIN);
+        modelo.deslogearUsuario();
+    }
+
     @Override
     public void eliminarHistorial() {
         vistaHistorial.mostrarProgreso();
@@ -130,22 +143,8 @@ public class PresentadorHistorial implements IPresentadorHistorial{
         Log.i(TAG,"eliminarHistorial");
     }
 
-    //TODO: NO SE USA, REDACCION
     @Override
     public void tratarCarga(Object informacion) {
 
-    }
-
-    @Override
-    public void tratarVolver() {
-        Log.i(TAG,"Volver");
-        vistaHistorial.finish();
-    }
-    //TODO: NUEVO, REDACCION
-    @Override
-    public void tratarSalir(){
-        vistaHistorial.mostrarProgreso();
-        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_DESLOGIN);
-        modelo.deslogearUsuario();
     }
 }

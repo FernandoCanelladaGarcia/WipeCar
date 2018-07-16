@@ -163,20 +163,19 @@ public class PresentadorPerfil implements IPresentadorPerfil {
 
     }
 
-    //TODO: EDITADO, REDACCION
+
     @Override
     public void tratarHistorial() {
         appMediador.launchActivity(VistaHistorial.class, this, null);
 
     }
 
-    //TODO: NO SE USA, REDACCION
+
     @Override
     public void tratarAyuda(Object informacion) {
-
+        vistaPerfil.mostrarDialogo(informacion);
     }
 
-    //TODO: NUEVO, REDACCION
     @Override
     public void tratarPapelera(Object informacion) {
         vistaPerfil.mostrarDialogo(informacion);
