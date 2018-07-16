@@ -7,7 +7,11 @@ import android.service.restrictions.RestrictionsReceiver;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import tfg.android.fcg.AppMediador;
 import tfg.android.fcg.modelo.IModelo;
@@ -161,6 +165,7 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                     vinculosConductor = vinculos;
                     vistaPrincipal.setListaVinculos(vinculos);
                     obtenerPasajerosVinculo(vinculosConductor);
+
                 }
             }
 
@@ -177,13 +182,11 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                         Log.i(TAG, "Actualizacion Destino");
                         vinculosPasajero = false;
                         vistaPrincipal.cerrarProgreso();
-                        refrescarListas();
                         vistaPrincipal.refrescarContenido();
                     } else if (datos[1].toString().equals("fechayhora")) {
                         Log.i(TAG, "Set fecha y hora");
                         vinculoConductor = false;
                         vistaPrincipal.cerrarProgreso();
-                        refrescarListas();
                         vistaPrincipal.refrescarContenido();
                     }
                 } else {
@@ -195,7 +198,6 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                 boolean respuesta = intent.getBooleanExtra(AppMediador.CLAVE_CREACION_VINCULO,false);
                 if(respuesta){
                     vistaPrincipal.cerrarProgreso();
-                    refrescarListas();
                     vistaPrincipal.refrescarContenido();
                 }else{
                     vistaPrincipal.cerrarProgreso();
@@ -206,7 +208,6 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                 boolean respuesta = intent.getBooleanExtra(AppMediador.CLAVE_ELIMINAR_VINCULO,false);
                 if(respuesta){
                     vistaPrincipal.cerrarProgreso();
-                    refrescarListas();
                     Toast.makeText(appMediador.getApplicationContext(),"Ha eliminado el vinculo correctamente",Toast.LENGTH_SHORT).show();
                     vistaPrincipal.refrescarContenido();
                     peticion = false;
@@ -218,7 +219,6 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                 boolean respuesta = intent.getBooleanExtra(AppMediador.CLAVE_CONCRETAR_VINCULO,false);
                 if(respuesta){
                     vistaPrincipal.cerrarProgreso();
-                    refrescarListas();
                     Toast.makeText(appMediador.getApplicationContext(),"Ha aceptado al pasajero como acompañante",Toast.LENGTH_SHORT).show();
                     vistaPrincipal.refrescarContenido();
                     peticion = false;
@@ -228,41 +228,6 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
             }
         }
     };
-
-//    private BroadcastReceiver receptorDeRespuestas = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            if(intent.getAction().equals(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR)){
-//                Log.i(TAG,"Aceptada la peticion");
-//                if(intent.getSerializableExtra(AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR) != null) {
-//                    appMediador.unRegisterReceiver(this);
-//                    Toast.makeText(appMediador.getApplicationContext(), "Ha sido aceptado como acompañante", Toast.LENGTH_SHORT).show();
-//                    vistaPrincipal.refrescarContenido();
-//                }
-//            }
-//            if(intent.getAction().equals(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR)){
-//                Log.i(TAG,"Peticion rechazada");
-//                boolean respuesta = intent.getBooleanExtra(AppMediador.CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR,false);
-//                if(respuesta) {
-//                    appMediador.unRegisterReceiver(this);
-//                    Toast.makeText(appMediador.getApplicationContext(), "Ha sido rechazado como acompañante", Toast.LENGTH_SHORT).show();
-//                    vistaPrincipal.refrescarContenido();
-//                }
-//            }
-//            if(intent.getAction().equals(AppMediador.AVISO_PETICION_OTGCONDUCTOR)){
-//                Log.i(TAG,"Existe peticion nueva");
-//                if(!peticion) {
-//                    Vinculo v = (Vinculo)intent.getSerializableExtra(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR);
-//                    if(v.getIdConductor().equals(usuario.getIdUser())) {
-//                        peticion = true;
-//                        appMediador.unRegisterReceiver(this);
-//                        Toast.makeText(appMediador.getApplicationContext(), "Tiene una nueva peticion", Toast.LENGTH_SHORT).show();
-//                        vistaPrincipal.refrescarContenido();
-//                    }
-//                }
-//            }
-//        }
-//    };
 
     @Override
     public void iniciar(Object informacion) {
@@ -412,27 +377,12 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
 
     @Override
     public void esperarRespuestas(){
-//        Log.i(TAG,"Esperando respuestas a vinculos");
-//        if(!usuario.isRol()) {
-//            Log.i(TAG,"Esperando respuestas a vinculos de tipo pasajero");
-//            appMediador.registerReceiver(receptorDeRespuestas, AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR);
-//            appMediador.registerReceiver(receptorDeRespuestas, AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR);
-//            for (Vinculo v : vinculos) {
-//                Log.i(TAG,"Vinculos = " +vinculos.size());
-//                String[] vinculo = new String[]{usuario.getIdUser(), v.getIdConductor()};
-//                modelo.obtenerRespuestaConductor(vinculo);
-//            }
-//        }else{
-//            Log.i(TAG,"Esperando respuestas a vinculos de conductor");
-//            appMediador.registerReceiver(receptorDeRespuestas,AppMediador.AVISO_PETICION_OTGCONDUCTOR);
-//            Object[] datos = new Object[]{2,usuario.getIdUser()};
-//            modelo.obtenerPeticionesDePasajeros(datos);
-//        }
+
    }
 
+    @Override
     public void finEsperarRespuestas(){
-//        Log.i(TAG,"finEsperarRespuestas");
-//        appMediador.unRegisterReceiver(receptorDeRespuestas);
+
     }
 
     private void refrescarListas(){

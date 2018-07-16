@@ -203,7 +203,7 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
         modelo.guardarUsuarioPickup(datos);
     }
 
-    //TODO: REDACCION NO SE USA
+    //TODO: NO SE USA, REDACCION
     @Override
     public void tratarCancelar(Object informacion) {
 

@@ -62,7 +62,6 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
                     timer.postDelayed(limiteDeTiempo, 30000);
                     appMediador.unRegisterReceiver(this);
                 } else {
-                    //TODO: NO HAY NADIE
                     vistaOTGConductor.indicarPeticionPasajero(null);
                 }
             }
@@ -106,8 +105,8 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
     private BroadcastReceiver receptor = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(AppMediador.AVISO_CREACION_VINCULO)) ;
-            boolean respuesta = (boolean) intent.getBooleanExtra(AppMediador.CLAVE_CREACION_VINCULO, false);
+            if (intent.getAction().equals(AppMediador.AVISO_CREACION_VINCULO_OTG)) ;
+            boolean respuesta = (boolean) intent.getBooleanExtra(AppMediador.CLAVE_CREACION_VINCULO_OTG, false);
             if (respuesta) {
                 Log.i(TAG, "receptor Creacion vinculo");
                 appMediador.getVistaPrincipal().cerrarProgreso();
@@ -139,7 +138,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
     @Override
     public void iniciar(final Object informacion) {
         user = (Usuario) informacion;
-        appMediador.registerReceiver(receptor, AppMediador.AVISO_CREACION_VINCULO);
+        appMediador.registerReceiver(receptor, AppMediador.AVISO_CREACION_VINCULO_OTG);
         Object[] iniciar = new Object[7];
         iniciar[0] = "";
         iniciar[1] = user.getIdUser();
@@ -147,7 +146,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
         iniciar[3] = "";
         iniciar[4] = user.getOrigenDef();
         iniciar[5] = user.getDestino();
-        iniciar[6] = 1;
+        iniciar[6] = 2;
         modelo.guardarUsuarioPickup(iniciar);
     }
 

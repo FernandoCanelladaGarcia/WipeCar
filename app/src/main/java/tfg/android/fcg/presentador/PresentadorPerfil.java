@@ -163,7 +163,7 @@ public class PresentadorPerfil implements IPresentadorPerfil {
 
     }
 
-    //TODO: SIN DATOS, REDACCION
+    //TODO: EDITADO, REDACCION
     @Override
     public void tratarHistorial() {
         appMediador.launchActivity(VistaHistorial.class, this, null);

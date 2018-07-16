@@ -94,7 +94,7 @@ public class FragmentoPrincipalLista extends Fragment{
         if(rootView != null){
             adapterPrincipalLista = new AdapterPrincipalLista(rootView.getContext(),listaPasajeros,listaVinculos,appMediador);
             listView.setAdapter(adapterPrincipalLista);
-            if(listaPasajeros.isEmpty()){
+            if(listaPasajeros.isEmpty() || listaVinculos.isEmpty()){
                 rootView.findViewById(R.id.elementoListaPrincipalVacia).setVisibility(View.VISIBLE);
                     TextView mensajeListaVacia = (TextView) rootView.findViewById(R.id.mensajeListaPrincipalVacia);
                     mensajeListaVacia.setText("No existen pasajeros que le hayan escogido para ir a su destino");

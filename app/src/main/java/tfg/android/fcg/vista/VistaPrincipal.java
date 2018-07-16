@@ -354,7 +354,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         }else{
             listaUsuarios = new ArrayList<>();
         }
-        prepararTabs();
+        checkView();
     }
 
     @Override
@@ -420,7 +420,6 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
     @Override
     public void setVinculos(Object informacion) {
         ArrayList<Usuario> getVinculos = (ArrayList<Usuario>) informacion;
-
         if (!getVinculos.isEmpty()) {
             vinculosPasajeros = true;
             if (listaVinculos == null) {
@@ -435,7 +434,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         } else {
             listaVinculos = new ArrayList<>();
             listaVehiculosVinculo = new ArrayList<>();
-            prepararTabs();
+            checkView();
         }
     }
 
@@ -451,12 +450,10 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
             listaVehiculosVinculo = null;
             listaVehiculosVinculo = getVehic;
         }
-        prepararTabs();
+        checkView();
     }
 
     private void prepararTabs() {
-
-        checkView();
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
@@ -502,6 +499,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
             Log.i(TAG,"viewPager != null");
             viewPager = null;
         }
+        prepararTabs();
     }
 
     private void compararListas(){
@@ -549,13 +547,13 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         tabLayout.setupWithViewPager(viewPager);
 
         cerrarProgreso();
-        //appMediador.getPresentadorPrincipal().esperarRespuestas();
     }
 
     @Override
     public void refrescarContenido() {
         Log.i(TAG, "refrescarContenido");
         vinculosPasajeros = false;
+
         appMediador.getPresentadorPrincipal().iniciar(idUser);
     }
 

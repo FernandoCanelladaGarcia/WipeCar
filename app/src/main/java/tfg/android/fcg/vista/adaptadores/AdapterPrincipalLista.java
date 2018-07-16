@@ -160,6 +160,8 @@ public class AdapterPrincipalLista extends BaseAdapter{
                 marcaCoche.setText(vehiculo.getMarca());
                 modeloCoche.setText(vehiculo.getModelo());
                 destinovehiculo.setText(conductor.getDestino());
+                CardView cardView = (CardView) v.findViewById(R.id.cardItemListaUsuario_Conductor);
+                cardView.setCardBackgroundColor(appMediador.getResources().getColor(R.color.background2));
                 if(conductor.getValoracion() != 0) {
                     valoracionCond.setText(String.valueOf(conductor.getValoracion()));
                 }else{

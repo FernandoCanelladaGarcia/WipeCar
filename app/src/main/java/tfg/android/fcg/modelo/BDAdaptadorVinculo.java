@@ -98,6 +98,29 @@ public class BDAdaptadorVinculo {
                         }
                     }
                 });
+                break;
+            case 2:
+                vinculo = new Vinculo(idPasajero, idConductor, false, fecha, hora, origen, destino);
+                DatabaseReference referenciaCond = reference.push();
+                referenciaCond.setValue(vinculo).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            //Se ha agregado vinculo de pasajero a conductor
+                            Log.i(TAG, "Agregado vinculo");
+                            Bundle extras = new Bundle();
+                            extras.putBoolean(AppMediador.CLAVE_CREACION_VINCULO_OTG, true);
+                            appMediador.sendBroadcast(AppMediador.AVISO_CREACION_VINCULO_OTG, extras);
+                        } else {
+                            //Error a la hora de agregar vinculo
+                            Log.i(TAG, "Error a la hora de agregar vinculo");
+                            Bundle extras = new Bundle();
+                            extras.putBoolean(AppMediador.CLAVE_CREACION_VINCULO, false);
+                            appMediador.sendBroadcast(AppMediador.AVISO_CREACION_VINCULO_OTG, extras);
+                        }
+                    }
+                });
+                break;
         }
 
     }
@@ -132,7 +155,7 @@ public class BDAdaptadorVinculo {
                                         if (task.isSuccessful()) {
                                             //Creado vinculo
                                             Bundle extras = new Bundle();
-                                            Log.i(TAG,"CONCRETADO VINCULO");
+                                            Log.i(TAG, "CONCRETADO VINCULO");
                                             extras.putBoolean(AppMediador.CLAVE_CONCRETAR_VINCULO, true);
                                             appMediador.sendBroadcast(AppMediador.AVISO_CONCRETAR_VINCULO, extras);
                                         } else {
@@ -159,51 +182,6 @@ public class BDAdaptadorVinculo {
                 });
                 break;
 
-//            //OTG
-//            case 1:
-//                reference.addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                            vinculo = snapshot.getValue(Vinculo.class);
-//                            if (vinculo.getIdConductor().equals(idConductor) & vinculo.getIdPasajero().isEmpty()) {
-//                                Map<String, Object> task = new HashMap<>();
-//                                task.put("idPasajero", idPasajero);
-//                                task.put("vinculo", true);
-//                                dataSnapshot.getRef().updateChildren(task).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<Void> task) {
-//                                        if (task.isSuccessful()) {
-//                                            //Creado vinculo
-//                                            Bundle extras = new Bundle();
-//                                            extras.putSerializable(AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR, vinculo);
-//                                            appMediador.sendBroadcast(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR, extras);
-//                                        } else {
-//                                            //No se ha concretado vinculo
-//                                            Bundle extras = new Bundle();
-//                                            extras.putSerializable(AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR, null);
-//                                            appMediador.sendBroadcast(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR, extras);
-//                                        }
-//                                    }
-//                                });
-//                            }
-//                        }
-//                        reference.removeEventListener(this);
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//                        //No se ha encontrado referencia
-//                        Bundle extras = new Bundle();
-//                        extras.putSerializable(AppMediador.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR, null);
-//                        appMediador.sendBroadcast(AppMediador.AVISO_ACEPTAR_PETICION_OTGCONDUCTOR, extras);
-//                        reference.removeEventListener(this);
-//                    }
-//                });
-//                break;
-//            default:
-//                Log.i(TAG, "Error, no se ha introducido tipo de tarea");
-//                return;
         }
     }
 

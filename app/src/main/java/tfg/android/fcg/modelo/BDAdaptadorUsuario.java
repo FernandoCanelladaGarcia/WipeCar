@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import tfg.android.fcg.AppMediador;
+import tfg.android.fcg.modelo.bajonivel.AESHelper;
 
 public class BDAdaptadorUsuario {
 
@@ -38,12 +39,14 @@ public class BDAdaptadorUsuario {
     private final String TAG = "depurador";
     private DatabaseReference database;
     private Modelo modelo;
+    private AESHelper aesHelper;
 
     public BDAdaptadorUsuario() {
         appMediador = AppMediador.getInstance();
         auth = FirebaseAuth.getInstance();
         sharedPreferences = appMediador.getSharedPreferences("Login", 0);
         database = FirebaseDatabase.getInstance().getReference().child("usuarios");
+        aesHelper = new AESHelper();
     }
 
     /**
@@ -55,6 +58,12 @@ public class BDAdaptadorUsuario {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 usuario = dataSnapshot.getValue(Usuario.class);
+
+                String nombreDesencriptado = aesHelper.decryption(usuario.getNombre());
+                String telefonoDesencriptado = aesHelper.decryption(usuario.getTelefono());
+                usuario.setNombre(nombreDesencriptado);
+                usuario.setTelefono(telefonoDesencriptado);
+
                 Bundle extras = new Bundle();
                 extras.putSerializable(AppMediador.CLAVE_OBTENER_USUARIO,usuario);
                 appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_USUARIO,extras);
@@ -85,6 +94,7 @@ public class BDAdaptadorUsuario {
                 usuario = dataSnapshot.getValue(Usuario.class);
                 SharedPreferences sharedPreferences = appMediador.getSharedPreferences("Login",0);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("email",auth.getCurrentUser().getEmail());
                 editor.putString("origendef",usuario.getOrigenDef());
                 editor.putBoolean("rol",usuario.isRol());
                 editor.putString("idUser",usuario.getIdUser());
@@ -106,7 +116,6 @@ public class BDAdaptadorUsuario {
      * @param destino contendra:
      */
     public void obtenerListaConductores(final String destino) {
-        //TODO comprobar rol
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -114,6 +123,12 @@ public class BDAdaptadorUsuario {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Usuario usuario = snapshot.getValue(Usuario.class);
                     if (usuario.getDestino().equals(destino) && usuario.isRol()) {
+
+                        String nombreDesencriptado = aesHelper.decryption(usuario.getNombre());
+                        String telefonoDesencriptado = aesHelper.decryption(usuario.getTelefono());
+                        usuario.setNombre(nombreDesencriptado);
+                        usuario.setTelefono(telefonoDesencriptado);
+
                         conductores.add(usuario);
                     }
                 }
@@ -142,7 +157,6 @@ public class BDAdaptadorUsuario {
      * @param destino contendra:
      */
     public void obtenerListaPasajeros(final String destino) {
-        //TODO comprobar rol
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -151,6 +165,12 @@ public class BDAdaptadorUsuario {
                     Usuario usuario = snapshot.getValue(Usuario.class);
                     if (usuario.getDestino().equals(destino) && !usuario.isRol()) {
                         Log.i(TAG,"Pasajero");
+
+                        String nombreDesencriptado = aesHelper.decryption(usuario.getNombre());
+                        String telefonoDesencriptado = aesHelper.decryption(usuario.getTelefono());
+                        usuario.setNombre(nombreDesencriptado);
+                        usuario.setTelefono(telefonoDesencriptado);
+
                         pasajeros.add(usuario);
                     }
                 }
@@ -184,6 +204,12 @@ public class BDAdaptadorUsuario {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Obtenido conductor
                 usuario = dataSnapshot.getValue(Usuario.class);
+
+                String nombreDesencriptado = aesHelper.decryption(usuario.getNombre());
+                String telefonoDesencriptado = aesHelper.decryption(usuario.getTelefono());
+                usuario.setNombre(nombreDesencriptado);
+                usuario.setTelefono(telefonoDesencriptado);
+
                 Bundle extras = new Bundle();
                 extras.putSerializable(AppMediador.CLAVE_OBTENER_CONDUCTOR, usuario);
                 appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_CONDUCTOR, extras);
@@ -214,6 +240,11 @@ public class BDAdaptadorUsuario {
                 //Obtenido Pasajero
                 usuario = dataSnapshot.getValue(Usuario.class);
 
+                String nombreDesencriptado = aesHelper.decryption(usuario.getNombre());
+                String telefonoDesencriptado = aesHelper.decryption(usuario.getTelefono());
+                usuario.setNombre(nombreDesencriptado);
+                usuario.setTelefono(telefonoDesencriptado);
+
                 Bundle extras = new Bundle();
                 extras.putSerializable(AppMediador.CLAVE_OBTENER_PASAJERO, usuario);
                 appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_PASAJERO, extras);
@@ -242,7 +273,6 @@ public class BDAdaptadorUsuario {
      * @param informacion contendra:
      */
     public void agregarUsuario(final Object[] informacion) {
-        //TODO ENCRIPTAR
         //INFORMACION LOGIN = 0 email, 1 contraseña, 2 nombre
         //INFORMACION USUARIO = nombre, telefono, rol valoracion, origen, destino, fecha, hora, datovehiculo
         final String email = (String) informacion[0];
@@ -276,12 +306,14 @@ public class BDAdaptadorUsuario {
                                 editor.putBoolean("rol",rol);
                                 editor.putString("idUser",idUser);
                                 editor.apply();
-                                //TODO ENCRIPTAR
-                                String nombreEncriptado = nombre;
+
+                                String nombreEncriptado = aesHelper.encryption(nombre);
+                                String telefonoEncriptado = aesHelper.encryption(telefono);
+
                                 //Creamos el Login del usuario
                                 login = new Login(idUser, nombreEncriptado, email);
                                 //Guardamos en la tabla el usuario
-                                usuario = new Usuario(idUser, nombreEncriptado, telefono, rol, 0, "",origen, "", "", "", null);
+                                usuario = new Usuario(idUser, nombreEncriptado, telefonoEncriptado, rol, 0, "",origen, "", "", "", null);
                                 DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(idUser);
                                 referenciaUsuario.setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     //                                    referenciaUsuario.setValue(usuario, new DatabaseReference.CompletionListener() {
@@ -369,204 +401,6 @@ public class BDAdaptadorUsuario {
                 Log.i(TAG, "TAREA == " + informacion[0]);
                 //return;
         }
-//TODO EN CASO DE ALGUN PROBLEMA. CODIGO MUERTO DE LA SEPARACION DE ACTUALIZARUSUARIO
-
-//        String currentDisplayName = auth.getCurrentUser().getDisplayName();
-//        String[] partes = currentDisplayName.split("#");
-//        String currentName = partes[0];
-//        String currentPhone = partes[1];
-//        final String password = sharedPreferences.getString("password", null);
-//        final String correoActual = sharedPreferences.getString("email", null);
-//        boolean currentRol = Boolean.valueOf(partes[2]);
-//        boolean newRol = Boolean.valueOf((String) informacion[7]);
-//
-//        //igual displayname
-//        if (currentName.equals(informacion[0]) && currentPhone.equals(informacion[1]) && currentRol == newRol) {
-//            finalDisplayName = currentDisplayName;
-//            //distinto rol
-//        }
-//        if (currentName.equals(informacion[0]) && currentPhone.equals(informacion[1]) && currentRol != newRol) {
-//            finalDisplayName = currentName + "#" + currentPhone + "#" + informacion[7];
-//            login.setRol((Boolean) informacion[7]);
-//            //distinto telefono
-//        }
-//        if (currentName.equals(informacion[0]) && !currentPhone.equals(informacion[1]) && currentRol == newRol) {
-//            finalDisplayName = currentName + "#" + informacion[1] + "#" + currentRol;
-//            login.setTelefono((String) informacion[1]);
-//            //distinto nombre
-//        }
-//        if (!currentName.equals(informacion[0]) && currentPhone.equals(informacion[1]) && currentRol == newRol) {
-//            finalDisplayName = informacion[0] + "#" + currentPhone + "#" + currentRol;
-//            login.setNombre((String) informacion[0]);
-//            //distinto rol y telefono
-//        }
-//        if (currentName.equals(informacion[0]) && !currentPhone.equals(informacion[1]) && currentRol != newRol) {
-//            finalDisplayName = currentName + "#" + informacion[1] + "#" + informacion[7];
-//            login.setTelefono((String) informacion[1]);
-//            login.setRol((Boolean) informacion[7]);
-//            //distinto nombre y rol
-//        }
-//        if (!currentName.equals(informacion[0]) && currentPhone.equals(informacion[1]) && currentRol != newRol) {
-//            finalDisplayName = informacion[0] + "#" + currentPhone + "#" + informacion[7];
-//            login.setNombre((String) informacion[0]);
-//            login.setRol((Boolean) informacion[7]);
-//            //distinto nombre y telefono
-//        }
-//        if (!currentName.equals(informacion[0]) && !currentPhone.equals(informacion[1]) && currentRol == newRol) {
-//            finalDisplayName = informacion[0] + "#" + informacion[1] + "#" + currentRol;
-//            login.setNombre((String) informacion[0]);
-//            login.setTelefono((String) informacion[1]);
-//            //Distinto displayName
-//        } else {
-//            finalDisplayName = informacion[0] + "#" + informacion[1] + "#" + informacion[7];
-//            login.setNombre((String) informacion[0]);
-//            login.setTelefono((String) informacion[1]);
-//            login.setRol((Boolean) informacion[7]);
-//        }
-//
-//        AuthCredential credential = EmailAuthProvider.getCredential(correoActual, password);
-//        usuarioActual.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                if (task.isSuccessful()) {
-//                    UserProfileChangeRequest actualizacion = new UserProfileChangeRequest.Builder().setDisplayName(finalDisplayName).build();
-//                    usuarioActual.updateProfile(actualizacion).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Void> task) {
-//                            //Actualizacion del Display Name en tabla Login
-//                            if (task.isSuccessful()) {
-//                                String idUsuario = usuario.getIdUser();
-//                                DatabaseReference referenciaUsuario = FirebaseDatabase.getInstance().getReference().child("usuarios").child(idUsuario);
-//                                Map<String, Object> taskMap = new HashMap<>();
-//                                if (!informacion[0].toString().isEmpty()) {
-//                                    taskMap.put("nombre", informacion[0]);
-//                                    usuario.setNombre((String) informacion[0]);
-//                                }
-//                                if (!informacion[5].toString().isEmpty()) {
-//                                    taskMap.put("origen", informacion[5]);
-//                                    usuario.setOrigen((String) informacion[5]);
-//                                }
-//                                if (!informacion[6].toString().isEmpty()) {
-//                                    taskMap.put("destino", informacion[6]);
-//                                    usuario.setDestino((String) informacion[6]);
-//                                }
-//                                if (!informacion[8].toString().isEmpty()) {
-//                                    taskMap.put("datoVehiculo", informacion[8]);
-//                                    usuario.setDatoVehiculo(informacion[8]);
-//                                }
-//                                if (!informacion[9].toString().isEmpty()) {
-//                                    taskMap.put("fecha", informacion[9]);
-//                                    usuario.setFecha((String) informacion[9]);
-//                                }
-//                                if (!informacion[10].toString().isEmpty()) {
-//                                    taskMap.put("hora", informacion[10]);
-//                                    usuario.setHora((String) informacion[10]);
-//                                }
-//                                if (!informacion[11].toString().isEmpty()) {
-//                                    taskMap.put("valoracion", informacion[11]);
-//                                    usuario.setValoracion((String) informacion[11]);
-//                                }
-//
-//                                referenciaUsuario.updateChildren(taskMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<Void> task) {
-//                                        if (task.isSuccessful()) {
-//                                            //Actualizado usuario en tabla usuarios
-//                                            if (!informacion[3].equals(correoActual)) {
-//                                                login.setEmail((String) informacion[3]);
-//                                                usuarioActual.updateEmail((String) informacion[3]).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                                    @Override
-//                                                    public void onComplete(@NonNull Task<Void> task) {
-//                                                        if (task.isSuccessful()) {
-//                                                            if (!informacion[4].equals(password)) {
-//                                                                usuarioActual.updatePassword((String) informacion[4]).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                                                    @Override
-//                                                                    public void onComplete(@NonNull Task<Void> task) {
-//                                                                        if (task.isSuccessful()) {
-//                                                                            //Correo Actualizado, contraseña actualizada actualizacion completa.
-//                                                                            datos[0] = true;
-//                                                                            datos[1] = null;
-//
-//                                                                            Bundle extras = new Bundle();
-//                                                                            extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
-//                                                                            appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
-//                                                                        } else {
-//                                                                            //Error actualizacion contraseña
-//                                                                            String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_PASSWORD;
-//
-//                                                                            datos[0] = false;
-//                                                                            datos[1] = error;
-//
-//                                                                            Bundle extras = new Bundle();
-//                                                                            extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
-//                                                                            appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
-//                                                                        }
-//                                                                    }
-//                                                                });
-//                                                            } else {
-//                                                                //No se actualiza la password, termina aqui.
-//                                                                datos[0] = true;
-//                                                                datos[1] = null;
-//
-//                                                                Bundle extras = new Bundle();
-//                                                                extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
-//                                                                appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
-//                                                            }
-//                                                        } else {
-//                                                            //Error actualizacion correo
-//                                                            String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_CORREO;
-//
-//                                                            datos[0] = false;
-//                                                            datos[1] = error;
-//
-//                                                            Bundle extras = new Bundle();
-//                                                            extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
-//                                                            appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
-//                                                        }
-//                                                    }
-//                                                });
-//                                            } else {
-//                                                //No se actualiza el correo, termina la actualizacion aqui
-//                                                datos[0] = true;
-//                                                datos[1] = null;
-//
-//                                                Bundle extras = new Bundle();
-//                                                extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
-//                                                appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
-//                                            }
-//                                        } else {
-//                                            //Error a la hora de actualizar los parametros del usuario en la base de datos
-//                                            String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_NOMBRE;
-//                                            datos[0] = false;
-//                                            datos[1] = error;
-//                                            Bundle extras = new Bundle();
-//                                            extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
-//                                            appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
-//                                        }
-//                                    }
-//                                });
-//                            } else {
-//                                //Error de actualizacion del DisplayName
-//                                String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_INFO;
-//                                datos[0] = false;
-//                                datos[1] = error;
-//                                Bundle extras = new Bundle();
-//                                extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
-//                                appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
-//                            }
-//                        }
-//                    });
-//                } else {
-//                    //Error reautenticacion
-//                    String error = AppMediador.ERROR_ACTUALIZACION_USUARIO_REAUTENTICACION;
-//                    datos[0] = false;
-//                    datos[1] = error;
-//                    Bundle extras = new Bundle();
-//                    extras.putSerializable(AppMediador.CLAVE_ACTUALIZACION_USUARIO, datos);
-//                    appMediador.sendBroadcast(AppMediador.AVISO_ACTUALIZACION_USUARIO, extras);
-//                }
-//            }
-//        });
     }
 
     /**
@@ -672,13 +506,14 @@ public class BDAdaptadorUsuario {
                     final String newEmail = informacion[2];
                     final String newPassword = informacion[3];
                     final boolean newRol = Boolean.valueOf(informacion[4]);
-
                     if (currentName.equals(newName)) {
                         newDisplayName = currentName;
-                        taskMap.put("nombre", currentName);
+                        String nombreEncriptado = aesHelper.encryption(newDisplayName);
+                        taskMap.put("nombre", nombreEncriptado);
                     } else {
                         newDisplayName = newName;
-                        taskMap.put("nombre", newName);
+                        String nombreEncriptado = aesHelper.encryption(newDisplayName);
+                        taskMap.put("nombre", nombreEncriptado);
                     }
 
                     UserProfileChangeRequest actualizacion = new UserProfileChangeRequest.Builder().setDisplayName(newDisplayName).build();
@@ -703,7 +538,6 @@ public class BDAdaptadorUsuario {
                                             if (!currentPassword.equals(newPassword)) {
                                                 editor.putString("password", newPassword);
                                                 editor.apply();
-                                                //TODO ENCRIPTAR
                                                 usuarioActual.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
@@ -863,7 +697,6 @@ public class BDAdaptadorUsuario {
         });
     }
 
-    //TODO DEBE LLAMARSE TRAS ACTUALIZAR O AGREGAR UN VEHICULO
     private void actualizarDatosVehiculo(String informacion) {
         final Object[] datos = new Object[2];
         usuarioActual = auth.getCurrentUser();
@@ -938,9 +771,9 @@ public class BDAdaptadorUsuario {
 
         Map<String, Object> taskMap = new HashMap<>();
         if(!origen.equals("1")){
-            taskMap.put("origen", informacion[0]);
+            taskMap.put("origen", origen);
         }
-        taskMap.put("destino", informacion[1]);
+        taskMap.put("destino", destino);
         referenciaUsuario.updateChildren(taskMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

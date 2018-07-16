@@ -69,7 +69,7 @@ public class PresentadorLogin implements IPresentadorLogin {
         modelo.recuperarPassword(informacion);
     }
 
-    //TODO: NO SE HA UTILIZADO, REDACCION
+    //TODO: NO SE USA, REDACCION
     @Override
     public void tratarCambiarPassword(Object informacion) {
 

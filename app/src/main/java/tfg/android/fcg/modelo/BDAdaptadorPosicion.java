@@ -52,7 +52,6 @@ public class BDAdaptadorPosicion {
      * @param informacion contendra:
      */
     public void obtenerPosicion(Object informacion){
-    //TODO: OBTENER POSICION LAT-LONG DE LA TABLA POSICIONES
         database.child((String)informacion).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

@@ -141,7 +141,7 @@ public class PresentadorHistorial implements IPresentadorHistorial{
         Log.i(TAG,"Volver");
         vistaHistorial.finish();
     }
-    //TODO: NUEVO METODO, REDACCION
+    //TODO: NUEVO, REDACCION
     @Override
     public void tratarSalir(){
         vistaHistorial.mostrarProgreso();

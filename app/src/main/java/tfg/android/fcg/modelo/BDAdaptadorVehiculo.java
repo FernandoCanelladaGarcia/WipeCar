@@ -16,18 +16,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 import tfg.android.fcg.AppMediador;
+import tfg.android.fcg.modelo.bajonivel.AESHelper;
 
 public class BDAdaptadorVehiculo {
 
     private AppMediador appMediador;
     private DatabaseReference database;
     private Vehiculo vehiculo;
+    private AESHelper aesHelper;
 
     private final String TAG = "depurador";
 
     public BDAdaptadorVehiculo(){
         appMediador = AppMediador.getInstance();
         database = FirebaseDatabase.getInstance().getReference().child("vehiculos");
+        aesHelper = new AESHelper();
     }
 
     /**
@@ -40,7 +43,8 @@ public class BDAdaptadorVehiculo {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Se ha obtenido vehiculo
                 vehiculo = dataSnapshot.getValue(Vehiculo.class);
-
+                String matriculaDesencriptada = aesHelper.decryption(vehiculo.getMatricula());
+                vehiculo.setMatricula(matriculaDesencriptada);
                 Bundle extras = new Bundle();
                 extras.putSerializable(AppMediador.CLAVE_OBTENER_VEHICULO,vehiculo);
                 appMediador.sendBroadcast(AppMediador.AVISO_OBTENER_VEHICULO,extras);
@@ -67,13 +71,13 @@ public class BDAdaptadorVehiculo {
      * @param informacion contendra:
      */
     public void agregarVehiculo(Object[] informacion){
-        //TODO: ENCRIPTAR
         String marca = (String)informacion[0];
         String modelo = (String)informacion[1];
         String matricula = (String)informacion[2];
+        String matriculaEncriptada = aesHelper.encryption(matricula);
         final String datoVehiculo = database.push().getKey();
 
-        vehiculo = new Vehiculo(datoVehiculo,marca,modelo,matricula);
+        vehiculo = new Vehiculo(datoVehiculo,marca,modelo,matriculaEncriptada);
 
         database.child(datoVehiculo).setValue(vehiculo).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -101,14 +105,13 @@ public class BDAdaptadorVehiculo {
      * Modifica en la tabla Vehículo, un determinado vehículo que se indica a través del parámetro.
      * @param informacion contendra:
      */
-    //TODO BUSCAR VEHICULO A TRAVES DE ID USER!!
     public void actualizarVehiculo(Object[] informacion){
         //INFORMACION 0=datovehiculo, 1=marca 2=modelo, 3=matricula.
         String datoVehiculo = (String)informacion[0];
         String marca = (String)informacion[1];
         String modelo = (String)informacion[2];
         String matricula = (String)informacion[3];
-
+        String matriculaEncriptada = aesHelper.encryption(matricula);
         Map<String, Object> vehiculoTask = new HashMap<>();
         vehiculoTask.put("marca", marca);
         vehiculo.setMarca(marca);
@@ -116,8 +119,8 @@ public class BDAdaptadorVehiculo {
         vehiculoTask.put("modelo", modelo);
         vehiculo.setModelo(modelo);
 
-        vehiculoTask.put("matricula",matricula);
-        vehiculo.setMatricula(matricula);
+        vehiculoTask.put("matricula",matriculaEncriptada);
+        vehiculo.setMatricula(matriculaEncriptada);
 
         database.child(datoVehiculo).updateChildren(vehiculoTask).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

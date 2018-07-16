@@ -79,7 +79,6 @@ public class Modelo implements IModelo{
 
     @Override
     public void comprobarLogin(Object[] informacion) {
-    //TODO: ENCRIPTAR PASSWORD
         final String email = (String)informacion[0];
         final String password = (String)informacion[1];
         Log.i(TAG, email + " " + password);
@@ -127,7 +126,7 @@ public class Modelo implements IModelo{
         });
     }
 
-    //TODO: NUEVO METODO, REDACCION
+    //TODO: NUEVO, REDACCION
     @Override
     public void deslogearUsuario(){
         auth.signOut();
@@ -158,7 +157,7 @@ public class Modelo implements IModelo{
         });
     }
 
-    //TODO: NO SE HA UTILIZADO, REDACCION
+    //TODO: NO SE USA, REDACCION
     @Override
     public void cambiarPassword(final Object[] informacion) {
         //informacion 0 = vieja, informacion 1 = nueva, informacion 2 = correo

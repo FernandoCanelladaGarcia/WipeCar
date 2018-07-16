@@ -94,6 +94,7 @@ public class AppMediador extends Application {
 	public static final String AVISO_LISTA_CONDUCTORES = "tfg.android.fcg.AVISO_LISTA_CONDUCTORES";
 	public static final String AVISO_LISTA_PASAJEROS = "tfg.android.fcg.AVISO_LISTA_PASAJEROS";
 	public static final String AVISO_CREACION_VINCULO = "tfg.android.fcg.AVISO_CREACION_VINCULO";
+	public static final String AVISO_CREACION_VINCULO_OTG = "tfg.android.fcg.AVISO_CREACION_VINCULO_OTG";
 	public static final String AVISO_CONCRETAR_VINCULO = "tfg.android.fcg.AVISO_CONCRETAR_VINCULO";
 	public static final String AVISO_ELIMINAR_VINCULO = "tfg.android.fcg.AVISO_ELIMINAR_VINCULO";
 	public static final String AVISO_LISTA_PASAJEROS_VINCULO = "tfg.android.fcg.AVISO_LISTA_PASAJEROS_VINCULO";
@@ -134,6 +135,7 @@ public class AppMediador extends Application {
     public static final String CLAVE_LISTA_CONDUCTORES = "tfg.android.fcg.CLAVE_LISTA_CONDUCTORES";
     public static final String CLAVE_LISTA_PASAJEROS = "tfg.android.fcg.CLAVE_LISTA_PASAJEROS";
     public static final String CLAVE_CREACION_VINCULO = "tfg.android.fcg.CLAVE_CREACION_VINCULO";
+	public static final String CLAVE_CREACION_VINCULO_OTG = "tfg.android.fcg.CLAVE_CREACION_VINCULO_OTG";
     public static final String CLAVE_AVISO_PETICION_OTGCONDUCTOR = "tfg.android.fcg.CLAVE_AVISO_PETICION_OTGCONDUCTOR";
     public static final String CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR = "tfg.android.fcg.CLAVE_ACEPTAR_PETICION_OTGCONDUCTOR";
     public static final String CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR = "tfg.android.fcg.CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR";

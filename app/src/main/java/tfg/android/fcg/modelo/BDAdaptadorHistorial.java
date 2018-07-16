@@ -20,18 +20,21 @@ import java.util.List;
 import java.util.Map;
 
 import tfg.android.fcg.AppMediador;
+import tfg.android.fcg.modelo.bajonivel.AESHelper;
 
 public class BDAdaptadorHistorial {
 
     private AppMediador appMediador;
     private DatabaseReference reference;
     private Historial historial;
+    private AESHelper aesHelper;
 
     private final String TAG = "depurador";
 
     public BDAdaptadorHistorial(){
         appMediador = AppMediador.getInstance();
         reference = FirebaseDatabase.getInstance().getReference().child("historial");
+        aesHelper = new AESHelper();
     }
 
     /**
@@ -51,9 +54,11 @@ public class BDAdaptadorHistorial {
         String destino = vinculo.getDestino();
         //TODO: NUEVOS VALORES, REDACCION
         String nombreConductor = (String)datos[1];
+        String nombreConductorEncriptado = aesHelper.encryption(nombreConductor);
         String nombrePasajero = (String)datos[2];
+        String nombrePasajeroEncriptado = aesHelper.encryption(nombrePasajero);
 
-        historial = new Historial(idPasajero,idConductor,fecha,hora,origen,destino, nombreConductor,nombrePasajero);
+        historial = new Historial(idPasajero,idConductor,fecha,hora,origen,destino, nombreConductorEncriptado,nombrePasajeroEncriptado);
         DatabaseReference referencia = reference.push();
         referencia.setValue(historial).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -142,11 +147,13 @@ public class BDAdaptadorHistorial {
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
                     Log.i(TAG," "+dataSnapshot.getChildrenCount());
                     Historial historial = snapshot.getValue(Historial.class);
-                    Log.i(TAG,historial.getIdPasajero());
-                    Log.i(TAG,historial.getIdConductor());
                     if(historial.getIdPasajero().equals(idUser) || historial.getIdConductor().equals(idUser)){
                         //Si coincide añadimos a la lista
                         Log.i(TAG, "Añadimos a la tabla");
+                        String nombrePasajeroDecriptado = aesHelper.decryption(historial.getNombrePasajero());
+                        String nombreConductorDecriptado = aesHelper.decryption(historial.getNombreConductor());
+                        historial.setNombrePasajero(nombrePasajeroDecriptado);
+                        historial.setNombreConductor(nombreConductorDecriptado);
                         listaHistorial.add(historial);
                     }
                 }
@@ -180,10 +187,6 @@ public class BDAdaptadorHistorial {
         });
     }
 
-    //TODO: EDITAR ERROR A LA HORA DE AGREGAR VALORACION
-    //AGREGA VALORACION A AMBOS USUARIOS CUANDO DEBERIA AGREGAR VALORACION
-    //EN LA TABLA DE USUARIOS, SOBRE EL USUARIO AL QUE VALORA.
-    //NO HAY QUE ACCEDER A HISTORIAL, SINO A USUARIO.
     //TODO: REDACTAR, NO SE USA.
 
     public void agregarValoracion(String[] informacion){
