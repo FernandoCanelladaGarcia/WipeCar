@@ -332,7 +332,6 @@ public class BDAdaptadorVinculo {
      *
      * @param idUser contendra:
      */
-    //TODO: NUEVO, REDACCION
     public void obtenerListaVinculos(final String idUser) {
 
         reference.addValueEventListener(new ValueEventListener() {
@@ -369,7 +368,10 @@ public class BDAdaptadorVinculo {
         });
     }
 
-    //TODO: NUEVO, REDACCION
+    /**
+     * Notifica las peticiones existentes de la tabla Vinculo que coinciden con el atributo idUser, pasado por parámetro.
+     * @param idUser contendra:
+     */
     public void obtenerListaVinculosOTG(final String idUser) {
 
         reference.addChildEventListener(new ChildEventListener() {
@@ -412,7 +414,11 @@ public class BDAdaptadorVinculo {
         });
     }
 
-    //TODO: NUEVO, REDACCION
+    /**
+     * Notifica los cambios que suceden sobre un vinculo de la tabla Vinculo que coincide con los atributos idPasajero e idConductor, pasados por parametros.
+     * @param idPasajero
+     * @param idConductor
+     */
     public void obtenerRespuestaVinculos(final String idPasajero, final String idConductor) {
         reference.addChildEventListener(new ChildEventListener() {
             @Override
@@ -458,7 +464,10 @@ public class BDAdaptadorVinculo {
         });
     }
 
-    //TODO: NUEVO, REDACCION
+    /**
+     * Busca en la tabla Vinculo las peticiones existentes que coinciden con el atributo idUser, pasado por parámetro.
+     * @param idUser contendra:
+     */
     public void obtenerListaVinculosConductores(final String idUser) {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -491,7 +500,10 @@ public class BDAdaptadorVinculo {
         });
     }
 
-    //TODO: NUEVO, REDACCION
+    /**
+     * Busca en la tabla Vinculo los conductores existentes que se dirigen al destino pasado por parámetros.
+     * @param destino
+     */
     public void obtenerConductoresEnRuta(final String destino) {
         reference.addValueEventListener(new ValueEventListener() {
             @Override

@@ -57,7 +57,7 @@ public class BDAdaptadorUsuario {
         database.child(idUser).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                usuario = dataSnapshot.getValue(Usuario.class);
+                Usuario usuario = dataSnapshot.getValue(Usuario.class);
 
                 String nombreDesencriptado = aesHelper.decryption(usuario.getNombre());
                 String telefonoDesencriptado = aesHelper.decryption(usuario.getTelefono());
@@ -79,8 +79,6 @@ public class BDAdaptadorUsuario {
             }
         });
     }
-
-    //TODO: NUEVO, REDACCION
 
     /**
      * Metodo al que se recurre en caso de una mala actualización, desinstalación de la aplicación

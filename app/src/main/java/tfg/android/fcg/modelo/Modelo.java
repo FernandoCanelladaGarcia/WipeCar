@@ -126,7 +126,6 @@ public class Modelo implements IModelo{
         });
     }
 
-    //TODO: NUEVO, REDACCION
     @Override
     public void deslogearUsuario(){
         auth.signOut();
@@ -157,7 +156,6 @@ public class Modelo implements IModelo{
         });
     }
 
-    //TODO: NO SE USA, REDACCION
     @Override
     public void cambiarPassword(final Object[] informacion) {
         //informacion 0 = vieja, informacion 1 = nueva, informacion 2 = correo
@@ -207,13 +205,11 @@ public class Modelo implements IModelo{
         adaptadorVehiculo.obtenerVehiculo((String) informacion);
     }
 
-    //TODO: NO SE USA, REDACCION
     @Override
     public void obtenerMapa(Object informacion) {
 
     }
 
-    //TODO: NUEVO, REDACCION
     @Override
     public void iniciarGps() {
         adaptadorPosicion.iniciarGps();
@@ -316,9 +312,7 @@ public class Modelo implements IModelo{
     @Override
     public void asignarValoracion(Object[] informacion) {
         adaptadorUsuario.actualizarUsuario(informacion);
-        //adaptadorHistorial.agregarValoracion((String[]) informacion);
     }
-
     @Override
     public void eliminarHistorial(Object informacion) {
         Object[] datos = (Object[])informacion;

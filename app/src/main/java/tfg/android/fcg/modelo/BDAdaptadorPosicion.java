@@ -104,6 +104,10 @@ public class BDAdaptadorPosicion {
         });
     }
 
+    /**
+     * Elimina de la tabla Posicion la latitud y longitud asociadas a un usuario.
+     * @param informacion contendra:
+     */
     public void eliminarPosicion(Object informacion){
         String idUser = (String) informacion;
 
@@ -129,7 +133,7 @@ public class BDAdaptadorPosicion {
 
     /**
      * Modifica en la tabla Posición una latitud y longitud de un usuario determinado.
-     * @param informacion
+     * @param informacion contendra:
      */
     public void actualizarPosicion(Object[]informacion){
         //INFORMACION 0=idUser, 1=latitud 2=longitud
@@ -165,6 +169,10 @@ public class BDAdaptadorPosicion {
         });
     }
 
+    /**
+     * Traduce un objeto Latlng en una calle situada en la posicion dada.
+     * @param miLatlng contendra:
+     */
     public void traducirLatlng(LatLng miLatlng){
         Bundle extras = new Bundle();
         List<Address> addresses = null;
@@ -202,6 +210,9 @@ public class BDAdaptadorPosicion {
         }
     }
 
+    /**
+     * Finaliza el servicio de localización.
+     */
     public void finalizarGps(){
         appMediador.stopService(ServicioLocalizacion.class);
     }

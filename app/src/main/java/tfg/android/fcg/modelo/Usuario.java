@@ -11,7 +11,6 @@ public class Usuario implements Serializable {
     private String telefono;
     private boolean rol;
     private float valoracion;
-    //TODO: NUEVO, REDACCION
     private String origenDef;
     private String origen;
     private String destino;

@@ -173,6 +173,7 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
                 appMediador.unRegisterReceiver(this);
                 vistaPrincipal.cerrarProgreso();
                 appMediador.launchActivity(VistaLogin.class, this, null);
+                vistaPrincipal.finish();
             }
             if (intent.getAction().equals(AppMediador.AVISO_ACTUALIZACION_USUARIO)) {
                 appMediador.unRegisterReceiver(this);

@@ -109,6 +109,7 @@ public class VistaVehiculo extends AppCompatActivity implements IVistaVehiculo, 
         dialogo.cancel();
     }
 
+    //TODO: NO SE USA
     @Override
     public void prepararEdicion(Object informacion) {
 
@@ -123,6 +124,12 @@ public class VistaVehiculo extends AppCompatActivity implements IVistaVehiculo, 
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        appMediador.removePresentadorVehiculo();
     }
 
     private boolean checkEditText(){
@@ -141,11 +148,5 @@ public class VistaVehiculo extends AppCompatActivity implements IVistaVehiculo, 
             return false;
         }
         return true;
-    }
-
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        appMediador.removePresentadorVehiculo();
     }
 }

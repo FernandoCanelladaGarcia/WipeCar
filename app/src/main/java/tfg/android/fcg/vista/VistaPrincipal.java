@@ -708,6 +708,7 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
         viewPager = null;
         adaptador = null;
         tabLayout = null;
+        fragmentoPrincipal = null;
         super.onDestroy();
         appMediador.removePresentadorPrincipal();
     }

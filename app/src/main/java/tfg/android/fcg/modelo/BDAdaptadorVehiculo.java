@@ -143,6 +143,11 @@ public class BDAdaptadorVehiculo {
         });
     }
 
+    /**
+     * Elimina de la tabla Vehiculo un determinado vehiculo que se indica a través del parámetro,
+     * así como el parámetro almacenado en el usuario que referencia al vehículo.
+     * @param informacion
+     */
     public void eliminarVehiculo(Object informacion){
     //Informacion Query del datovehiculo, eliminar vehiculo de tabla vehiculos
         String idUser = (String)informacion;

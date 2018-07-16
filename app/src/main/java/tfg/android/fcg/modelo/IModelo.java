@@ -181,7 +181,6 @@ public interface IModelo {
      */
     public void deslogearUsuario();
 
-    //TODO: NUEVO, REDACCION
     public void cambiarRol(Object informacion);
 
     public void obtenerConductoresEnRuta(Object informacion);

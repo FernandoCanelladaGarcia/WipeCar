@@ -52,7 +52,6 @@ public class BDAdaptadorHistorial {
         String hora = vinculo.getHora();
         String origen = vinculo.getOrigen();
         String destino = vinculo.getDestino();
-        //TODO: NUEVOS VALORES, REDACCION
         String nombreConductor = (String)datos[1];
         String nombreConductorEncriptado = aesHelper.encryption(nombreConductor);
         String nombrePasajero = (String)datos[2];
@@ -187,7 +186,6 @@ public class BDAdaptadorHistorial {
         });
     }
 
-    //TODO: NO SE USA, REDACCION.
 
     public void agregarValoracion(String[] informacion){
     //Informacion => 0 idPasajero, 1 idConductor, 2 valorPasajero, 3 valorConductor.

@@ -10,10 +10,8 @@ public class Historial {
     private String hora;
     private String origen;
     private String destino;
-    //TODO: NO NECESARIOS, REDACCION
     //private String valoracionPasajero;
     //private String valoracionConductor;
-    //TODO: NUEVOS VALORES, REDACCION
     private String nombreConductor;
     private String nombrePasajero;
 
