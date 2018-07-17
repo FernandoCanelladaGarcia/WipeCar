@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/SwipeRefreshLayoutVinculos"
+    android:background="@color/background">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listaVinculos"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10.0sp"/>
+
+    <include
+        layout="@layout/layout_lista_vinculos_vacia"
+        android:id="@+id/elementoListaVinculoVacia"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/botonRefrescar"
+        android:background="@color/botones"
+        android:textColor="@color/texto_borde"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="4dp"
+        android:onClick="onClick"
+        android:text="Refrescar Lista" />
+</RelativeLayout>

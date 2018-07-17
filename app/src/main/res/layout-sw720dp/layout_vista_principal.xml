@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constrainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/MainTitle"
+            android:layout_width="395dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="WipeCar"
+            android:textColor="@color/texto"
+            android:textSize="60dp"
+            android:textStyle="bold|italic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/botonSalir"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="28dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/botones"
+            android:fontFamily="@font/ubuntu_medium"
+            android:onClick="onClick"
+            android:text="Salir"
+            android:textColor="@color/texto_borde"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/botonPerfil"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="52dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/botones"
+            android:fontFamily="@font/ubuntu_medium"
+            android:onClick="onClick"
+            android:text="Perfil"
+            android:textColor="@color/texto_borde"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toStartOf="@+id/botonSalir"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constrainLayout"
+        app:tabGravity="fill"
+        app:tabTextColor="@color/texto_borde" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPagerPrincipal"
+        android:layout_width="781dp"
+        android:layout_height="1051dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout"
+        app:layout_constraintVertical_bias="0.615" />
+
+</android.support.constraint.ConstraintLayout>

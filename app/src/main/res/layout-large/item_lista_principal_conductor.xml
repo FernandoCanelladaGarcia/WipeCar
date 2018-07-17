@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardItemListaUsuario_Conductor"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:elevation="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/icon_car_user" />
+
+        <TextView
+            android:id="@+id/NombreConductor"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="8dp"
+            android:text="Nombre Conductor"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/texto_borde"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/Fecha"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/NombreConductor"
+            android:layout_marginLeft="40dp"
+            android:text="Fecha/Hora"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/texto_borde"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/MarcaVehiculo"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@+id/NombreConductor"
+            android:text="Marca"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/texto_borde"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/ModeloVehiculo"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="30dp"
+            android:layout_toEndOf="@+id/NombreConductor"
+            android:text="Modelo"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/texto_borde"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/DestinoVehiculo"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="4dp"
+            android:text="Destino"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/texto_borde"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/valoracionConductor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="55dp"
+            android:layout_marginBottom="6dp"
+            android:textColor="@color/texto_borde"
+            android:text="Valoracion"
+            />
+
+        <ImageButton
+            android:id="@+id/opcionesItemConductor"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:src="@drawable/ic_more_vert_black_24dp" />
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/botonIniciarRuta"
+        android:layout_width="181dp"
+        android:layout_height="99dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/botones"
+        android:fontFamily="@font/ubuntu_medium"
+        android:onClick="onClick"
+        android:text="Iniciar Ruta"
+        android:textColor="@color/texto_borde"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/botonAceptarPasajero"
+        android:layout_width="136dp"
+        android:layout_height="89dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="228dp"
+        android:background="#01DF3A"
+        android:fontFamily="@font/ubuntu_medium"
+        android:onClick="onClick"
+        android:text="Aceptar"
+        app:layout_constraintEnd_toStartOf="@+id/botonRechazarPasajero"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/botonIniciarRuta" />
+
+    <Button
+        android:id="@+id/botonRechazarPasajero"
+        android:layout_width="136dp"
+        android:layout_height="89dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="228dp"
+        android:background="#DF0101"
+        android:fontFamily="@font/ubuntu_medium"
+        android:onClick="onClick"
+        android:text="Rechazar"
+        android:textColor="@color/texto_borde"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/botonIniciarRuta" />
+
+    <Button
+        android:id="@+id/botonFinalizarRuta"
+        android:layout_width="181dp"
+        android:layout_height="99dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/botones"
+        android:fontFamily="@font/ubuntu_medium"
+        android:onClick="onClick"
+        android:text="Finalizar Ruta"
+        android:textColor="@color/texto_borde"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>

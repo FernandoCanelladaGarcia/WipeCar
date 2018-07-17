@@ -9,8 +9,8 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="222dp"
-        android:layout_height="wrap_content"
+        android:layout_width="259dp"
+        android:layout_height="85dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -19,7 +19,7 @@
         android:text="WipeCar"
         android:textAlignment="center"
         android:textColor="@color/texto"
-        android:textSize="50sp"
+        android:textSize="60sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.065"
@@ -132,15 +132,14 @@
         android:layout_width="103dp"
         android:layout_height="91dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toEndOf="@+id/title"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.167"
+        app:layout_constraintVertical_bias="0.143"
         app:srcCompat="@drawable/ic_launcher" />
 
 </android.support.constraint.ConstraintLayout>
