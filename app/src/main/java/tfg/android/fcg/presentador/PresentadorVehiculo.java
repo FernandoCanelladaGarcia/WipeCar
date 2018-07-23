@@ -78,25 +78,4 @@ public class PresentadorVehiculo implements IPresentadorVehiculo{
         appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_REGISTRO_VEHICULO);
         modelo.guardarVehiculo((Object[]) informacion);
     }
-
-    @Override
-    public void tratarCancelar(Object informacion) {
-
-    }
-
-    @Override
-    public void tratarEditar(Object informacion) {
-
-    }
-
-    @Override
-    public void tratarPapelera(Object informacion) {
-
-    }
-
-
-    @Override
-    public void tratarEliminarVehiculo(Object informacion) {
-
-    }
 }

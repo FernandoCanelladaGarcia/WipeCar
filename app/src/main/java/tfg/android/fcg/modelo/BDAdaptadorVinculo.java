@@ -377,20 +377,28 @@ public class BDAdaptadorVinculo {
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                reference.removeEventListener(this);
+
                 Vinculo vinculo = dataSnapshot.getValue(Vinculo.class);
                 if (vinculo.getIdConductor().equals(idUser) && !vinculo.getIdPasajero().isEmpty()) {
                     Log.i(TAG, "HAY PETICION");
                     Bundle extras = new Bundle();
                     extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, vinculo);
                     appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras);
-
+                    reference.removeEventListener(this);
                 }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
+                Vinculo vinculo = dataSnapshot.getValue(Vinculo.class);
+                if (vinculo.getIdConductor().equals(idUser) && !vinculo.getIdPasajero().isEmpty()) {
+                    Log.i(TAG, "HAY PETICION");
+                    Bundle extras = new Bundle();
+                    extras.putSerializable(AppMediador.CLAVE_AVISO_PETICION_OTGCONDUCTOR, vinculo);
+                    appMediador.sendBroadcast(AppMediador.AVISO_PETICION_OTGCONDUCTOR, extras);
+                    reference.removeEventListener(this);
+                }
             }
 
             @Override

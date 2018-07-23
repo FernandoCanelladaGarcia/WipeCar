@@ -27,19 +27,25 @@ public interface IPresentadorOTGPasajero {
      */
     public void tratarOk(Object informacion);
 
-    //TODO: NO SE USA, REDACCION
     /**
-     * Trata la selección del botón Cancelar.
-     * @param informacion contendra:
+     * Recupera la lista de conductores que se dirigen al mismo destino que el pasajero.
+     * @param informacion
      */
-    public void tratarCancelar(Object informacion);
-
-    //TODO: NUEVO, REDACCION
     public void obtenerConductores(Object informacion);
 
+    /**
+     * Recupera la posición de los conductores que se desplazan al destino del pasajero.
+     * @param informacion
+     */
     public void obtenerPosicionConductores(Object informacion);
 
+    /**
+     * Recupera las respuestas a las solicitudes realizadas por el usuario.
+     */
     public void esperarRespuesta();
 
+    /**
+     * Almacena en la base de datos la información necesaria para crear una entrada al historial del usuario.
+     */
     public void generarHistorial();
 }

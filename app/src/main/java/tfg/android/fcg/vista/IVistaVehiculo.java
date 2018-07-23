@@ -22,10 +22,4 @@ public interface IVistaVehiculo {
      * Cierra el diálogo mostrado al usuario tras su uso útil.
      */
     public void cerrarDialogo();
-
-    /**
-     * Habilita la edición de los datos del vehículo.
-     * @param informacion contendra:
-     */
-    public void prepararEdicion(Object informacion);
 }

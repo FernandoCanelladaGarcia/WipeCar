@@ -29,9 +29,4 @@ public interface IVistaMapaOrigen {
      */
     public void mostrarMapaConPosicion(Object informacion);
 
-    /**
-     * Muestra una marca en el mapa.
-     * @param informacion contendra:
-     */
-    public void mostrarOrigen(Object informacion);
 }

@@ -57,7 +57,7 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
                 if (peticion != null) {
                     vinculo = peticion;
                     atendiendoPeticion = true;
-                    pasajero = vinculo.getIdConductor();
+                    pasajero = vinculo.getIdPasajero();
                     vistaOTGConductor.indicarPeticionPasajero(vinculo);
                     timer.postDelayed(limiteDeTiempo, 30000);
                     appMediador.unRegisterReceiver(this);
@@ -108,8 +108,8 @@ public class PresentadorOTGConductor implements IPresentadorOTGConductor {
             boolean respuesta = (boolean) intent.getBooleanExtra(AppMediador.CLAVE_CREACION_VINCULO_OTG, false);
             if (respuesta) {
                 Log.i(TAG, "receptor Creacion vinculo");
-                appMediador.getVistaPrincipal().cerrarProgreso();
                 iniciarThreds();
+                appMediador.getVistaPrincipal().cerrarProgreso();
             } else {
                 appMediador.getVistaPrincipal().cerrarProgreso();
             }

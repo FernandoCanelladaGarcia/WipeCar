@@ -30,7 +30,7 @@ import tfg.android.fcg.presentador.IPresentadorMapaOrigen;
  * Created by ferca on 21/03/2018.
  */
 
-public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallback, IVistaMapaOrigen, GoogleMap.OnMapClickListener, View.OnClickListener {
+public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallback, IVistaMapaOrigen, View.OnClickListener {
 
     private GoogleMap mMap;
     private ProgressDialog dialogoProgreso;
@@ -246,13 +246,4 @@ public class VistaMapaOrigen extends FragmentActivity implements OnMapReadyCallb
         presentadorMapaOrigen.iniciar();
     }
 
-    @Override
-    public void mostrarOrigen(Object informacion) {
-
-    }
-
-    @Override
-    public void onMapClick(LatLng latLng) {
-
-    }
 }

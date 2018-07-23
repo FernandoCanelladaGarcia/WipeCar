@@ -776,19 +776,4 @@ public class VistaPrincipal extends AppCompatActivity implements IVistaPrincipal
             return mFragmentTitleList.get(position);
         }
     }
-
-    @Override
-    public void mostrarUsuarios(Object informacion) {
-
-    }
-
-    @Override
-    public void mostrarSeleccion(Object informacion) {
-
-    }
-
-    @Override
-    public void desmarcarUsuario(Object informacion) {
-
-    }
 }

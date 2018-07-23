@@ -352,22 +352,6 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
         modelo.obtenerPeticionesDePasajeros(datos);
     }
 
-    public void obtenerConductoresVinculo(Object informacion){
-        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_OBTENER_USUARIO);
-        ArrayList<Vinculo> vinculos = (ArrayList<Vinculo>) informacion;
-        for(Vinculo vinculo : vinculos){
-            modelo.obtenerUsuario(vinculo.getIdConductor());
-        }
-    }
-
-    public void obtenerPasajerosVinculo(Object informacion){
-        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_OBTENER_USUARIO);
-        ArrayList<Vinculo> vinculos = (ArrayList<Vinculo>) informacion;
-        for(Vinculo vinculo : vinculos){
-            modelo.obtenerUsuario(vinculo.getIdPasajero());
-        }
-    }
-
     @Override
     public void obtenerVehiculosVinculo(Object informacion) {
         appMediador.registerReceiver(receptorDeAvisos, AppMediador.AVISO_OBTENER_VEHICULO);
@@ -388,24 +372,20 @@ public class PresentadorPrincipal implements IPresentadorPrincipal {
         vinculosConductor = new ArrayList<>();
     }
 
-    //ESTAN OKEY
-    @Override
-    public void tratarCancelar(Object informacion) {
-
+    private void obtenerConductoresVinculo(Object informacion){
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_OBTENER_USUARIO);
+        ArrayList<Vinculo> vinculos = (ArrayList<Vinculo>) informacion;
+        for(Vinculo vinculo : vinculos){
+            modelo.obtenerUsuario(vinculo.getIdConductor());
+        }
     }
 
-    @Override
-    public void tratarChat(Object informacion) {
-
+    private void obtenerPasajerosVinculo(Object informacion){
+        appMediador.registerReceiver(receptorDeAvisos,AppMediador.AVISO_OBTENER_USUARIO);
+        ArrayList<Vinculo> vinculos = (ArrayList<Vinculo>) informacion;
+        for(Vinculo vinculo : vinculos){
+            modelo.obtenerUsuario(vinculo.getIdPasajero());
+        }
     }
 
-    @Override
-    public void tratarMapa(Object informacion) {
-
-    }
-
-    @Override
-    public void tratarOnTheGo(Object informacion) {
-
-    }
 }

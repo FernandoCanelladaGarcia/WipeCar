@@ -28,7 +28,6 @@ public interface IVistaPerfil {
      */
     public void prepararEdicion();
 
-    //TODO: NUEVO REDACCION
     /**
      * Configura la vista para salir de la edición de los datos del usuario.
      */

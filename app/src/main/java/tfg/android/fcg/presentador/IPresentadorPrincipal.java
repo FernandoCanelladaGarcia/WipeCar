@@ -35,39 +35,32 @@ public interface IPresentadorPrincipal {
     public void tratarConfiguracion(Object informacion);
 
     /**
-     * Trata la selección del botón Cancelar.
-     * @param informacion contendra:
-     */
-    //TODO: NO SE USAN
-    public void tratarCancelar(Object informacion);
-
-    /**
-     * Trata la selección del botón Chat, para poner en contacto a los usuarios acompañantes.
-     * @param informacion contendra:
-     */
-    public void tratarChat(Object informacion);
-
-    /**
-     * Presenta la vista de mapa, para que el pasajero pueda cambiar de origen y/o destino.
-     * @param informacion contendra:
-     */
-    public void tratarMapa(Object informacion);
-
-    /**
-     * Presenta la vista On the Go
-     * para que el usuario pueda elegir acompañantes en tiempo real.
+     * Recupera los vehículos de los conductores que se dirigen al destino del usuario.
      * @param informacion
      */
-    public void tratarOnTheGo(Object informacion);
-
-    //TODO: NUEVOS, REDACCION
     public void obtenerVehiculos(Object informacion);
 
+    /**
+     * Recupera los conductores que se dirigen al destino del usuario.
+     * @param informacion
+     */
     public void obtenerConductores(Object informacion);
 
+    /**
+     * Recupera la lista de vínculos que posee un usuario como conductor.
+     * @param informacion
+     */
     public void obtenerPeticionesPasajeros(Object informacion);
 
+    /**
+     * Recupera la lista de vínculos que posee un usuario como pasajero.
+     * @param informacion
+     */
     public void obtenerVinculosPasajero(Object informacion);
 
+    /**
+     * Recupera la lista de vehículos de los conductores que poseen un vínculo con el usuario como pasajero.
+     * @param informacion
+     */
     public void obtenerVehiculosVinculo(Object informacion);
 }

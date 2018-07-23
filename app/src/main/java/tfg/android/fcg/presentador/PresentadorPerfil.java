@@ -153,11 +153,6 @@ public class PresentadorPerfil implements IPresentadorPerfil {
     }
 
     @Override
-    public void tratarCancelar(Object informacion) {
-
-    }
-
-    @Override
     public void tratarEditar(Object informacion) {
         vistaPerfil.mostrarDialogo(informacion);
 

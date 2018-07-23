@@ -142,9 +142,4 @@ public class PresentadorHistorial implements IPresentadorHistorial{
         modelo.eliminarHistorial(datosHistorial);
         Log.i(TAG,"eliminarHistorial");
     }
-
-    @Override
-    public void tratarCarga(Object informacion) {
-
-    }
 }

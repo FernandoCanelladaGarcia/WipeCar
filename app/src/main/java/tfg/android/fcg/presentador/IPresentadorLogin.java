@@ -23,14 +23,6 @@ public interface IPresentadorLogin {
     public void tratarRecuperarPassword(Object informacion);
 
     /**
-     * Realiza las operaciones oportunas para cambiar la contraseña
-     * del usuario.
-     * @param informacion contendra:
-     */
-    //TODO: NO SE USA, REDACCION
-    public void tratarCambiarPassword(Object informacion);
-
-    /**
      * Realiza las operaciones oportunas para registrar un nuevo
      * usuario en la aplicación.
      */

@@ -31,13 +31,6 @@ public interface IModelo {
     public void registrarUsuario(Object informacion);
 
     /**
-     * Obtiene un mapa centrado en la ubicación del usuario
-     * usando el servidor de Google.
-     * @param informacion contendra:
-     */
-    public void obtenerMapa(Object informacion);
-
-    /**
      * Inicia el GPS del usuario para obtener su posición.
      */
     public void iniciarGps();
@@ -181,13 +174,34 @@ public interface IModelo {
      */
     public void deslogearUsuario();
 
+    /**
+     * Encargado de cambiar el rol que utiliza el usuario.
+     * @param informacion
+     */
     public void cambiarRol(Object informacion);
 
+    /**
+     * Recupera la información de los conductores que están realizando una ruta
+     * al destino del usuario de la base de datos.
+     * @param informacion
+     */
     public void obtenerConductoresEnRuta(Object informacion);
 
+    /**
+     * Actualiza la posición del usuario en la base de datos.
+     * @param informacion
+     */
     public void actualizarLocalizacion(Object informacion);
 
+    /**
+     * Encargado de controlar las respuestas del conductor al pasajero.
+     * @param informacion
+     */
     public void obtenerRespuestaConductor(Object informacion);
 
+    /**
+     * Almacena en la base de datos una entrada al historial del usuario.
+     * @param informacion
+     */
     public void agregarHistorial(Object informacion);
 }

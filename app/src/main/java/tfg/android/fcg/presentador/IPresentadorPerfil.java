@@ -27,12 +27,6 @@ public interface IPresentadorPerfil {
     public void tratarGuardarPerfil(Object informacion);
 
     /**
-     * Trata la selección del botón Cancelar.
-     * @param informacion contendra:
-     */
-    public void tratarCancelar(Object informacion);
-
-    /**
      * Prepara la interfaz de usuario para la edición.
      * @param informacion contendra:
      */
@@ -42,7 +36,6 @@ public interface IPresentadorPerfil {
      * Presenta la vista de historial para que el usuario
      * pueda comprobar el listado de su historial.
      */
-    //TODO: EDITADO, REDACCION
     public void tratarHistorial();
 
     /**
@@ -56,7 +49,7 @@ public interface IPresentadorPerfil {
      * para que el usuario pueda confirmar la eliminación del perfil.
      * @param informacion contendra:
      */
-    //TODO: NUEVO, REDACCION
+
     public void tratarPapelera(Object informacion);
 
     /**

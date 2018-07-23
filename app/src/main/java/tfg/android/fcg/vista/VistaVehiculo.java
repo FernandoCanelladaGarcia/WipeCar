@@ -109,12 +109,6 @@ public class VistaVehiculo extends AppCompatActivity implements IVistaVehiculo, 
         dialogo.cancel();
     }
 
-    //TODO: NO SE USA
-    @Override
-    public void prepararEdicion(Object informacion) {
-
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){

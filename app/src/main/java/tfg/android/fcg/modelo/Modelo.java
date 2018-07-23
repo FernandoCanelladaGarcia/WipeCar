@@ -206,11 +206,6 @@ public class Modelo implements IModelo{
     }
 
     @Override
-    public void obtenerMapa(Object informacion) {
-
-    }
-
-    @Override
     public void iniciarGps() {
         adaptadorPosicion.iniciarGps();
     }

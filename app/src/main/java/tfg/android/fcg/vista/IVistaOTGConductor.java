@@ -23,7 +23,6 @@ public interface IVistaOTGConductor {
     /**
      * Indicación sonora de que ha sucedido algún problema
      */
-    //TODO NUEVO, REDACCION
     public void indicarProblema();
 
 }

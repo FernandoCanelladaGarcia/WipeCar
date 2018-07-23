@@ -203,6 +203,7 @@ public class VistaOTGPasajero extends Fragment implements IVistaOTGPasajero, OnM
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         cerrarDialogo();
+                        presentadorOTGPasajero.esperarRespuesta();
                     }
                 });
                 dialogo = dialogBuild.create();

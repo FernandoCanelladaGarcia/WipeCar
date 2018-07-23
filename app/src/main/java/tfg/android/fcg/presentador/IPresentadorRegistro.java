@@ -22,7 +22,6 @@ public interface IPresentadorRegistro {
      */
     public void tratarAceptarRegistro(Object informacion);
 
-
     /**
      * Trata la selección del botón Cancelar.
      */

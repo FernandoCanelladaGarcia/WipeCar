@@ -29,13 +29,11 @@ public interface IVistaOTGPasajero {
      */
     public void mostrarMapaConPosicion(Object informacion);
 
-    //TODO: EDITADO, REDACCION
     /**
      * Muestra en el mapa los vehículos encontrados.
      */
     public void mostrarVehiculos();
 
-    //TODO: NUEVO, REDACCION
     /**
      * Muestra en el mapa solo aquellos vehiculos que mantengan un vínculo con el usuario
      */

@@ -36,7 +36,7 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
     private Usuario user;
     private Vinculo vinculo;
     private final static String TAG = "depurador";
-    private boolean aceptado = false;
+    private boolean aceptado;
 
     private BroadcastReceiver receptorDeAvisos = new BroadcastReceiver() {
         @Override
@@ -124,21 +124,24 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
                 vistaOTGPasajero.mostrarDialogo(2);
             }
             if(intent.getAction().equals(AppMediador.AVISO_RECHAZAR_PETICION_OTGCONDUCTOR)){
-                if(!aceptado){
-                    Log.i(TAG,"Rechazada la peticion");
-                    appMediador.unRegisterReceiver(this);
-                    appMediador.unRegisterReceiver(receptorDeAvisos);
-                    vinculo = null;
-                    //Refresh con todos los coches
-                    vistaOTGPasajero.mostrarDialogo(4);
-                    vistaOTGPasajero.refrescarPantalla();
-                }else{
-                    Log.i(TAG,"Finalizada la ruta, reiniciar pantalla y set historial");
-                    appMediador.unRegisterReceiver(this);
-                    appMediador.unRegisterReceiver(receptorDeAvisos);
-                    //refresh pantalla con mi ubicacion
-                    vistaOTGPasajero.mostrarDialogo(3);
-                    vistaOTGPasajero.refrescarPantalla();
+                boolean respuesta = intent.getBooleanExtra(AppMediador.CLAVE_RECHAZAR_PETICION_OTGCONDUCTOR,false);
+                if(respuesta) {
+                    if (!aceptado) {
+                        Log.i(TAG, "Rechazada la peticion");
+                        appMediador.unRegisterReceiver(this);
+                        appMediador.unRegisterReceiver(receptorDeAvisos);
+                        vinculo = null;
+                        //Refresh con todos los coches
+                        vistaOTGPasajero.mostrarDialogo(4);
+                        vistaOTGPasajero.refrescarPantalla();
+                    } else {
+                        Log.i(TAG, "Finalizada la ruta, reiniciar pantalla y set historial");
+                        appMediador.unRegisterReceiver(this);
+                        appMediador.unRegisterReceiver(receptorDeAvisos);
+                        //refresh pantalla con mi ubicacion
+                        vistaOTGPasajero.mostrarDialogo(3);
+                        vistaOTGPasajero.refrescarPantalla();
+                    }
                 }
             }
             if(intent.getAction().equals(AppMediador.AVISO_CREACION_HISTORIAL)){
@@ -160,6 +163,7 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
         conductores = new ArrayList<>();
         posiciones = new ArrayList<>();
         modelo = Modelo.getInstance();
+        aceptado = false;
     }
 
     @Override
@@ -201,11 +205,6 @@ public class PresentadorOTGPasajero implements IPresentadorOTGPasajero{
         datos[6] = 1;
         vinculo = new Vinculo(user.getIdUser(),conductor.getIdUser(),false,fecha,hora,user.getOrigenDef(),user.getDestino());
         modelo.guardarUsuarioPickup(datos);
-    }
-
-    @Override
-    public void tratarCancelar(Object informacion) {
-
     }
 
     @Override

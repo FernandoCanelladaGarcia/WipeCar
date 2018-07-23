@@ -74,8 +74,4 @@ public class PresentadorLogin implements IPresentadorLogin {
         appMediador.launchActivity(VistaRegistro.class, this,null);
     }
 
-    @Override
-    public void tratarCambiarPassword(Object informacion) {
-
-    }
 }
